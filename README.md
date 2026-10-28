@@ -102,6 +102,7 @@ weekly reading habit. **Sell analysis, never raw platform data.**
 - [`docs/METHOD.md`](docs/METHOD.md) — the four-part method + legality boundaries
 - [`docs/SCHEMA.md`](docs/SCHEMA.md) — the capture record schema
 - [`docs/DELIVERY.md`](docs/DELIVERY.md) — Telegram/WhatsApp/webhook setup + Meta API collector
+- [`docs/LAUNCH.md`](docs/LAUNCH.md) — the X launch thread + posting kit
 
 ## The Monday pipeline
 
