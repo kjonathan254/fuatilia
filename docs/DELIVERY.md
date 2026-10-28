@@ -8,20 +8,68 @@ Add secrets at: **repo → Settings → Secrets and variables → Actions → Ne
 
 ---
 
-## 1. Telegram (easiest — 10 minutes)
+## 1. Telegram (easiest — 15 minutes, zero to phone)
 
-1. In Telegram, message **@BotFather** → `/newbot` → give it a name → copy the bot
-   token (looks like `123456:AAH-...`).
-2. Start a chat with your new bot (press **Start**) — bots cannot message you first.
-3. Get your chat ID: open
-   `https://api.telegram.org/bot<TOKEN>/getUpdates`
-   in a browser, find `"chat":{"id":123456789,...}` — that number is your chat ID.
-   (For a group chat, add the bot to the group and read the group's id — negative number.)
-4. Add two secrets:
-   - `FUATILIA_TELEGRAM_BOT_TOKEN`
-   - `FUATILIA_TELEGRAM_CHAT_ID`
+**1. Create the bot with @BotFather** (Telegram's official bot that makes other bots):
 
-Test locally: `FUATILIA_TELEGRAM_BOT_TOKEN=... FUATILIA_TELEGRAM_CHAT_ID=... node bin/fuatilia.js deliver`
+1. Open Telegram, search **@BotFather** (blue check), send `/newbot`.
+2. It asks for a **display name** — suggestions: `Fuatilia Digest` · `Fuatilia Radar` · `AdWatch KE`.
+3. It asks for a **username** (must end in `bot`, 5–32 chars). Try in order:
+   `fuatilia_digest_bot` → `fuatiliaradar_bot` → `fuatilia_ke_bot` → `my_fuatilia_bot`
+   → taken? add your digits: `fuatilia_digest_254_bot`.
+4. BotFather replies with the **bot token** — `123456789:AAH-xxxx...`.
+   That token is the bot's password. Never commit it; if it ever leaks, `/revoke`
+   in BotFather mints a new one. Optional polish: `/setdescription` → "Your Monday
+   ad-intelligence brief for Kenya — winners, hook tests, new entrants. 09:00 Nairobi."
+
+**2. Say hello to your bot (do not skip):** open the bot from BotFather's message and
+press **Start** (or send any message). Bots cannot message you first — without this
+step every later send fails with `chat not found`.
+
+**3. Get your chat ID.** Open in any browser:
+
+```
+https://api.telegram.org/bot<TOKEN>/getUpdates
+```
+
+(replace `<TOKEN>` with the full token, no spaces). In the JSON, find
+`"chat":{"id":123456789,...}` — that number is your chat ID. Blank result? Send the
+bot another message and refresh. Shortcut for personal chats: message **@userinfobot**
+— your Telegram user ID *is* your chat ID. Groups: add the bot to the group, run
+`/setprivacy` → **Disable** in BotFather (lets getUpdates see chatter), post anything
+in the group, refresh getUpdates — the group ID is negative (e.g. `-1001234...`);
+use it as-is.
+
+**4. Add two repository secrets** (repo → Settings → Secrets and variables → Actions
+→ New repository secret; secrets are write-only — a typo can only be fixed by
+overwriting, never viewed):
+
+| Name | Value |
+|---|---|
+| `FUATILIA_TELEGRAM_BOT_TOKEN` | the full bot token, e.g. `123456789:AAH-...` |
+| `FUATILIA_TELEGRAM_CHAT_ID` | the numeric chat ID, e.g. `123456789` |
+
+**5. Test from your laptop** (sends the newest file in `digests/`):
+
+```bash
+FUATILIA_TELEGRAM_BOT_TOKEN=123456789:AAH-... \
+FUATILIA_TELEGRAM_CHAT_ID=123456789 \
+node bin/fuatilia.js deliver
+```
+
+**6. Test in the cloud:** repo → Actions → **Fuatilia AdWatch** → Run workflow →
+wait ~1 minute → the condensed digest lands on your phone. From then on it arrives
+every Monday 09:00 Nairobi, no one has to remember anything.
+
+**Troubleshooting**
+
+| Symptom | Cause → fix |
+|---|---|
+| `Telegram API 401` | token wrong or revoked → re-copy from BotFather, overwrite the secret |
+| `400 ... chat not found` | you never pressed Start, or the chat ID is wrong (groups are negative) |
+| CLI says `skipped: no delivery channels configured` | env var names typo'd — they must be exactly `FUATILIA_TELEGRAM_BOT_TOKEN` + `FUATILIA_TELEGRAM_CHAT_ID` |
+| Workflow green but silent | deliver ran before any digest existed → ensure the digest step ran, or pass `--digest path` |
+| Want it in a group too | chat ID = group's negative ID; one bot can serve both (second secret set not needed — one channel, one destination) |
 
 ## 2. WhatsApp (official Cloud API)
 
