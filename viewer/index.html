@@ -16,6 +16,9 @@
   h1 { font-size: 22px; letter-spacing: .3px; }
   h1 span { color: var(--green); }
   .sub { color: var(--dim); margin: 6px 0 18px; font-size: 14px; }
+  .crumb { margin: 10px 0 4px; }
+  .crumb a { color: var(--blue); text-decoration: none; font-size: 13px; }
+  .crumb a:hover { text-decoration: underline; }
   .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
   .toolbar button, .toolbar input {
     background: var(--panel); border: 1px solid var(--line); color: var(--text);
@@ -45,6 +48,7 @@
 </head>
 <body>
 <div class="wrap">
+  <p class="crumb"><a href="../">&larr; Fuatilia home</a></p>
   <h1><span>Fuatilia</span> — Kenya ad watch</h1>
   <p class="sub">Public ad-library captures, classified by tenure and version signals. Signals are heuristics, not proof.</p>
 
@@ -64,7 +68,7 @@
   <div class="foot">
     Built from public transparency surfaces (Meta Ad Library · Google Ads Transparency Center · TikTok Creative Center) by human capture.
     Demo rows are fictional. Method: <code>docs/METHOD.md</code> · Schema: <code>docs/SCHEMA.md</code>.
-    Serve locally with <code>python3 -m http.server</code> from the repo root, or via GitHub Pages.
+    Also live on GitHub Pages: <a href="../">the Fuatilia landing page</a>.
   </div>
 </div>
 

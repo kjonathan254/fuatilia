@@ -7,6 +7,9 @@
 
 **Product #2 of the DC254 stack** (Product #1: the [Data-Centers-254](https://github.com/kjonathan254/Data-Centers-254) content engine).
 
+**Live site:** <https://kjonathan254.github.io/fuatilia/> — landing page + data viewer,
+published from `main` via GitHub Pages.
+
 ---
 
 ## The gap it fills
@@ -113,7 +116,7 @@ out of the box and lights up as you configure. Setup guide: `docs/DELIVERY.md`.
 ## Roadmap
 
 - **v0.2** ✅ — Telegram/WhatsApp/webhook digest delivery · Meta API collector (EU/issue tier)
-- **v0.3** — GitHub Pages viewer polish · multi-country profiles (TZ / UG / RW) · digest HTML edition
+- **v0.3** — GitHub Pages site ✅ (landing + viewer, `main` → Pages) · multi-country profiles (TZ / UG / RW) · digest HTML edition
 - **v1.0** — Swahili/Sheng mode · contributor capture playbook · first paid analysis cohort
 
 ## Non-goals
