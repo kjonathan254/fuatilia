@@ -1,0 +1,41 @@
+# Fuatilia weekly digest — Monday 09:00 Nairobi (06:00 UTC).
+# Renders digests/adwatch-YYYY-MM-DD.md from data/captures.jsonl and uploads it as an
+# artifact (needs a GitHub login to download — digests can carry commercial observations,
+# so like Repo Watch this is deliberately NOT published to the open web).
+#
+# Run by hand: Actions tab -> "Fuatilia AdWatch" -> Run workflow.
+
+name: Fuatilia AdWatch
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Monday 06:00 UTC = 09:00 EAT
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuatilia-adwatch
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate weekly adwatch digest
+        run: node bin/fuatilia.js digest --out digests
+
+      - name: Upload digest artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: adwatch-digest
+          path: digests/adwatch-*.md
+          retention-days: 90
+          if-no-files-found: error

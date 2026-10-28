@@ -1,0 +1,73 @@
+{
+  "country": "KE",
+  "updated": "2026-10-28",
+  "note": "Brands and categories worth watching in Kenya. page_id stays null until you open the advertiser in the Meta Ad Library and paste its ID. Categories are search seeds for weekly browsing.",
+  "watchlist": [
+    {
+      "advertiser": "Safaricom",
+      "category": "telco",
+      "platforms": ["meta", "google", "tiktok"],
+      "page_id": null,
+      "how_to_find": "Meta Ad Library -> search 'Safaricom' -> open advertiser page -> paste page_id here"
+    },
+    {
+      "advertiser": "Zuku",
+      "category": "isp",
+      "platforms": ["meta", "google"],
+      "page_id": null,
+      "how_to_find": "search 'Zuku' / 'Zuku Fibre' in the library, country=KE"
+    },
+    {
+      "advertiser": "Faiba",
+      "category": "isp",
+      "platforms": ["meta", "google"],
+      "page_id": null,
+      "how_to_find": "search 'Faiba' in the library, country=KE"
+    },
+    {
+      "advertiser": "Starlink Kenya",
+      "category": "isp",
+      "platforms": ["meta", "google"],
+      "page_id": null,
+      "how_to_find": "search 'Starlink' in the library, country=KE (official + reseller pages)"
+    },
+    {
+      "advertiser": "M-Kopa",
+      "category": "fintech-hardware",
+      "platforms": ["meta", "google", "tiktok"],
+      "page_id": null,
+      "how_to_find": "search 'M-KOPA' in the library, country=KE"
+    },
+    {
+      "advertiser": "Jumia Kenya",
+      "category": "e-commerce",
+      "platforms": ["meta", "google", "tiktok"],
+      "page_id": null,
+      "how_to_find": "search 'Jumia' in the library, country=KE"
+    },
+    {
+      "advertiser": "Chipper Cash",
+      "category": "fintech",
+      "platforms": ["meta", "tiktok"],
+      "page_id": null,
+      "how_to_find": "search 'Chipper Cash' in the library, country=KE"
+    },
+    {
+      "advertiser": "Carry1st",
+      "category": "gaming",
+      "platforms": ["meta", "tiktok", "google"],
+      "page_id": null,
+      "how_to_find": "search 'Carry1st' in the library, country=KE"
+    }
+  ],
+  "search_seeds": [
+    "home fibre wifi",
+    "wifi installation",
+    "posture corrector",
+    "smart watch",
+    "LED mask",
+    "solar panel kit",
+    "data bundles promo",
+    "online loans"
+  ]
+}

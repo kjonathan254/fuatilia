@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Syntax check all sources
+        run: |
+          node --check bin/fuatilia.js
+          node --check lib/signals.js
+          node --check lib/digest.js
+
+      - name: Validate watchlist + captures JSON
+        run: node bin/fuatilia.js check
+
+      - name: Smoke test — score + digest render
+        run: |
+          node bin/fuatilia.js score
+          node bin/fuatilia.js digest --out /tmp/adwatch-test
+          test -s /tmp/adwatch-test/adwatch-*.md
