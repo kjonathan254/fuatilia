@@ -7,6 +7,11 @@
 //   fuatilia check             validate captures against the schema
 //   fuatilia score             classify every captured ad, printed as a table
 //   fuatilia digest [--out D]  render the weekly markdown digest
+//   fuatilia deliver [--digest F]  send the latest digest: Telegram / WhatsApp /
+//                                  webhook — skips channels with no secrets set
+//   fuatilia collect [--terms T] [--countries KE,DE] [--limit N]
+//                                  pull the Meta Ad Library API tier (EU/issue ads);
+//                                  skips when META_ACCESS_TOKEN is not set
 //
 // Method: docs/METHOD.md · Schema: docs/SCHEMA.md · License: MIT
 
@@ -15,8 +20,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { classify, aggregate, scaleBand } from "../lib/signals.js";
 import { renderDigest } from "../lib/digest.js";
+import { deliver } from "../lib/deliver.js";
+import { collect } from "../lib/collector.js";
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
 const CAPTURES = path.join(DATA_DIR, "captures.jsonl");
@@ -292,6 +299,32 @@ function cmdDigest(args) {
   }
 }
 
+function cmdDeliver(args) {
+  deliver(ROOT, process.env, args.digest || null)
+    .then((r) => {
+      r.skipped.forEach((m) => console.log(`skip: ${m}`));
+      r.sent.forEach((m) => console.log(`sent: ${m}`));
+      r.failed.forEach((f) => console.error(`failed: ${f.channel} — ${f.error}`));
+      if (r.failed.length) process.exit(1);
+    })
+    .catch((e) => die(String(e.message || e)));
+}
+
+async function cmdCollect(args) {
+  const r = await collect(ROOT, process.env, {
+    terms: args.terms,
+    countries: args.countries,
+    limit: args.limit,
+  });
+  (r.skipped || []).forEach((m) => console.log(`skip: ${m}`));
+  if (r.fetched !== undefined) {
+    console.log(
+      `collected: ${r.appended} new records (fetched ${r.fetched}) from [${(r.countries || []).join(",")}] terms: ${(r.terms || []).join(", ")}`,
+    );
+  }
+  (r.notes || []).forEach((n) => console.log(`note: ${n}`));
+}
+
 // ---------- main ----------
 
 const [cmd, ...rest] = process.argv.slice(2);
@@ -312,6 +345,12 @@ switch (cmd) {
     break;
   case "digest":
     cmdDigest(args);
+    break;
+  case "deliver":
+    cmdDeliver(args);
+    break;
+  case "collect":
+    cmdCollect(args);
     break;
   case "version":
   case "--version":

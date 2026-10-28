@@ -23,9 +23,11 @@ open source (MIT).
 
 | Piece | File | What it does |
 |---|---|---|
-| CLI | `bin/fuatilia.js` | `init` · `add` · `check` · `score` · `digest` — zero-dependency Node ≥ 18 |
+| CLI | `bin/fuatilia.js` | `init` · `add` · `check` · `score` · `digest` · `deliver` · `collect` — zero-dependency Node ≥ 18 |
 | Signals engine | `lib/signals.js` | Tenure, version counts, scale bands → winner candidates & hook tests |
 | Digest renderer | `lib/digest.js` | The Monday Markdown sheet: pulse, winners, hook tests, new entrants, teardown list |
+| Delivery | `lib/deliver.js` | Sends the digest to **Telegram**, **WhatsApp (Cloud API)** or any webhook — env-driven, skips when unconfigured |
+| API collector | `lib/collector.js` | Pulls the Meta Ad Library **API tier** (EU + issue ads) into `captures.jsonl`, de-duplicated |
 | Watchlist | `watchlist.json` | Kenyan brands & category search seeds to track weekly |
 | Capture store | `data/captures.jsonl` | One JSON object per seen ad card (schema: `docs/SCHEMA.md`) |
 | Monday Action | `.github/workflows/adwatch.yml` | Generates the digest every **Monday 09:00 Nairobi** as a workflow artifact |
@@ -51,6 +53,10 @@ node bin/fuatilia.js score
 
 # 4. render the digest
 node bin/fuatilia.js digest
+
+# 5. (optional) send it to your phone — Telegram in ~10 minutes:
+#    repo secrets: FUATILIA_TELEGRAM_BOT_TOKEN, FUATILIA_TELEGRAM_CHAT_ID
+#    full guide (WhatsApp + webhook + Meta API): docs/DELIVERY.md
 ```
 
 Serve the viewer: `python3 -m http.server` from the repo root → open `/viewer/`.
@@ -92,11 +98,22 @@ weekly reading habit. **Sell analysis, never raw platform data.**
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — full definition, 5W1H, business model, roadmap
 - [`docs/METHOD.md`](docs/METHOD.md) — the four-part method + legality boundaries
 - [`docs/SCHEMA.md`](docs/SCHEMA.md) — the capture record schema
+- [`docs/DELIVERY.md`](docs/DELIVERY.md) — Telegram/WhatsApp/webhook setup + Meta API collector
+
+## The Monday pipeline
+
+```
+collect (Meta API tier — optional) → digest (always) → deliver (Telegram/WhatsApp/webhook — optional)
+         skips without token                    skips without secrets
+```
+
+Every optional stage self-skips when its secrets are missing, so a fresh fork runs green
+out of the box and lights up as you configure. Setup guide: `docs/DELIVERY.md`.
 
 ## Roadmap
 
-- **v0.2** — Telegram/WhatsApp digest delivery · Meta API collector for EU/issue-ad tiers
-- **v0.3** — GitHub Pages viewer · multi-country profiles (TZ / UG / RW)
+- **v0.2** ✅ — Telegram/WhatsApp/webhook digest delivery · Meta API collector (EU/issue tier)
+- **v0.3** — GitHub Pages viewer polish · multi-country profiles (TZ / UG / RW) · digest HTML edition
 - **v1.0** — Swahili/Sheng mode · contributor capture playbook · first paid analysis cohort
 
 ## Non-goals

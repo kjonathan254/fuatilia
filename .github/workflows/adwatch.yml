@@ -1,7 +1,7 @@
 # Fuatilia weekly digest — Monday 09:00 Nairobi (06:00 UTC).
-# Renders digests/adwatch-YYYY-MM-DD.md from data/captures.jsonl and uploads it as an
-# artifact (needs a GitHub login to download — digests can carry commercial observations,
-# so like Repo Watch this is deliberately NOT published to the open web).
+# Pipeline: collect (optional Meta API tier) -> digest -> deliver (optional Telegram/
+# WhatsApp/webhook). Every optional stage skips itself when its secrets are missing,
+# so a fresh fork works out of the box and lights up channel by channel as you add them.
 #
 # Run by hand: Actions tab -> "Fuatilia AdWatch" -> Run workflow.
 
@@ -29,8 +29,27 @@ jobs:
         with:
           node-version: 20
 
+      - name: Collect Meta API tier (EU/issue ads — skips without token)
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          FUATILIA_META_API_VERSION: ${{ secrets.FUATILIA_META_API_VERSION }}
+          FUATILIA_COLLECT_TERMS: ${{ secrets.FUATILIA_COLLECT_TERMS }}
+          FUATILIA_COLLECT_COUNTRIES: ${{ secrets.FUATILIA_COLLECT_COUNTRIES }}
+        run: node bin/fuatilia.js collect
+
       - name: Generate weekly adwatch digest
         run: node bin/fuatilia.js digest --out digests
+
+      - name: Deliver digest (Telegram/WhatsApp/webhook — skips without secrets)
+        env:
+          FUATILIA_TELEGRAM_BOT_TOKEN: ${{ secrets.FUATILIA_TELEGRAM_BOT_TOKEN }}
+          FUATILIA_TELEGRAM_CHAT_ID: ${{ secrets.FUATILIA_TELEGRAM_CHAT_ID }}
+          FUATILIA_WHATSAPP_TOKEN: ${{ secrets.FUATILIA_WHATSAPP_TOKEN }}
+          FUATILIA_WHATSAPP_PHONE_ID: ${{ secrets.FUATILIA_WHATSAPP_PHONE_ID }}
+          FUATILIA_WHATSAPP_TO: ${{ secrets.FUATILIA_WHATSAPP_TO }}
+          FUATILIA_WHATSAPP_API_VERSION: ${{ secrets.FUATILIA_WHATSAPP_API_VERSION }}
+          FUATILIA_WEBHOOK_URL: ${{ secrets.FUATILIA_WEBHOOK_URL }}
+        run: node bin/fuatilia.js deliver
 
       - name: Upload digest artifact
         uses: actions/upload-artifact@v4
