@@ -1,0 +1,100 @@
+# Fuatilia launch kit — X (Twitter) thread
+
+Voice: Kevin Jonathan Otieno / DC254. Every post is under 280 characters. Links go in
+the first reply (external links in post body suppress reach). Post as a thread, then
+pin it. Attach one screenshot to the first post: the landing page hero or the live
+viewer — a real image beats a clean feed.
+
+---
+
+## The thread
+
+**1/8 — the hook**
+
+Kenya's biggest advertisers publish their entire playbook in public. Every ad, its
+start date, its version count. Free to read, hiding in plain sight. I built a tool
+that reads it for you every Monday.
+
+**2/8 — the source**
+
+The sources are Meta's Ad Library and Google's Ads Transparency Center. Every ad
+running in Kenya, no login, no fee. Reading it is the hard part: hundreds of ad cards
+with no memory. The trick is counting days and versions.
+
+**3/8 — the signals**
+
+Two numbers do the reading:
+
+1. An ad alive after 90 days is a winner candidate. Nobody funds a loser for a
+quarter.
+
+2. Three or more versions of the same ad means hook testing. Watch which opening
+survives, copy its structure.
+
+**4/8 — the product**
+
+I called it Fuatilia. Swahili for keep watch. Free, open source, MIT. Every Monday
+09:00 Nairobi it builds a brief: winner candidates, hook tests, new entrants, landing
+pages worth a teardown. Delivered straight to your Telegram or WhatsApp.
+
+**5/8 — who it's for**
+
+Built for the advertisers global tools ignore. BigSpy, PiPiAds, Foreplay, AdClarity:
+zero Kenyan coverage. Enterprise intelligence costs more than most SME budgets here.
+If you sell fibre, solar, loans or skincare in Kenya, this is for you.
+
+**6/8 — the honesty**
+
+Full honesty, in the docs and on every page: ad spend is private, so exact budgets
+are impossible. Fuatilia reads time and versions instead. It stamps signal, not proof
+on everything. You verify, then move.
+
+**7/8 — how to try it**
+
+Try it in one minute: open the site, tap the live viewer, see what the radar sees.
+Want the Monday brief on your phone? Create a Telegram bot, paste two keys into repo
+secrets. Fifteen minutes, once, then it arrives forever.
+
+**8/8 — the ask**
+
+Everything is MIT licensed, zero dependencies, and the method is documented for
+anyone to audit. Fork it, break it, improve it. Tell me what to track next. Links
+below.
+
+**First reply (the links)**
+
+Live site: https://kjonathan254.github.io/fuatilia/
+GitHub: https://github.com/kjonathan254/fuatilia
+Issues and ideas welcome: https://github.com/kjonathan254/fuatilia/issues
+
+---
+
+## Posting checklist
+
+1. Screenshot the landing hero (or viewer with data on screen) — attach to post 1.
+2. Best window for a Kenyan tech audience: Tuesday–Thursday, 08:00–10:00 EAT, or
+   Sunday 19:00–21:00 EAT.
+3. Post the thread, drop the links reply immediately, pin the thread.
+4. First hour matters: reply to every comment, quote-tweet yourself at lunch with one
+   interesting capture from the viewer.
+5. Do not edit post 1 after posting (edits reset distribution).
+6. Skip hashtags on the thread itself; one `#BuiltInKenya` in a follow-up post is
+   enough.
+
+## Follow-up posts (the week after)
+
+- **Teardown Tuesday** — pick one winner candidate from the viewer, break down its
+  landing page structure (promise → proof → offer → urgency → CTA). One per week.
+- **Signal of the week** — a screenshot of the most interesting capture, one line on
+  why it matters.
+- **Build in public** — "This week Fuatilia shipped X" (delivery channels, Pages
+  site, first real captures).
+- **Myth post** — "Anyone selling you exact Kenyan ad spend numbers is guessing."
+  Explain what public data can and cannot tell you.
+- **Community ask** — "Which Kenyan niche should the radar watch next? ISPs? Betting?
+  Skincare? Most replies wins Monday's watchlist."
+
+## One-liner (bio / profile)
+
+Fuatilia — the open ad-intelligence radar for Kenya. What Kenya is advertising,
+read for you every Monday. Free, MIT, built in Nairobi.
