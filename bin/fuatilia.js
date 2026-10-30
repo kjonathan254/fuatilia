@@ -13,7 +13,8 @@
 //   fuatilia collect [--terms T] [--countries KE,DE] [--limit N]
 //                                  pull the Meta Ad Library API tier (EU/issue ads);
 //                                  skips when META_ACCESS_TOKEN is not set
-//   fuatilia push [--source S]    upload real captures to the Supabase platform
+//   fuatilia push [--source S] [--brief UUID]
+//                                 upload real captures to the Supabase platform
 //                                  (observations + heartbeat); skips when
 //                                  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are unset
 //
@@ -62,7 +63,9 @@ Fuatilia v${VERSION} — know what Kenya is advertising (the publicly observable
   fuatilia check                     validate data/captures.jsonl (+ demo.jsonl)
   fuatilia score                     print all captures with tenure + signals + scale
   fuatilia digest [--out DIR]        render the weekly digest (default: digests/)
-  fuatilia push [--source S]         push captures to Supabase (automation platform)
+  fuatilia push [--source S] [--brief UUID]
+                                 push captures to Supabase (automation platform);
+                                 --brief links the evidence to a portal brief
   fuatilia snapshot                  write snapshots/<week>.json (weekly history)
 
 Signals are heuristics, not proof. Long-running != profitable; variants != new hooks.
@@ -482,7 +485,7 @@ async function cmdCollect(args) {
 
 async function cmdPush(args) {
   try {
-    const r = await pushCaptures(ROOT, process.env, { source: args.source });
+    const r = await pushCaptures(ROOT, process.env, { source: args.source, briefId: args.brief });
     (r.skipped || []).forEach((m) => console.log(`skip: ${m}`));
     (r.notes || []).forEach((n) => console.log(`note: ${n}`));
     if (r.pushed !== undefined) {

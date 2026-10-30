@@ -45,7 +45,9 @@ Automatic delivery            WhatsApp · email · Telegram
    frequency, delivery channel + time. Stored in `briefs` + `brief_competitors`.
 3. **Fuatilia collects** — scheduled sweeps and assisted capture land in `observations`
    with source, capture method and capture date. `fuatilia push` is the bridge from the
-   local engine to the platform (idempotent via `dedupe_key`).
+   local engine to the platform (idempotent via `dedupe_key`); pass `--brief <uuid>`
+   (or set `FUATILIA_BRIEF_ID`) so the evidence lands attached to that brief — unlinked
+   rows are stored but stay pipeline-only until a linked push claims them.
 4. **Analysis** — the deterministic engine computes tenure, variants, active-ad bands;
    the AI layer writes interpretation **on top of** those numbers, never instead of them.
 5. **Report** — `reports` rows with `summary` (counts) and `content` (executive
@@ -85,15 +87,17 @@ every Monday is not a product advantage — reliability is the product.
 ## 5 · Security model
 
 - **Publishable (anon) key** — the portal uses it; every query is governed by RLS.
-  Customers only ever see their own briefs, reports and deliveries. `observations` are
-  readable by any authenticated user (public ad evidence), but **written only by the
-  pipeline** — no insert policy exists for clients.
+  Customers only ever see their own data: an `observations` row is readable only by the
+  customer whose brief it was collected for (rows with no brief link and demo rows stay
+  pipeline-only), and `briefs → reports → deliveries` chain ownership through RLS joins.
+  `observations` are **written only by the pipeline** — no insert policy exists for clients.
 - **Service-role key** — bypasses RLS; belongs to the automation pipeline only
   (`fuatilia push`, n8n, report writer). It lives in CI secrets / shell env — never in
   the repo, never in the portal, never in client code. If it is ever exposed in a chat
   or a screenshot, rotate it in Supabase → Settings → API.
-- **Row ownership** — `briefs → reports → deliveries` chains enforce ownership through
-  RLS joins; no customer can read another customer's configuration.
+- **Row ownership** — every customer-facing table resolves to the owning customer through
+  RLS joins (`briefs.customer_id`, or `observations/reports/deliveries → brief → customer`);
+  no customer can read another customer's configuration or evidence.
 
 ## 6 · Build stages — where we are
 

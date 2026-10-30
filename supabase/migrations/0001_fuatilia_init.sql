@@ -13,9 +13,11 @@
 --          "5 free intelligence sessions, then paid" model.
 --
 -- Run in: Supabase Dashboard → SQL Editor (or `supabase db push`).
+-- Safe to re-run: tables/indexes use IF NOT EXISTS, the onboarding function is
+-- CREATE OR REPLACE, and every policy is dropped before it is recreated.
+-- gen_random_uuid() is core since PostgreSQL 13 (Supabase runs 15+), so no
+-- extension install is required.
 -- ============================================================================
-
-create extension if not exists "pgcrypto";
 
 -- ---------------------------------------------------------------------------
 -- 1 · CUSTOMER PORTAL
@@ -231,6 +233,28 @@ alter table public.deliveries           enable row level security;
 alter table public.subscriptions        enable row level security;
 alter table public.intelligence_sessions enable row level security;
 
+-- ---------------------------------------------------------------------------
+-- Re-run safety — PostgreSQL has no CREATE POLICY IF NOT EXISTS, so drop every
+-- policy this script owns before recreating it. On a fresh database these are
+-- no-ops; on a re-run they replace the existing definitions with the ones
+-- below. (Includes the pre-v0.5 observations policy name.)
+-- ---------------------------------------------------------------------------
+
+drop policy if exists "customers read own" on public.customers;
+drop policy if exists "customers insert own" on public.customers;
+drop policy if exists "customers update own" on public.customers;
+drop policy if exists "briefs owner all" on public.briefs;
+drop policy if exists "competitors owner all" on public.brief_competitors;
+drop policy if exists "observations authenticated read" on public.observations;
+drop policy if exists "observations owner read" on public.observations;
+drop policy if exists "advertisers authenticated read" on public.advertisers;
+drop policy if exists "collection_runs authenticated read" on public.collection_runs;
+drop policy if exists "reports owner read" on public.reports;
+drop policy if exists "deliveries owner read" on public.deliveries;
+drop policy if exists "subscriptions owner read" on public.subscriptions;
+drop policy if exists "subscriptions owner bootstrap" on public.subscriptions;
+drop policy if exists "sessions owner read" on public.intelligence_sessions;
+
 -- customers
 create policy "customers read own" on public.customers
   for select using (auth.uid() = id);
@@ -251,10 +275,20 @@ create policy "competitors owner all" on public.brief_competitors
     exists (select 1 from public.briefs b where b.id = brief_id and b.customer_id = auth.uid())
   );
 
--- observations: authenticated users can read public ad evidence;
--- writes have NO policy → service_role (the pipeline) only.
-create policy "observations authenticated read" on public.observations
-  for select to authenticated using (example = false);
+-- observations: customer-scoped evidence. A row is readable only by the
+-- customer who owns the brief it was collected for. Rows with no brief link
+-- (unlinked pushes, pre-onboarding captures) and demo rows stay invisible to
+-- clients — the service_role pipeline is the only writer AND the only reader
+-- of those. Writes have NO policy → service_role (the pipeline) only.
+create policy "observations owner read" on public.observations
+  for select to authenticated using (
+    example = false
+    and brief_id is not null
+    and exists (
+      select 1 from public.briefs b
+      where b.id = observations.brief_id and b.customer_id = auth.uid()
+    )
+  );
 
 create policy "advertisers authenticated read" on public.advertisers
   for select to authenticated using (true);
