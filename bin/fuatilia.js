@@ -13,6 +13,9 @@
 //   fuatilia collect [--terms T] [--countries KE,DE] [--limit N]
 //                                  pull the Meta Ad Library API tier (EU/issue ads);
 //                                  skips when META_ACCESS_TOKEN is not set
+//   fuatilia push [--source S]    upload real captures to the Supabase platform
+//                                  (observations + heartbeat); skips when
+//                                  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are unset
 //
 // Data files: data/captures.jsonl = real captures only. data/demo.jsonl = the
 // fictional demo rows (example:true), kept out of the production store.
@@ -26,6 +29,7 @@ import { classify, aggregate, scaleBand, resolveActiveAds } from "../lib/signals
 import { renderDigest } from "../lib/digest.js";
 import { deliver } from "../lib/deliver.js";
 import { collect } from "../lib/collector.js";
+import { pushCaptures } from "../lib/supabase-sync.js";
 
 const VERSION = "0.4.0";
 const ROOT = process.cwd();
@@ -58,6 +62,7 @@ Fuatilia v${VERSION} — know what Kenya is advertising (the publicly observable
   fuatilia check                     validate data/captures.jsonl (+ demo.jsonl)
   fuatilia score                     print all captures with tenure + signals + scale
   fuatilia digest [--out DIR]        render the weekly digest (default: digests/)
+  fuatilia push [--source S]         push captures to Supabase (automation platform)
   fuatilia snapshot                  write snapshots/<week>.json (weekly history)
 
 Signals are heuristics, not proof. Long-running != profitable; variants != new hooks.
@@ -475,6 +480,27 @@ async function cmdCollect(args) {
   (r.notes || []).forEach((n) => console.log(`note: ${n}`));
 }
 
+async function cmdPush(args) {
+  try {
+    const r = await pushCaptures(ROOT, process.env, { source: args.source });
+    (r.skipped || []).forEach((m) => console.log(`skip: ${m}`));
+    (r.notes || []).forEach((n) => console.log(`note: ${n}`));
+    if (r.pushed !== undefined) {
+      console.log(
+        `pushed: ${r.pushed} observation${r.pushed === 1 ? "" : "s"} → Supabase (deduped by evidence key)`,
+      );
+    }
+  } catch (e) {
+    if (/HTTP 40[14]/.test(e.message) && /does not exist|schema cache|Could not find/i.test(e.message)) {
+      die(
+        "platform schema not ready — run supabase/migrations/0001_fuatilia_init.sql in the SQL Editor first\n" +
+        `detail: ${e.message}`,
+      );
+    }
+    die(e.message || String(e));
+  }
+}
+
 // ---------- main ----------
 
 const [cmd, ...rest] = process.argv.slice(2);
@@ -504,6 +530,9 @@ switch (cmd) {
     break;
   case "collect":
     cmdCollect(args);
+    break;
+  case "push":
+    cmdPush(args);
     break;
   case "version":
   case "--version":
