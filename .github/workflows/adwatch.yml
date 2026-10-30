@@ -1,7 +1,17 @@
 # Fuatilia weekly digest — Monday 09:00 Nairobi (06:00 UTC).
-# Pipeline: collect (optional Meta API tier) -> digest -> deliver (optional Telegram/
-# WhatsApp/webhook). Every optional stage skips itself when its secrets are missing,
-# so a fresh fork works out of the box and lights up channel by channel as you add them.
+# Pipeline: collect (optional Meta API tier) -> digest -> snapshot -> deliver
+# (optional Telegram/WhatsApp/webhook). Every optional stage skips itself when its
+# secrets are missing, so a fresh fork works out of the box and lights up channel
+# by channel as you add them.
+#
+# Reliability notes (post-audit, 2026-10-30):
+#   * GitHub pauses scheduled workflows in public repos after ~60 days without
+#     repo activity. The heartbeat commit below counts as activity — and the
+#     ops/heartbeat.json file makes the last successful run publicly visible.
+#   * Delivery is SCHEDULED, not guaranteed: channel delivery depends on secrets
+#     being configured and on GitHub Actions availability.
+#   * The digest + snapshot are committed to the repo (persistent archive) and
+#     also uploaded as an artifact.
 #
 # Run by hand: Actions tab -> "Fuatilia AdWatch" -> Run workflow.
 
@@ -13,7 +23,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: fuatilia-adwatch
@@ -22,6 +32,7 @@ concurrency:
 jobs:
   digest:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -40,6 +51,9 @@ jobs:
       - name: Generate weekly adwatch digest
         run: node bin/fuatilia.js digest --out digests
 
+      - name: Write weekly snapshot (history for trend reads)
+        run: node bin/fuatilia.js snapshot
+
       - name: Deliver digest (Telegram/WhatsApp/webhook — skips without secrets)
         env:
           FUATILIA_TELEGRAM_BOT_TOKEN: ${{ secrets.FUATILIA_TELEGRAM_BOT_TOKEN }}
@@ -51,6 +65,26 @@ jobs:
           FUATILIA_WEBHOOK_URL: ${{ secrets.FUATILIA_WEBHOOK_URL }}
         run: node bin/fuatilia.js deliver
 
+      - name: Write heartbeat (public proof of last successful run)
+        if: success()
+        run: |
+          mkdir -p ops
+          printf '{\n  "last_successful_run": "%s",\n  "workflow": "adwatch",\n  "commit": "%s",\n  "note": "written by the AdWatch workflow on every success; delivery is scheduled, subject to GitHub Actions availability and configured channel secrets"\n}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${GITHUB_SHA:0:7}" > ops/heartbeat.json
+          cat ops/heartbeat.json
+
+      - name: Commit digest, snapshot and heartbeat (persistent archive)
+        if: success()
+        run: |
+          git config user.name "fuatilia-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add digests snapshots ops/heartbeat.json data/captures.jsonl 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "nothing new to archive"
+          else
+            git commit -m "adwatch: weekly digest + snapshot archive [skip ci]"
+            git push
+          fi
+
       - name: Upload digest artifact
         uses: actions/upload-artifact@v4
         with:
@@ -58,3 +92,18 @@ jobs:
           path: digests/adwatch-*.md
           retention-days: 90
           if-no-files-found: error
+
+      - name: Notify on failure (Telegram — skips without secrets)
+        if: failure()
+        env:
+          FUATILIA_TELEGRAM_BOT_TOKEN: ${{ secrets.FUATILIA_TELEGRAM_BOT_TOKEN }}
+          FUATILIA_TELEGRAM_CHAT_ID: ${{ secrets.FUATILIA_TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -n "$FUATILIA_TELEGRAM_BOT_TOKEN" ] && [ -n "$FUATILIA_TELEGRAM_CHAT_ID" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${FUATILIA_TELEGRAM_BOT_TOKEN}/sendMessage" \
+              -d chat_id="${FUATILIA_TELEGRAM_CHAT_ID}" \
+              -d text="⚠️ Fuatilia AdWatch FAILED for run ${GITHUB_RUN_ID} on ${GITHUB_REPOSITORY}. Check: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+              > /dev/null || echo "(telegram notify failed — non-blocking)"
+          else
+            echo "(no Telegram secrets — failure notification skipped)"
+          fi

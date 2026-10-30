@@ -27,28 +27,35 @@ advertiser page.
 
 For each advertiser, note the ad's **start date**. The library shows it on every card.
 
-- **90+ days live** → *winner candidate*. Nobody keeps funding an ad for a quarter
-  without a reason. (120 days is the viral threshold; 90 is the conservative one.
-  Fuatilia flags at 90 and names it a candidate, not a winner.)
-- **3+ active versions of one ad** → *hook testing in progress*. They are spending real
-  money to A/B the opening line, angle or creative right now. Watch which version
-  survives — that is the market telling you what it wants.
+- **90+ days live** → *long-running creative (persistence signal)*. Somebody has kept this
+  ad alive for a quarter — that is worth investigating, but persistence is NOT proof of
+  performance: brand-awareness campaigns, retargeting, automated evergreen delivery,
+  grant-funded advertising and plain autopilot all keep ads running. (120 days is the
+  viral-threshold heuristic; 90 is the conservative flag. Fuatilia names the signal,
+  you supply the verdict.)
+- **3+ active variants of one ad** → *creative experimentation in progress*. They are
+  iterating **something** — possibly the opening hook, but possibly just aspect ratios,
+  language versions, placements, audiences or CTAs. Count the *concepts*, not just the
+  variants (`concept_id` in the schema); that distinction is the difference between
+  counting ads and doing creative intelligence.
 - **Launch dates cluster** (many ads started the same week) → *campaign burst*: product
   launch, seasonal push, or funding round. Compare year-over-year for seasonality.
 
 ## Part 3 — The scale read (how big they are)
 
-Count the advertiser's active ads and map to bands:
+Count the advertiser's **active ads** (the `active_ad_count` you record at capture time —
+never the variant count) and map to bands:
 
 | Active ads | Band | What it usually means |
 |---|---|---|
-| 1–2 | Solo / testing | One person with a card and hope |
-| 3–29 | Scaling | A real media budget and someone watching numbers |
-| 30+ | Team-scale | Agency or in-house team, six-figure monthly spend territory |
+| 1–2 | Light | Small or early-stage activity |
+| 3–29 | Consistent | Steady campaign activity |
+| 30+ | Wide-footprint | Large ongoing program |
 
-Bands are calibrated for the Kenyan market's smaller absolute budgets; treat them as
-order-of-magnitude reads, never exact figures. Actual spend is not public outside
-political ads — anyone selling you exact spend numbers for Kenya is guessing.
+Every band output prints its **basis** — `reported_active_ads` (counted on the ad card)
+or `captured_cards` (the fallback when you did not record a total). Treat bands as
+order-of-magnitude **activity** reads, never budget estimates. Actual spend is not public
+outside political ads — anyone selling you exact spend numbers for Kenya is guessing.
 
 ## Part 4 — The landing page (where the click lands)
 
@@ -66,15 +73,17 @@ Fuatilia stores the URL and the headline; the teardown is human work (or a promp
 ## The loop, weekly
 
 1. **Monday morning**: the Action generates the digest from everything captured last week.
-2. **Read the digest**: new entrants, new hook tests, winners crossing the 90-day line.
+2. **Read the digest**: new entrants, new multi-variant advertisers, long-running creatives crossing the 90-day line.
 3. **Capture anything new** you saw while scrolling (`fuatilia add` takes a minute).
-4. **Teardown one winner** properly each week — structure notes into `notes/` (optional).
+4. **Teardown one long-runner** properly each week — structure notes into `notes/` (optional).
 
 ## Legality & platform terms (the boundaries that keep this product alive)
 
-- All three libraries are **public transparency surfaces** built under legal obligation
-  (DSA Article 39 in the EU; political-ad rules in the US; voluntary/regulated programs
-  elsewhere). Browsing them is the intended use.
+- All three libraries are **publicly accessible transparency surfaces** (the DSA creates
+  transparency obligations for the EU; the libraries themselves are open to browse
+  worldwide). Browsing them is the intended use. Public availability is a fact about
+  access, not a claim about Kenyan law: Kenyan commercial ads appear there voluntarily —
+  say "publicly available", never "regulator-mandated in Kenya".
 - **Manual, human capture is fine. Bulk scraping and reselling raw data violate Meta's
   and Google's terms of service.** Fuatilia is a structured notebook for human capture —
   deliberately.
