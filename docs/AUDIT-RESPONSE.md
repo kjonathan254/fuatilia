@@ -25,7 +25,12 @@ This file maps every audit finding to an action: **fixed in this release (v0.3.0
 ## Decisions we took from the audit's strategy section
 
 - **Positioning line adopted**: "Kenyan advertising intelligence hiding in public."
-- **Hybrid model endorsed** (free public radar / paid professional intelligence / MIT core) and written into the roadmap; no charging for access to already-public ads — we charge for research, organisation and time saved, if and when we get there.
+- **Hybrid model, now concretised by the owner (2026-10-30)**: free public radar forever;
+  intelligence **free for the first 5 sessions** — no card, no signup — then paid
+  (Fuatilia Brief from KSh 500/session or KSh 2,500/month; agency tier KSh 10,000/month).
+  Session-based freemium replaces the audit's flat free/paid split: the audience gets
+  hooked on real sessions first, then pays. No charging for access to already-public ads
+  — we charge for research, organisation and time saved.
 - **First target customer** (agencies + independent media buyers) noted for the pilot phase — see the audit's validation experiment, which we accept as the plan for the next 90 days: 30 advertisers, 3 sectors, 4 consecutive weekly briefs, 10 pilot users.
 
 ## Explicitly not done yet (the audit's Week 2–4 backlog)
@@ -49,6 +54,8 @@ repo history) but was deliberately deferred one day so the correctness fixes shi
 > Do you intend Fuatilia to become: an independent public-interest tool, a commercial
 > SaaS, or a hybrid?
 
-The code now supports all three paths (clean MIT core, isolated data stores, honest
-methodology). The recommendation on record is the **hybrid**; the final call belongs to
-@kjonathan254.
+**Answered by the owner on 2026-10-30: a hybrid, with session-based freemium** — the
+radar stays free and open forever; intelligence is free for the first 5 sessions, then
+paid once the value is proven to the operator. The code supports the path (clean MIT
+core, isolated data stores, honest methodology); the pricing copy ships on the landing
+page and in README/docs.
