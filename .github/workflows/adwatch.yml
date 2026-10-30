@@ -1,8 +1,10 @@
 # Fuatilia weekly digest — Monday 09:00 Nairobi (06:00 UTC).
-# Pipeline: collect (optional Meta API tier) -> digest -> snapshot -> deliver
-# (optional Telegram/WhatsApp/webhook). Every optional stage skips itself when its
-# secrets are missing, so a fresh fork works out of the box and lights up channel
-# by channel as you add them.
+# Pipeline: collect (optional Meta API tier) -> push (optional Supabase platform
+# sync) -> digest -> snapshot -> deliver (optional Telegram/WhatsApp/webhook) ->
+# report (optional AI interpretation) -> deliver-reports (optional per-customer
+# WhatsApp templates). Every optional stage skips itself when its secrets are
+# missing, so a fresh fork works out of the box and lights up channel by channel
+# as you add them.
 #
 # Reliability notes (post-audit, 2026-10-30):
 #   * GitHub pauses scheduled workflows in public repos after ~60 days without
@@ -10,10 +12,10 @@
 #     ops/heartbeat.json file makes the last successful run publicly visible.
 #   * Delivery is SCHEDULED, not guaranteed: channel delivery depends on secrets
 #     being configured and on GitHub Actions availability.
-#   * The digest + snapshot are committed to the repo (persistent archive) and
-#     also uploaded as an artifact.
+#   * The digest, snapshot and report are committed to the repo (persistent
+#     archive) and also uploaded as an artifact.
 #
-# Run by hand: Actions tab -> "Fuatilia AdWatch" -> Run workflow.
+# Run by hand: Actions tab -> "Fuatilia AdWatch" -> Run workflow (manual retry).
 
 name: Fuatilia AdWatch
 
@@ -48,6 +50,13 @@ jobs:
           FUATILIA_COLLECT_COUNTRIES: ${{ secrets.FUATILIA_COLLECT_COUNTRIES }}
         run: node bin/fuatilia.js collect
 
+      - name: Push captures to the platform (Supabase — skips without secrets)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          FUATILIA_BRIEF_ID: ${{ secrets.FUATILIA_BRIEF_ID }}
+        run: node bin/fuatilia.js push --source scheduled_workflow
+
       - name: Generate weekly adwatch digest
         run: node bin/fuatilia.js digest --out digests
 
@@ -64,6 +73,28 @@ jobs:
           FUATILIA_WHATSAPP_API_VERSION: ${{ secrets.FUATILIA_WHATSAPP_API_VERSION }}
           FUATILIA_WEBHOOK_URL: ${{ secrets.FUATILIA_WEBHOOK_URL }}
         run: node bin/fuatilia.js deliver
+
+      - name: Write weekly intelligence report (AI layer — deterministic without key)
+        env:
+          FUATILIA_AI_API_KEY: ${{ secrets.FUATILIA_AI_API_KEY }}
+          FUATILIA_AI_BASE_URL: ${{ secrets.FUATILIA_AI_BASE_URL }}
+          FUATILIA_AI_MODEL: ${{ secrets.FUATILIA_AI_MODEL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          FUATILIA_REPORT_BRIEF_ID: ${{ secrets.FUATILIA_REPORT_BRIEF_ID }}
+        run: node bin/fuatilia.js report --out digests
+
+      - name: Deliver per-customer reports (WhatsApp templates — skips without secrets)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          FUATILIA_WHATSAPP_TOKEN: ${{ secrets.FUATILIA_WHATSAPP_TOKEN }}
+          FUATILIA_WHATSAPP_PHONE_ID: ${{ secrets.FUATILIA_WHATSAPP_PHONE_ID }}
+          FUATILIA_WHATSAPP_API_VERSION: ${{ secrets.FUATILIA_WHATSAPP_API_VERSION }}
+          FUATILIA_WHATSAPP_TEMPLATE: ${{ secrets.FUATILIA_WHATSAPP_TEMPLATE }}
+          FUATILIA_WHATSAPP_TEMPLATE_LANG: ${{ secrets.FUATILIA_WHATSAPP_TEMPLATE_LANG }}
+          FUATILIA_PORTAL_URL: ${{ secrets.FUATILIA_PORTAL_URL }}
+        run: node bin/fuatilia.js deliver-reports
 
       - name: Write heartbeat (public proof of last successful run)
         if: success()
@@ -89,7 +120,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: adwatch-digest
-          path: digests/adwatch-*.md
+          path: |
+            digests/adwatch-*.md
+            digests/report-*.md
+            digests/report-*.json
           retention-days: 90
           if-no-files-found: error
 

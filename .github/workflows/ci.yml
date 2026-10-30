@@ -26,14 +26,20 @@ jobs:
           node --check lib/digest.js
           node --check lib/deliver.js
           node --check lib/collector.js
+          node --check lib/supabase-sync.js
+          node --check lib/analyst.js
 
       - name: Validate watchlist + captures JSON
         run: node bin/fuatilia.js check
 
-      - name: Smoke test — score, digest, deliver/collect skip paths
+      - name: Smoke test — score, digest, report, deliver/collect skip paths
         run: |
           node bin/fuatilia.js score
           node bin/fuatilia.js digest --out /tmp/adwatch-test
           test -s /tmp/adwatch-test/adwatch-*.md
+          node bin/fuatilia.js report --out /tmp/adwatch-test
+          test -s /tmp/adwatch-test/report-*.json
+          test -s /tmp/adwatch-test/report-*.md
           node bin/fuatilia.js deliver
+          node bin/fuatilia.js deliver-reports
           node bin/fuatilia.js collect
