@@ -13,8 +13,10 @@ for what the CLI records and what the digest reads.
 ## Part 1 — The search (who is spending)
 
 Open the **Meta Ad Library** (`facebook.com/ads/library`), set country to **Kenya**,
-search a product or category. Every brand paying to sell that thing right now appears.
-No login. The advertiser cannot opt out — public by law.
+search a product or category. Every publicly observable brand advertising that thing
+right now appears. No login. The advertiser cannot opt out of the library — in the EU
+that is law (DSA Art. 39); in Kenya the platforms do it by policy. Either way the data
+is public and free to read.
 
 Do the same in the **Google Ads Transparency Center** (Search/YouTube/Display, ~30-day
 window) and **TikTok Creative Center**. Cross-platform advertisers are the strongest
@@ -27,18 +29,22 @@ advertiser page.
 
 For each advertiser, note the ad's **start date**. The library shows it on every card.
 
-- **90+ days live** → *winner candidate*. Nobody keeps funding an ad for a quarter
-  without a reason. (120 days is the viral threshold; 90 is the conservative one.
-  Fuatilia flags at 90 and names it a candidate, not a winner.)
-- **3+ active versions of one ad** → *hook testing in progress*. They are spending real
-  money to A/B the opening line, angle or creative right now. Watch which version
-  survives — that is the market telling you what it wants.
+- **90+ days live** → *long-running creative*. Someone keeps renewing the budget — a
+  persistence signal, not proof of profit. (120 days is the viral threshold; 90 is the
+  conservative one. Fuatilia flags at 90 and names it exactly what it is: long-running.)
+- **3+ active variants of one ad** → *creative experimentation in progress*. They are
+  iterating the creative — new hooks, or just aspect ratios, languages and placements.
+  Watch which variants survive before you decide it was a hook fight.
 - **Launch dates cluster** (many ads started the same week) → *campaign burst*: product
   launch, seasonal push, or funding round. Compare year-over-year for seasonality.
 
 ## Part 3 — The scale read (how big they are)
 
-Count the advertiser's active ads and map to bands:
+Read the advertiser's **total active-ad count off the library's advertiser page** (Meta
+shows it directly — "X active ads") and map it to bands. Record it in
+`active_ad_count` — the schema has a dedicated field for exactly this. Never infer
+scale from version counts or from how many rows you happened to save; those measure
+different things.
 
 | Active ads | Band | What it usually means |
 |---|---|---|
@@ -66,15 +72,17 @@ Fuatilia stores the URL and the headline; the teardown is human work (or a promp
 ## The loop, weekly
 
 1. **Monday morning**: the Action generates the digest from everything captured last week.
-2. **Read the digest**: new entrants, new hook tests, winners crossing the 90-day line.
+2. **Read the digest**: new entrants, fresh creative experiments, long-runners crossing
+   the 90-day line.
 3. **Capture anything new** you saw while scrolling (`fuatilia add` takes a minute).
-4. **Teardown one winner** properly each week — structure notes into `notes/` (optional).
+4. **Teardown one long-runner** properly each week — structure notes into `notes/` (optional).
 
 ## Legality & platform terms (the boundaries that keep this product alive)
 
-- All three libraries are **public transparency surfaces** built under legal obligation
-  (DSA Article 39 in the EU; political-ad rules in the US; voluntary/regulated programs
-  elsewhere). Browsing them is the intended use.
+- The three libraries are **public transparency surfaces** — some under legal obligation
+  (DSA Article 39 in the EU, political-ad rules in the US), some under platform policy
+  for other markets (Meta's all-ads library covering Kenya is policy, not Kenyan law).
+  Browsing them is the intended use either way.
 - **Manual, human capture is fine. Bulk scraping and reselling raw data violate Meta's
   and Google's terms of service.** Fuatilia is a structured notebook for human capture —
   deliberately.
@@ -91,6 +99,7 @@ A capture is one *active ad card* you saw today:
 
 - advertiser: **Zuku** — platform: **meta** — country: **KE**
 - ad_start: the date on the card — versions: how many active variants of that ad
+- active_ad_count: the advertiser's total active ads (from their library page)
 - offer: "Free installation this month" — landing_url: where the button goes
 - library_url: paste it so future-you can re-check in one click
 

@@ -20,7 +20,7 @@ Add secrets at: **repo → Settings → Secrets and variables → Actions → Ne
 4. BotFather replies with the **bot token** — `123456789:AAH-xxxx...`.
    That token is the bot's password. Never commit it; if it ever leaks, `/revoke`
    in BotFather mints a new one. Optional polish: `/setdescription` → "Your Monday
-   ad-intelligence brief for Kenya — winners, hook tests, new entrants. 09:00 Nairobi."
+   ad-intelligence brief for Kenya — long-runners, experiments, new entrants. 09:00 Nairobi."
 
 **2. Say hello to your bot (do not skip):** open the bot from BotFather's message and
 press **Start** (or send any message). Bots cannot message you first — without this
