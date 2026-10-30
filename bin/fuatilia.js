@@ -244,7 +244,7 @@ function cmdAdd(args) {
   const errs = validateRecord(record);
   if (errs.length) die(errs.map((e) => `-- ${e}`).join("\n"));
   if (!record.advertiser)
-    die("--advertiser is required. Example:\n  fuatilia add --advertiser Zuku --platform meta --country KE --start 2026-09-01 --versions 4");
+    die("--advertiser is required. Example:\n  fuatilia add --advertiser Zuku --platform meta --country KE --start 2026-09-01 --versions 4 --ads 18");
 
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   const target = args.example ? DEMO : CAPTURES;

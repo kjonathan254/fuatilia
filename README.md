@@ -80,6 +80,15 @@ Serve the viewer: `python3 -m http.server` from the repo root → open `/viewer/
 autopilot; grants fund ads that never need profit; variants are not always new hooks.
 Fuatilia classifies — humans decide.
 
+## The model
+
+**Radar is free forever** — the CLI, the method, the Monday digest, the viewer.
+**Intelligence is free for your first 5 sessions** — no card, no signup; get hooked
+first, decide after. Once it has earned its keep: **Fuatilia Brief** from KSh 500 per
+session, or **KSh 2,500/month** for unlimited sessions, weekly snapshots and sector
+filters. **Agency tier: KSh 10,000/month** (multi-seat, custom watchlists). You pay for
+research, organisation and time saved — never for access to already-public ads.
+
 ## Honest data constraints (read before dreaming)
 
 | Source | Kenya commercial ads | Notes |
