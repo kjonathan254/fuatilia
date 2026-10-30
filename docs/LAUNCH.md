@@ -17,37 +17,38 @@ that reads it for you every Monday.
 
 **2/8 — the source**
 
-The sources are Meta's Ad Library and Google's Ads Transparency Center. Every ad
-running in Kenya, no login, no fee. Reading it is the hard part: hundreds of ad cards
-with no memory. The trick is counting days and versions.
+The sources are Meta's Ad Library and Google's Ads Transparency Center. The publicly
+observable ads in Kenya, no login, no fee. Reading it is the hard part: hundreds of ad
+cards with no memory. The trick is counting days, variants and active-ad totals.
 
 **3/8 — the signals**
 
 Two numbers do the reading:
 
-1. An ad alive after 90 days is a winner candidate. Nobody funds a loser for a
-quarter.
+1. An ad alive after 90 days gets a long-runner flag. Someone keeps renewing the
+budget. Persistence, not proof of profit.
 
-2. Three or more versions of the same ad means hook testing. Watch which opening
-survives, copy its structure.
+2. Three or more variants of one ad means creative experimentation. Could be hooks,
+could be placements. Watch which variants survive.
 
 **4/8 — the product**
 
 I called it Fuatilia. Swahili for keep watch. Free, open source, MIT. Every Monday
-09:00 Nairobi it builds a brief: winner candidates, hook tests, new entrants, landing
+09:00 Nairobi it builds a brief: long-runners, experiments, new entrants, landing
 pages worth a teardown. Delivered straight to your Telegram or WhatsApp.
 
 **5/8 — who it's for**
 
-Built for the advertisers global tools ignore. BigSpy, PiPiAds, Foreplay, AdClarity:
-zero Kenyan coverage. Enterprise intelligence costs more than most SME budgets here.
-If you sell fibre, solar, loans or skincare in Kenya, this is for you.
+Built for the advertisers the global tools skip. BigSpy, PiPiAds, Foreplay, AdClarity:
+none lists Kenya as a covered market as of writing. Enterprise intelligence costs
+more than most SME budgets here. If you sell fibre, solar, loans or skincare in Kenya,
+this is for you.
 
 **6/8 — the honesty**
 
 Full honesty, in the docs and on every page: ad spend is private, so exact budgets
-are impossible. Fuatilia reads time and versions instead. It stamps signal, not proof
-on everything. You verify, then move.
+are impossible. Fuatilia reads time, variants and the advertiser's own active-ad
+count instead. It stamps signal, not proof on everything. You verify, then move.
 
 **7/8 — how to try it**
 
@@ -83,7 +84,7 @@ Issues and ideas welcome: https://github.com/kjonathan254/fuatilia/issues
 
 ## Follow-up posts (the week after)
 
-- **Teardown Tuesday** — pick one winner candidate from the viewer, break down its
+- **Teardown Tuesday** — pick one long-runner from the viewer, break down its
   landing page structure (promise → proof → offer → urgency → CTA). One per week.
 - **Signal of the week** — a screenshot of the most interesting capture, one line on
   why it matters.

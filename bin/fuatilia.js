@@ -23,7 +23,7 @@ import { renderDigest } from "../lib/digest.js";
 import { deliver } from "../lib/deliver.js";
 import { collect } from "../lib/collector.js";
 
-const VERSION = "0.2.0";
+const VERSION = "0.4.0";
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
 const CAPTURES = path.join(DATA_DIR, "captures.jsonl");
@@ -39,9 +39,9 @@ Fuatilia v${VERSION} — know what Kenya is advertising.
 
   fuatilia init                      scaffold watchlist.json + data/
   fuatilia add --advertiser NAME --platform meta|google|tiktok --country KE
-               [--start YYYY-MM-DD] [--versions N] [--type video|image|carousel|search]
+               [--start YYYY-MM-DD] [--versions N] [--ads N] [--type video|image|carousel|search]
                [--offer "..."] [--landing URL] [--headline "..."] [--library URL]
-               [--page-id ID] [--tags a,b] [--notes "..."]
+               [--page-id ID] [--method manual|auto] [--tags a,b] [--notes "..."]
                [--example]          capture one ad card (5 minutes of browsing, one row)
   fuatilia check                     validate data/captures.jsonl against the schema
   fuatilia score                     print all captures with tenure + signals
@@ -172,6 +172,14 @@ function validateRecord(r) {
     !(Number.isFinite(Number(r.active_versions)) && Number(r.active_versions) >= 0)
   )
     errs.push("active_versions must be a number");
+  if (
+    r.active_ad_count !== undefined &&
+    r.active_ad_count !== null &&
+    !(Number.isFinite(Number(r.active_ad_count)) && Number(r.active_ad_count) >= 0)
+  )
+    errs.push("active_ad_count must be a number (the advertiser's total active ads)");
+  if (r.capture_method !== undefined && !"manual auto".split(" ").includes(r.capture_method))
+    errs.push("capture_method must be manual or auto");
   if (r.landing_url && !/^https?:\/\//.test(r.landing_url))
     errs.push("landing_url must be an http(s) URL");
   if (r.library_url && !/^https?:\/\//.test(r.library_url))
@@ -181,6 +189,8 @@ function validateRecord(r) {
 
 function cmdAdd(args) {
   if (args.help) return console.log(HELP);
+  if (args.method !== undefined && !"manual auto".split(" ").includes(String(args.method)))
+    die(`--method must be manual or auto (got "${args.method}")`);
   const record = {
     id: [
       slugify(args.advertiser || "unknown"),
@@ -196,6 +206,8 @@ function cmdAdd(args) {
     ad_start: args.start || null,
     first_seen_by_us: todayISO(),
     active_versions: args.versions !== undefined ? Number(args.versions) : undefined,
+    active_ad_count: args.ads !== undefined ? Number(args.ads) : undefined,
+    capture_method: args.method === "auto" ? "auto" : "manual",
     creative_type: args.type || undefined,
     offer: args.offer || undefined,
     landing_url: args.landing || undefined,
@@ -212,7 +224,7 @@ function cmdAdd(args) {
   const errs = validateRecord(record);
   if (errs.length) die(errs.map((e) => `-- ${e}`).join("\n"));
   if (!record.advertiser)
-    die("--advertiser is required. Example:\n  fuatilia add --advertiser Zuku --platform meta --country KE --start 2026-09-01 --versions 4");
+    die("--advertiser is required. Example:\n  fuatilia add --advertiser Zuku --platform meta --country KE --start 2026-09-01 --versions 4 --ads 12");
 
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.appendFileSync(CAPTURES, JSON.stringify(record) + "\n");
@@ -260,17 +272,20 @@ function cmdScore() {
 
   const rows = shown.map((r) => {
     const c = classify(r);
-    const band = scaleBand(Number(r.active_versions) || 1);
+    // Band is computed ONLY from the advertiser-level active_ad_count captured
+    // from the library page — never from version counts or rows saved.
+    const band = scaleBand(Number(r.active_ad_count));
     return [
       r.advertiser,
       r.platform,
       c.tenure !== null ? `${c.tenure}d` : "—",
       String(r.active_versions ?? "—"),
+      String(r.active_ad_count ?? "—"),
       c.signals.map((s) => s.code).join("+") || "—",
       band ? band.band : "—",
     ];
   });
-  const headers = ["advertiser", "platform", "tenure", "versions", "signals", "band"];
+  const headers = ["advertiser", "platform", "tenure", "variants", "active ads", "signals", "band"];
   const widths = headers.map((h, i) =>
     Math.max(h.length, ...rows.map((r) => r[i].length), 3),
   );
@@ -279,6 +294,10 @@ function cmdScore() {
   console.log(line(headers));
   console.log("|" + widths.map((w) => "-".repeat(w + 2)).join("|") + "|");
   rows.forEach((r) => console.log(line(r)));
+  console.log(
+    "\nband comes from active ads (advertiser-level total shown on the library page) —",
+    "\n'—' means it was not captured yet; never guessed from variant counts.",
+  );
 }
 
 function cmdDigest(args) {

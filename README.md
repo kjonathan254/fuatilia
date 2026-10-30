@@ -2,8 +2,9 @@
 
 > **Swahili: _"track it / keep watch."_** The open ad-intelligence toolkit for Kenya.
 > Know what Kenya is advertising — who is spending, which ads survived 90+ days, which
-> hooks are being tested right now — using only public, regulator-mandated transparency
-> data. Zero dependencies. Built in Nairobi.
+> creatives are being iterated right now — using only public ad-library transparency
+> data (mandated by law in some jurisdictions, by platform policy elsewhere).
+> Zero dependencies. Built in Nairobi.
 
 **Product #2 of the DC254 stack** (Product #1: the [Data-Centers-254](https://github.com/kjonathan254/Data-Centers-254) content engine).
 
@@ -14,10 +15,12 @@ published from `main` via GitHub Pages.
 
 ## The gap it fills
 
-The "Meta Ad Library method" is real: every ad running right now, its start date, its
-version count, its landing page — public, free, no login. Global tools (BigSpy, PiPiAds,
-Foreplay, AdClarity) ignore East Africa. Enterprise ad intelligence (Nielsen, Similarweb)
-prices out the average Kenyan SMB advertiser.
+The "Meta Ad Library method" is real: the publicly observable ads, their start dates,
+their version counts, their landing pages — public, free, no login. As of writing, the
+global ad-spy tools (BigSpy, PiPiAds, Foreplay, AdClarity) do not list Kenya or East
+Africa as covered markets — verify their current coverage before relying on that — and
+enterprise ad intelligence (Nielsen, Similarweb) prices out the average Kenyan SMB
+advertiser.
 
 Fuatilia packages the method for the Kenyan market as **method + CLI + weekly digest**,
 open source (MIT).
@@ -27,8 +30,8 @@ open source (MIT).
 | Piece | File | What it does |
 |---|---|---|
 | CLI | `bin/fuatilia.js` | `init` · `add` · `check` · `score` · `digest` · `deliver` · `collect` — zero-dependency Node ≥ 18 |
-| Signals engine | `lib/signals.js` | Tenure, version counts, scale bands → winner candidates & hook tests |
-| Digest renderer | `lib/digest.js` | The Monday Markdown sheet: pulse, winners, hook tests, new entrants, teardown list |
+| Signals engine | `lib/signals.js` | Tenure, variant counts, scale bands → long-running creatives & creative experiments |
+| Digest renderer | `lib/digest.js` | The Monday Markdown sheet: pulse, long-runners, experiments, new entrants, teardown list |
 | Delivery | `lib/deliver.js` | Sends the digest to **Telegram**, **WhatsApp (Cloud API)** or any webhook — env-driven, skips when unconfigured |
 | API collector | `lib/collector.js` | Pulls the Meta Ad Library **API tier** (EU + issue ads) into `captures.jsonl`, de-duplicated |
 | Watchlist | `watchlist.json` | Kenyan brands & category search seeds to track weekly |
@@ -68,12 +71,21 @@ Serve the viewer: `python3 -m http.server` from the repo root → open `/viewer/
 
 | Signal | Trigger | Read |
 |---|---|---|
-| **Winner candidate** | ad live **90+ days** | nobody funds an ad a quarter without a reason (120 days in the wild; 90 here, conservative) |
-| **Hook testing** | **3+ active versions** | they are A/B-ing the opening right now — watch which version survives |
-| **Scale band** | 1–2 / 3–29 / 30+ active ads | solo-testing / scaling / team-scale budget (calibrated for Kenyan budgets) |
+| **Long-running creative** | ad live **90+ days** | persistence signal — someone keeps renewing the budget; not proof of profit (120 days is the viral threshold; 90 here, conservative) |
+| **Creative experimentation** | **3+ active variants** of one ad | they are iterating the creative — could be new hooks, or just aspect ratios, languages and placements; watch which variants survive |
+| **Scale band** | advertiser's **total active ads** (1–2 / 3–29 / 30+) | solo-testing / scaling / team-scale budget (calibrated for Kenyan budgets). Counted from the library's advertiser-level `active_ad_count` — never inferred from variant counts or rows saved |
 
 **Every output carries the caveat: signal, not proof.** Agencies leave losers on
 autopilot; grants fund ads that never need profit. Fuatilia classifies — humans decide.
+
+## The model
+
+**Radar is free forever** — the CLI, the method, the Monday digest, the viewer.
+**Intelligence is free for your first 5 sessions** — no card, no signup; get hooked
+first, decide after. Once it has earned its keep: **Fuatilia Brief** from KSh 500 per
+session or **KSh 2,500/month** for unlimited sessions, weekly snapshots and sector
+filters. **Agency tier: KSh 10,000/month** (multi-seat, custom watchlists). Sell
+analysis, never raw platform data.
 
 ## Honest data constraints (read before dreaming)
 
@@ -91,9 +103,9 @@ weekly reading habit. **Sell analysis, never raw platform data.**
 ## For Kenyan advertisers — the weekly loop
 
 1. **Monday 09:00** — the Action drops the digest (Actions → artifacts).
-2. Read: new entrants, new hook tests, winners crossing the 90-day line.
+2. Read: new entrants, fresh creative experiments, long-runners crossing the 90-day line.
 3. Ten minutes browsing your niche's library terms → `fuatilia add` what you saw.
-4. Teardown one winner's landing page — copy the **structure** (promise → proof → offer
+4. Teardown one long-runner's landing page — copy the **structure** (promise → proof → offer
    → urgency → CTA), never the words or assets.
 
 ## Docs
@@ -117,7 +129,9 @@ out of the box and lights up as you configure. Setup guide: `docs/DELIVERY.md`.
 ## Roadmap
 
 - **v0.2** ✅ — Telegram/WhatsApp/webhook digest delivery · Meta API collector (EU/issue tier)
-- **v0.3** — GitHub Pages site ✅ (landing + viewer, `main` → Pages) · multi-country profiles (TZ / UG / RW) · digest HTML edition
+- **v0.3** ✅ — GitHub Pages site (landing + viewer, `main` → Pages)
+- **v0.4** ✅ — trust & accuracy pass: advertiser-level `active_ad_count` scale bands (never inferred from variants), `capture_method` provenance, persistence/experimentation wording, demo data quarantined, honest coverage claims
+- **v0.5** — advertiser intelligence profiles · creative-concept grouping · weekly snapshots
 - **v1.0** — Swahili/Sheng mode · contributor capture playbook · first paid analysis cohort
 
 ## Non-goals

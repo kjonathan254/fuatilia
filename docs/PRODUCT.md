@@ -7,14 +7,15 @@ Codename during development: **AdWatch KE**. Product #2 of the DC254 stack (Prod
 
 ## The one-line pitch
 
-> Know what Kenya is advertising — which brands are spending, which ads have survived 90+ days, which hooks they are testing right now — using only public, regulator-mandated transparency data.
+> Know what Kenya is advertising — which brands are spending, which ads have survived 90+ days, which creatives they are iterating right now — using only public ad-library transparency data.
 
 ## Why this exists (the gap)
 
-The viral "Meta Ad Library method" is real competitive intelligence: every ad running
-right now, its start date, its version count, its landing page — public by law. Global
-tools (BigSpy, PiPiAds, Foreplay, AdClarity, Similarweb) either ignore East Africa or
-treat it as an afterthought. Enterprise ad intelligence (Nielsen, Pathmatics) prices out
+The viral "Meta Ad Library method" is real competitive intelligence: the publicly
+observable ads, their start dates, their version counts, their landing pages — public,
+free to read. As of writing, the global tools (BigSpy, PiPiAds, Foreplay, AdClarity,
+Similarweb) do not list East Africa as a covered market — verify their current coverage
+before relying on that. Enterprise ad intelligence (Nielsen, Pathmatics) prices out
 the average Kenyan SMB advertiser entirely.
 
 Nobody has packaged this for the Kenyan market. Fuatilia is that package: method +
@@ -45,9 +46,10 @@ that turns the public ad libraries into a structured, ongoing intelligence pract
 2. **A capture schema + CLI** that converts a 5-minute browse of the Meta Ad Library,
    Google Ads Transparency Center or TikTok Creative Center into structured records
    (`data/captures.jsonl`).
-3. **A signals engine** that classifies every captured ad: tenure (days live), version
-   count (hook testing), and a scale band for the advertiser.
-4. **A weekly digest generator** (Markdown) — winners, hook tests, scale bands, new
+3. **A signals engine** that classifies every captured ad: tenure (days live), variant
+   count (creative experimentation), and a scale band from the advertiser-level
+   active-ad count.
+4. **A weekly digest generator** (Markdown) — long-runners, experiments, scale bands, new
    entrants, landing pages worth tearing down — run automatically every Monday.
 5. **A static viewer** so non-technical users can browse the captured intelligence.
 
@@ -68,10 +70,11 @@ that turns the public ad libraries into a structured, ongoing intelligence pract
 
 ### WHY
 
-1. **The data is public by law** (EU DSA Article 39 for EU ads; platform transparency
-   obligations elsewhere) — the raw material is free and legitimate.
+1. **The data is public** (EU ads are mandated by DSA Article 39; Meta's all-ads library
+   covers markets like Kenya by platform policy — no Kenyan law requires it). Free and
+   legitimate raw material either way.
 2. **No local player** serves this market at this price point (free/open).
-3. **The signals are decision-grade**: a 120-day-old ad with 3+ active versions tells a
+3. **The signals are decision-grade**: a 120-day-old ad with 3+ active variants tells a
    media buyer more than a $997 course.
 4. **DC254 needs it too**: dogfooding — the toolkit tracks the ISP/telco/data-center
    categories DC254 itself sells into.
@@ -84,7 +87,7 @@ legal/ToS boundaries):
 | Part | Source | What it gives you |
 |---|---|---|
 | 1. The search | Meta Ad Library (web, country=KE) | Every brand actively paying to sell a product in the niche |
-| 2. The timeline | Ad start dates + version counts | Winners (90+ days live) and current hook tests (3+ versions) |
+| 2. The timeline | Ad start dates + variant counts | Long-runners (90+ days live) and active creative experimentation (3+ variants) |
 | 3. The scale read | Active ad count per advertiser | Side hustle vs scaling vs team-scale budget (heuristic bands) |
 | 4. The landing page | The ad's destination URL | The money-tested conversion structure — copy the skeleton, never the words |
 
@@ -104,10 +107,17 @@ the weekly reading habit. Reselling raw platform data violates platform terms; s
 
 ## Business model (kept ToS-clean)
 
-- **Open source forever**: the CLI, schema, method and workflows (this repo).
-- **Monetizable layer**: a paid human-written weekly analysis on top of the free digest
-  (the "so what" for Kenyan advertisers), agency-facing teardown packs, and custom
-  watchlists. Sell the insight, never the raw records.
+- **Radar — free forever, open source**: the CLI, schema, method, workflows, Monday
+  digest and viewer (this repo). Never paywalled.
+- **Intelligence — free for the first 5 sessions**: a session is one working sit-down
+  (browse, capture, score, digest, teardown list for your niche). No card, no signup —
+  get hooked first, decide after.
+- **Once hooked — Fuatilia Brief**: KSh 500 per session, or **KSh 2,500/month** for
+  unlimited sessions, weekly snapshots and sector filters.
+- **Agency**: KSh 10,000/month — multi-seat, custom watchlists, shared briefs.
+
+Sell the insight, never the raw records: reselling raw platform data violates platform
+terms; selling *analysis and enrichment* (the brief, the teardowns, the advisory) does not.
 
 ## Roadmap
 
@@ -115,8 +125,13 @@ the weekly reading habit. Reselling raw platform data violates platform terms; s
 - **v0.2**: Telegram/WhatsApp digest delivery; EU/political ad tier via official Meta API
   (for users who also sell into the EU diaspora or run issue campaigns).
 - **v0.3**: hosted viewer on Pages; multi-country profiles (TZ/UG/RW).
+- **v0.4** ✅: trust & accuracy pass — advertiser-level `active_ad_count` scale bands,
+  `capture_method` provenance field, persistence/experimentation wording, demo data
+  quarantined, coverage claims made honest.
+- **v0.5**: advertiser intelligence profiles · creative-concept grouping · weekly
+  snapshots · browser-first capture screen.
 - **v1.0**: Kenyan-language landing page (Sheng/Swahili mode), contributor capture
-  playbook, first paid digest cohort.
+  playbook, first paid brief cohort.
 
 ## Non-goals
 
