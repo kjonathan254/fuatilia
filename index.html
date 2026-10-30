@@ -116,6 +116,17 @@
   .way .mins{font:500 11px/1 var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--faint)}
   .way a{font-weight:600;font-size:14.5px;text-decoration:none;border-bottom:1.5px solid var(--green);padding-bottom:1px}
   .way a:hover{color:var(--ink);border-color:var(--ink)}
+  .forkgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+  @media(max-width:1000px){.forkgrid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.forkgrid{grid-template-columns:1fr}}
+  .fstep{background:var(--paper2);border:1.5px solid var(--ink);box-shadow:var(--sh);padding:26px 22px 22px;position:relative}
+  .fstep .fnum{position:absolute;top:-13px;left:18px;background:var(--ink);color:var(--paper);font:600 10px/1 var(--mono);letter-spacing:1.4px;text-transform:uppercase;padding:6px 10px;border-radius:4px}
+  .fstep:nth-child(1) .fnum{background:var(--green)} .fstep:nth-child(3) .fnum{background:var(--amber)}
+  .fstep h3{font:600 20px/1.25 var(--serif);margin:8px 0 8px}
+  .fstep p{font-size:14px;color:var(--dim);line-height:1.62}
+  .fstep a{font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--green);padding-bottom:1px}
+  .fstep a:hover{color:var(--ink);border-color:var(--ink)}
+  .fstep code{font:500 11.5px/1.4 var(--mono);background:var(--paper);border:1px solid rgba(24,36,32,.18);padding:1px 5px;border-radius:3px;word-break:break-word}
 
   /* A–Z */
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:36px}
@@ -223,7 +234,7 @@
   <div class="wrap">
     <span>Vol. 1 · Nairobi edition</span>
     <span class="hide-m">Public ad libraries · human capture</span>
-    <span><b>Monday 09:00 EAT</b> · free forever</span>
+    <span><b>Monday 09:00 EAT</b> · free &amp; open source</span>
   </div>
 </div>
 
@@ -232,10 +243,10 @@
     <a class="brand" href="./"><span class="brand-dot"></span><span class="brand-name">Fuatilia</span></a>
     <div class="nav-links">
       <a class="hide-m" href="#start">Start here</a>
+      <a class="hide-m" href="#fork">Fork it</a>
       <a class="hide-m" href="#how">How it works</a>
       <a class="hide-m" href="#signals">Signals</a>
       <a class="hide-m" href="#pulse">Pulse</a>
-      <a class="hide-m" href="#pricing">Pricing</a>
       <a class="hide-m" href="https://github.com/kjonathan254/fuatilia" target="_blank" rel="noopener">GitHub</a>
       <a class="btn" href="viewer/">Open viewer</a>
     </div>
@@ -249,7 +260,7 @@
         <span class="kicker">Open-source ad intelligence · Kenya</span>
         <h1 class="head">Know what Kenya is <em>advertising.</em></h1>
         <p class="def">Fuatilia · Swahili for "keep watch" · /fwa-TEE-lee-ah/</p>
-        <p class="sub">Kenyan advertisers publish their playbooks in <b>public ad libraries</b> — the publicly observable ads, their start dates, their version counts. Fuatilia turns that open data into a <b>Monday morning brief</b>: which ads survived 90+ days, who is iterating creatives, who just entered your category.</p>
+        <p class="sub">Kenyan advertisers are running their playbooks through <b>public ad libraries</b> — observable ad cards with start dates, variant counts, landing pages. Fuatilia turns what is publicly observable into a <b>Monday morning brief</b>: which creatives persist past 90 days, who is experimenting with variants, who just entered your category. Coverage is honest — what we captured, never a census.</p>
         <div class="cta-row">
           <a class="btn alt" href="viewer/">Open the live viewer</a>
           <a class="btn ghost" href="https://github.com/kjonathan254/fuatilia" target="_blank" rel="noopener">Star on GitHub</a>
@@ -265,11 +276,11 @@
           <div class="brief-date">Week of 2026-10-28 · Nairobi · reads in 10 minutes</div>
           <div class="brief-row">
             <span class="stamp win">Long-run 90d+</span>
-            <div class="brief-txt"><b>Demo Skincare KE · 210 days live</b><small>"LED mask results in 4 weeks" — same ad, 2 versions, budget keeps getting renewed</small></div>
+            <div class="brief-txt"><b>Demo Skincare KE · 210 days live</b><small>"LED mask results in 4 weeks" — same ad, 2 versions, still standing. Persistence worth investigating</small></div>
           </div>
           <div class="brief-row">
-            <span class="stamp hook">Experiment</span>
-            <div class="brief-txt"><b>Demo Gadgets KE · 7 versions running</b><small>"Smartwatch at KSh 1,999 — today only" — hooks? placements? watch which survive</small></div>
+            <span class="stamp hook">Experimenting</span>
+            <div class="brief-txt"><b>Demo Gadgets KE · 7 variants running</b><small>"Smartwatch at KSh 1,999 — today only" — iterating something: hooks, or just formats</small></div>
           </div>
           <div class="brief-row">
             <span class="stamp new">New entry</span>
@@ -286,16 +297,16 @@
   <div class="ticker-track">
     <span class="t-chip">THE WIRE ·</span>
     <span class="t-item">Demo Skincare KE <span class="t-win">210 days · long-running</span></span>
-    <span class="t-item">Demo Gadgets KE <span class="t-hook">7 versions · experimenting</span></span>
-    <span class="t-item">Demo ISP Ltd <span class="t-win">118 days · scaling</span></span>
-    <span class="t-item">Demo Loans KE <span class="t-hook">3 versions · experimenting</span></span>
+    <span class="t-item">Demo Gadgets KE <span class="t-hook">7 variants · experimenting</span></span>
+    <span class="t-item">Demo ISP Ltd <span class="t-win">118 days · consistent activity</span></span>
+    <span class="t-item">Demo Loans KE <span class="t-hook">3 variants · experimenting</span></span>
     <span class="t-item">Demo Solar KE <span class="t-new">18 days · too young to read</span></span>
     <span class="t-item">next wire <span class="t-win">Monday 09:00 Nairobi</span></span>
     <span class="t-chip">THE WIRE ·</span>
     <span class="t-item">Demo Skincare KE <span class="t-win">210 days · long-running</span></span>
-    <span class="t-item">Demo Gadgets KE <span class="t-hook">7 versions · experimenting</span></span>
-    <span class="t-item">Demo ISP Ltd <span class="t-win">118 days · scaling</span></span>
-    <span class="t-item">Demo Loans KE <span class="t-hook">3 versions · experimenting</span></span>
+    <span class="t-item">Demo Gadgets KE <span class="t-hook">7 variants · experimenting</span></span>
+    <span class="t-item">Demo ISP Ltd <span class="t-win">118 days · consistent activity</span></span>
+    <span class="t-item">Demo Loans KE <span class="t-hook">3 variants · experimenting</span></span>
     <span class="t-item">Demo Solar KE <span class="t-new">18 days · too young to read</span></span>
     <span class="t-item">next wire <span class="t-win">Monday 09:00 Nairobi</span></span>
   </div>
@@ -318,7 +329,7 @@
           <span class="tag">Way 2 · The subscriber</span>
           <h3>Get the brief on your phone</h3>
           <p>Fork the repo, create a Telegram bot with @BotFather, paste two keys into repo secrets. GitHub does the rest — the digest lands every Monday 09:00 Nairobi.</p>
-          <a href="docs/DELIVERY.md">The 15-minute guide</a> <span class="mins">· no coding</span>
+          <a href="#fork">The fork flow, step by step</a> <span class="mins">· no coding</span>
         </div>
         <div class="way" data-rv>
           <span class="tag">Way 3 · The operator</span>
@@ -330,16 +341,64 @@
     </div>
   </section>
 
+  <section class="sec" id="fork">
+    <div class="wrap">
+      <div class="eyebrow" data-rv><span class="n">01</span> The fork flow — own your own AdWatch</div>
+      <h2 data-rv>Fork it. Paste two keys. Done.</h2>
+      <p class="lede" data-rv>You do not rent Fuatilia — you own it. Four steps, nothing to install, no servers to babysit: GitHub's own machines run the radar inside <em>your</em> copy of the repo and deliver the Monday digest to <em>your</em> phone. Free, and yours.</p>
+      <div class="forkgrid">
+        <div class="fstep" data-rv>
+          <span class="fnum">Step 1 · 10 seconds</span>
+          <h3>Fork the repo</h3>
+          <p>Open <a href="https://github.com/kjonathan254/fuatilia/fork" target="_blank" rel="noopener">github.com/kjonathan254/fuatilia</a> and press <b>Fork</b>. You now own a complete copy — code, demo data and the weekly workflow included.</p>
+        </div>
+        <div class="fstep" data-rv>
+          <span class="fnum">Step 2 · 1 click</span>
+          <h3>Switch on Actions</h3>
+          <p>In your fork, open the <b>Actions</b> tab and press the green enable button. That is the whole step — the Monday radar workflow ships inside the repo, ready to go.</p>
+        </div>
+        <div class="fstep" data-rv>
+          <span class="fnum">Step 3 · 15 minutes</span>
+          <h3>Paste two secrets</h3>
+          <p>Create a Telegram bot with @BotFather, then add <code>FUATILIA_TELEGRAM_BOT_TOKEN</code> and <code>FUATILIA_TELEGRAM_CHAT_ID</code> under Settings → Secrets and variables → Actions. <a href="docs/DELIVERY.md">Our tap-by-tap guide</a> walks you through every screen.</p>
+        </div>
+        <div class="fstep" data-rv>
+          <span class="fnum">Step 4 · 2 minutes</span>
+          <h3>Run it once</h3>
+          <p>Actions → <b>AdWatch</b> → <b>Run workflow</b>. Your first digest lands on your phone before your tea cools. Then scheduled every Monday 09:00 Nairobi while your repo stays active — with a heartbeat file proving the last successful run.</p>
+        </div>
+      </div>
+      <div class="term" data-rv style="margin-top:36px">
+        <div class="term-bar">
+          <span class="term-dot" style="background:#E88B6F"></span>
+          <span class="term-dot" style="background:#E8B45C"></span>
+          <span class="term-dot" style="background:#5FD79B"></span>
+          <span class="term-title">prefer the terminal? — the operator lane</span>
+        </div>
+        <div class="term-body"><span class="c-cmd">$ git clone https://github.com/kjonathan254/fuatilia.git &amp;&amp; cd fuatilia &amp;&amp; npm install</span>
+<span class="c-cmd">$ node bin/fuatilia.js add --advertiser "Zuku" --platform meta --country KE \</span>
+<span class="c-cmd">    --start 2026-09-01 --versions 4 --ads 18 --offer "Free installation this month"</span>
+<span class="c-com"># --versions = variants of THIS ad · --ads = total active ads the advertiser is running</span>
+<span class="c-com"># your machine, your data, one JSONL file you can actually read</span><span class="cursor"></span></div>
+      </div>
+      <div class="cta-row" data-rv>
+        <a class="btn alt" href="https://github.com/kjonathan254/fuatilia/fork" target="_blank" rel="noopener">Fork Fuatilia now</a>
+        <a class="btn" href="docs/DELIVERY.md">The 15-minute setup guide</a>
+        <a class="btn ghost" href="https://github.com/kjonathan254/fuatilia/blob/main/.github/workflows/adwatch.yml" target="_blank" rel="noopener">See the Monday workflow</a>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="how">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">01</span> How it works</div>
+      <div class="eyebrow" data-rv><span class="n">02</span> How it works</div>
       <h2 data-rv>From A to Z, no jargon.</h2>
       <p class="lede" data-rv>Eight letters. If you can follow a recipe, you can follow this system.</p>
       <div class="steps">
         <div class="step" data-rv>
           <div class="step-L">A</div>
           <h3>Ads are public</h3>
-          <p>Meta and Google publish the ads they are seen serving in Kenya — who is advertising, since when, in how many variants. In the EU this is law; in Kenya the platforms do it by policy. Either way, anyone can look. We just look carefully, every week.</p>
+          <p>Meta and Google must show the ads they run in Kenya — who is advertising, since when, in how many versions. Anyone can look. We just look carefully, every week.</p>
         </div>
         <div class="step" data-rv>
           <div class="step-L">B</div>
@@ -353,18 +412,18 @@
         </div>
         <div class="step" data-rv>
           <div class="step-L">D</div>
-          <h3>90 days = long-runner</h3>
-          <p>Nobody keeps paying for an ad that loses money for three months. Still alive at 90 days? Someone keeps renewing the budget. That is persistence worth studying — not a profit guarantee.</p>
+          <h3>90 days = still standing</h3>
+          <p>An ad alive at 90 days is a <span class="k">persistence signal</span> — profit, brand reach, retargeting, grants or autopilot. Worth studying either way. That is your starting material, and you supply the verdict.</p>
         </div>
         <div class="step" data-rv>
           <div class="step-L">E</div>
           <h3>3+ variants = experimenting</h3>
-          <p>Same product, new first line, new photo — or just a new aspect ratio, language or placement. They are iterating the creative. Watch which versions survive before you call it a hook fight.</p>
+          <p>Same product, new cut, new language, new placement. They are iterating <span class="k">something</span> — count the concepts, not just the variants, and you get creative intelligence instead of ad arithmetic.</p>
         </div>
         <div class="step" data-rv>
           <div class="step-L">F</div>
-          <h3>30+ ads = team money</h3>
-          <p>1–2 ads is a solo test. 3–29 is someone scaling. 30+ usually means an agency or a funded team. Counted from the advertiser's total active ads in the library — never guessed from version counts.</p>
+          <h3>30+ active ads = wide footprint</h3>
+          <p>1–2 active ads is light activity. 3–29 is consistent. 30+ is a wide footprint. The bands read <span class="k">activity, never budgets</span> — spend is not public.</p>
         </div>
         <div class="step" data-rv>
           <div class="step-L">G</div>
@@ -382,27 +441,27 @@
 
   <section class="sec" id="signals">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">02</span> The signals</div>
+      <div class="eyebrow" data-rv><span class="n">03</span> The signals</div>
       <h2 data-rv>Three numbers do the reading.</h2>
-      <p class="lede" data-rv>You do not need analytics jargon. The radar only ever counts days, variants and active-ad totals.</p>
+      <p class="lede" data-rv>You do not need analytics jargon. The radar only ever counts days and versions.</p>
       <div class="sig-grid">
         <div class="sig g" data-rv>
           <div class="sig-num">90<small>+ days</small></div>
           <h3>Long-running creative</h3>
-          <div class="sig-trigger">trigger · ad still live at 90+ days</div>
-          <p>Time is the most honest judge in advertising — a long-lived ad means someone keeps renewing the budget. That is a persistence signal, not proof of profit. Study its promise, proof, offer, urgency and call to action — copy the structure, never the words.</p>
+          <div class="sig-trigger">trigger · ad still live at 90 days</div>
+          <p>A persistence signal, not a performance verdict: brand campaigns, retargeting, grants and autopilot all keep ads alive. Study the survivors' promise, proof, offer, urgency and CTA — copy the structure, never the words — then judge why it survived.</p>
         </div>
         <div class="sig a" data-rv>
           <div class="sig-num">3<small>+ variants</small></div>
           <h3>Creative experimentation</h3>
-          <div class="sig-trigger">trigger · same ad, 3 or more active variants</div>
-          <p>The advertiser is iterating — different openings, or just aspect ratios, languages and placements. Watch which variants survive longest before calling the hook.</p>
+          <div class="sig-trigger">trigger · same ad concept, 3 or more active variants</div>
+          <p>The advertiser is iterating something — different openings, or just aspect ratios, languages and placements. Track concepts, not just counts; the concept that survives longest is the lesson.</p>
         </div>
         <div class="sig c" data-rv>
           <div class="sig-num">1–2 · 3–29 · 30<small>+ ads</small></div>
-          <h3>Scale band</h3>
-          <div class="sig-trigger">trigger · the advertiser's total active ads, as shown in the library</div>
-          <p>Solo testing, then scaling, then team-scale budget. The count is read off the advertiser's own library page and recorded as <code>active_ad_count</code> — never inferred from version counts. Bands are tuned to Kenyan ad spend, not Silicon Valley ones.</p>
+          <h3>Activity band</h3>
+          <div class="sig-trigger">trigger · active_ad_count per advertiser — never the variant count</div>
+          <p>Light, consistent, wide-footprint — <b>activity</b> bands, not budget estimates. Every band prints its basis (reported active ads or captured cards). Spend is not public; anyone selling exact Kenyan spend numbers is guessing.</p>
         </div>
       </div>
       <span class="stamp-line" data-rv>Signal, not proof — always</span>
@@ -411,7 +470,7 @@
 
   <section class="sec" id="pipeline">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">03</span> The Monday pipeline</div>
+      <div class="eyebrow" data-rv><span class="n">04</span> The Monday pipeline</div>
       <h2 data-rv>Collect, digest, deliver.</h2>
       <div class="pipe">
         <div class="pipe-box" data-rv>
@@ -423,7 +482,7 @@
         <div class="pipe-box" data-rv>
           <span class="tag">2 · digest</span>
           <b>lib/digest.js</b>
-          <p>The Monday Markdown sheet: pulse, long-runners, experiments, new entrants, teardown list. Always runs — even on demo data.</p>
+          <p>The Monday Markdown sheet: pulse, long-running creatives, experimenters, new entrants, teardown list. Always runs — demo data is labelled loudly, never passed off as live.</p>
         </div>
         <div class="pipe-arrow" data-rv>→</div>
         <div class="pipe-box" data-rv>
@@ -438,25 +497,32 @@
 
   <section class="sec" id="pulse">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">04</span> Live pulse</div>
-      <h2 data-rv>What the radar sees right now.</h2>
-      <p class="lede" data-rv>Numbers below are computed in your browser from <code>data/captures.jsonl</code> — the same file the CLI writes. Demo rows are excluded whenever real captures exist. No server, no tracking.</p>
+      <div class="eyebrow" data-rv><span class="n">05</span> Coverage monitor</div>
+      <h2 data-rv>How much of the market are we actually watching?</h2>
+      <p class="lede" data-rv>A coverage dashboard, computed in your browser from <code>data/captures.jsonl</code> — <b>real captures only</b>. Demo rows live separately in <code>data/demo.jsonl</code> and are never counted here. When a number reads <em>not yet measured</em>, that is the honest state of the project, not a bug. Want more? <a href="viewer/" style="color:inherit;font-weight:600;border-bottom:1.5px solid var(--green)">Search the captures yourself</a>.</p>
       <div class="pulse-grid" data-rv>
-        <div class="stat"><b id="p-captures">–</b><small>ad records captured</small></div>
-        <div class="stat"><b id="p-advertisers">–</b><small>distinct advertisers</small></div>
-        <div class="stat"><b id="p-winners">–</b><small>long-running · 90d+</small></div>
-        <div class="stat"><b id="p-hooks">–</b><small>experiments · 3+ variants</small></div>
-        <div class="stat"><b id="p-platforms">–</b><small>platforms covered</small></div>
+        <div class="stat"><b id="p-captures">–</b><small>ad observations · real captures</small></div>
+        <div class="stat"><b id="p-advertisers">–</b><small>advertisers tracked</small></div>
+        <div class="stat"><b id="p-categories">–</b><small>categories covered</small></div>
+        <div class="stat"><b id="p-lastcapture">–</b><small>last verified capture</small></div>
+      </div>
+      <div class="pulse-grid" data-rv style="margin-top:14px">
+        <div class="stat"><b id="p-longrunners">–</b><small>long-running creatives · 90d+</small></div>
+        <div class="stat"><b id="p-experimenters">–</b><small>experimenting · 3+ variants</small></div>
+        <div class="stat"><b id="p-meta">–</b><small>meta observations</small></div>
+        <div class="stat"><b id="p-google">–</b><small>google observations</small></div>
+        <div class="stat"><b id="p-tiktok">–</b><small>tiktok observations</small></div>
       </div>
       <span class="pill" id="pulse-note" hidden><i></i><span id="pulse-note-text"></span></span>
+      <p class="pipe-note" data-rv style="margin-top:18px">Pipeline heartbeat: <span id="p-heartbeat" style="font-weight:600">checking…</span> · want the demo shape instead of empty numbers? <a href="viewer/?demo=1" style="font-weight:600;color:inherit">open the viewer with demo rows</a> (clearly badged, never counted here).</p>
     </div>
   </section>
 
   <section class="sec" id="digest">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">05</span> The Monday digest</div>
+      <div class="eyebrow" data-rv><span class="n">06</span> The Monday digest</div>
       <h2 data-rv>This lands every Monday morning.</h2>
-      <p class="lede" data-rv>Generated by GitHub Actions, filed as an artifact, delivered to your phone if you want. Here is the shape of one (demo edition):</p>
+      <p class="lede" data-rv><b>Demo data below — fictional advertisers.</b> Real captures replace this sheet the moment they exist. Here is the demo edition of the Monday digest:</p>
       <div class="term" data-rv>
         <div class="term-bar">
           <span class="term-dot" style="background:#E88B6F"></span>
@@ -467,56 +533,28 @@
         <div class="term-body"><span class="c-cmd">$ cat digests/adwatch-2026-10-28.md</span>
 
 <span class="c-key">AdWatch — Fuatilia weekly digest</span>
-Week of 2026-10-28 · generated by GitHub Actions · Monday 09:00 Nairobi
+Week of 2026-10-28 · generated by GitHub Actions · scheduled Monday 09:00 Nairobi
 
-<span class="c-com">&gt; Demo mode — no real captures yet, so this sheet shows the
-&gt; fictional demo rows shipped with the repo.</span>
+<span class="c-com">&gt; ⚠️ DEMO DATA — THE ADVERTISERS BELOW ARE FICTIONAL. Do not cite
+&gt; or act on anything in this sheet. Real captures replace it.</span>
 
 <span class="c-key">Pulse</span>
   advertisers captured    <span class="c-num">5</span>
   ad records captured     <span class="c-num">6</span>
-  meta / google / tiktok  <span class="c-num">4 / 1 / 1</span>
+  last verified capture   <span class="c-num">2026-10-26</span>
 
-<span class="c-key">Long-running creatives (live 90+ days)</span>
-  Demo Skincare KE   meta    <span class="c-win">210d</span>   2 variants   solo/testing
-  Demo Gadgets KE    meta    <span class="c-win">163d</span>   7 variants   team-scale
-  Demo ISP Ltd       meta    <span class="c-win">118d</span>   4 variants   scaling
+<span class="c-key">Long-running creatives (live 90+ days) — persistence signals</span>
+  Demo Skincare KE   meta    <span class="c-win">212d</span>   2 variants   light (reported active ads)
+  Demo Gadgets KE    meta    <span class="c-win">165d</span>   7 variants   wide-footprint (reported active ads)
+  Demo ISP Ltd       meta    <span class="c-win">120d</span>   4 variants   consistent (reported active ads)
 
-<span class="c-key">Creative experimentation (3+ active variants)</span>
-  Demo Gadgets KE    <span class="c-hook">7 variants</span>   163d   team-scale
-  Demo ISP Ltd       <span class="c-hook">4 variants</span>   118d   scaling
-  Demo Loans KE      <span class="c-hook">3 variants</span>    74d   scaling
+<span class="c-key">Creative experimentation (3+ variants of one ad)</span>
+  Demo Gadgets KE    <span class="c-hook">7 variants</span>   165d   wide-footprint
+  Demo ISP Ltd       <span class="c-hook">4 variants</span>   120d   consistent
+  Demo Loans KE      <span class="c-hook">3 variants</span>    76d   consistent
 
 <span class="c-key">Reads and caveats</span>
-  <span class="c-warn">Tenure, variants and bands are signals, not proof.</span><span class="cursor"></span></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="pricing">
-    <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">06</span> The model</div>
-      <h2 data-rv>Free until it clicks. Then cheap.</h2>
-      <p class="lede" data-rv>The radar is free forever. The intelligence is free for your <b>first five sessions</b> — get hooked first, pay after. No card, no signup, no invoice until you ask for one.</p>
-      <div class="ways">
-        <div class="way" data-rv>
-          <span class="tag">Radar · KSh 0</span>
-          <h3>Free forever</h3>
-          <p>The CLI, the method, the Monday digest, this viewer, Telegram delivery. Open source under MIT — it will never be paywalled. Audit every line before you trust it.</p>
-          <a href="https://github.com/kjonathan254/fuatilia" target="_blank" rel="noopener">Fork it</a> <span class="mins">· forever free</span>
-        </div>
-        <div class="way" data-rv>
-          <span class="tag">Intelligence · 5 free sessions</span>
-          <h3>Get hooked first</h3>
-          <p>Five working sessions — browse, capture, score, digest, teardown list for your niche — completely free. No card up front. By session five you will already know what it is worth to you.</p>
-          <a href="viewer/">Start session one</a> <span class="mins">· no signup</span>
-        </div>
-        <div class="way" data-rv>
-          <span class="tag">Brief · from KSh 500</span>
-          <h3>Then pay what it earned</h3>
-          <p>KSh 500 per session, or KSh 2,500/month for unlimited sessions, weekly snapshots and sector filters. Agency tier: KSh 10,000/month — multi-seat, custom watchlists, shared briefs.</p>
-          <a href="https://github.com/kjonathan254/fuatilia/issues" target="_blank" rel="noopener">Talk to us</a> <span class="mins">· cancel anytime</span>
-        </div>
+  <span class="c-warn">Persistence is not performance; variants are not always new hooks.</span><span class="cursor"></span></div>
       </div>
     </div>
   </section>
@@ -531,16 +569,16 @@ Week of 2026-10-28 · generated by GitHub Actions · Monday 09:00 Nairobi
           <p>The Ad Library shows everything, but it is a firehose of ad cards with no memory. Fuatilia is the bucket: structure, thresholds, a weekly reading habit, and a notebook that remembers what you saw.</p>
         </div>
         <div class="why" data-rv>
-          <h3><span>02</span>Global "spy tools" skip East Africa</h3>
-          <p>BigSpy, PiPiAds, Foreplay, AdClarity — as of writing, none lists Kenya as a covered market (check before you pay any of them). Enterprise ad intelligence prices out an SMB advertiser in Nairobi. Fuatilia costs nothing, shows its method, and you can read every line of it.</p>
+          <h3><span>02</span>Global tools are built for other markets</h3>
+          <p>The global ad-intelligence platforms are built around markets with API access and enterprise budgets — neither fits most Kenyan SMBs. Fuatilia is designed around Kenya: local categories, local budgets, local prices. It costs nothing, shows its method, and you can read every line of it.</p>
         </div>
         <div class="why" data-rv>
           <h3><span>03</span>Small budgets deserve big-market playbooks</h3>
-          <p>If a home-fibre ISP kept one ad alive for four months, a competitor with KSh 5,000 can study that landing page structure before spending a shilling. Winners are teaching for free — Fuatilia makes sure you attend the class.</p>
+          <p>If a home-fibre ISP kept one ad alive for four months, a competitor with KSh 5,000 can study that landing page structure before spending a shilling. Long-running ads teach for free — Fuatilia makes sure you attend the class, and tells you persistence is not proof of profit.</p>
         </div>
         <div class="why" data-rv>
           <h3><span>04</span>It stays legal on purpose</h3>
-          <p>Everything comes from public transparency pages — mandated by law in some jurisdictions (the EU's DSA), by platform policy elsewhere — captured by humans, one ad card at a time. No scraping behind logins, no personal data, no resale of raw platform data. The constraint shaped the product.</p>
+          <p>Everything comes from publicly available transparency pages, captured by humans, one ad card at a time. No scraping behind logins, no personal data, no resale of raw platform data. Public availability is a fact about access — not a claim about Kenyan law. The constraint shaped the product.</p>
         </div>
       </div>
     </div>
@@ -551,12 +589,12 @@ Week of 2026-10-28 · generated by GitHub Actions · Monday 09:00 Nairobi
       <div class="honest" data-rv>
         <h3>Public notice — read before dreaming</h3>
         <ul>
-          <li><b>Signals, not proof.</b> Heuristics classify; humans decide. An old ad can be a funded loser — a long-runner is persistence, not profit.</li>
-          <li><b>Variants are not always hooks</b> — they can be aspect ratios, languages or placements. And scale bands come from the advertiser's total active-ad count, never from variant counts.</li>
+          <li><b>Signals, not proof.</b> Heuristics classify; humans decide. A long-running ad can be a funded loser; variants can be formats, not new hooks.</li>
+          <li><b>Coverage is partial by design.</b> The coverage monitor counts only what was actually captured. Absence here is not absence in the market.</li>
           <li><b>Spend is not public</b> outside political ads. Anyone selling exact Kenyan spend numbers is guessing.</li>
           <li><b>Kenya commercial ads are not in Meta's API</b> — that is why Fuatilia is capture-first: disciplined human capture keeps it inside platform terms.</li>
           <li><b>Copy structure, never words or assets.</b> Structure is craft; words belong to whoever wrote them.</li>
-          <li><b>Demo rows are fictional</b> and labeled <code>example: true</code>. Real captures replace them the moment you run <code>fuatilia add</code>.</li>
+          <li><b>Demo rows are fictional</b> and live in <code>data/demo.jsonl</code>, isolated from real captures — badged in the viewer, excluded from coverage counts, and loudly labelled in any demo digest.</li>
         </ul>
       </div>
     </div>
@@ -567,12 +605,13 @@ Week of 2026-10-28 · generated by GitHub Actions · Monday 09:00 Nairobi
   <div class="foot-in">
     <div>
       <a class="brand" href="./"><span class="brand-dot"></span><span class="brand-name" style="font:700 21px/1 var(--serif)">Fuatilia</span></a>
-      <p>The open ad-intelligence toolkit for Kenya. Know what Kenya is advertising — who is spending, which ads survived 90+ days, which creatives are being iterated — using only public transparency data.</p>
+      <p>The open ad-intelligence toolkit for Kenya. Track the publicly observable side of Kenyan advertising — who is running what, which creatives persist past 90 days, who is experimenting with variants — using only publicly available transparency data.</p>
       <p class="fine">Built in Nairobi · MIT License · Product #2 of the DC254 stack<br>(Product #1: the Data-Centers-254 content engine)</p>
     </div>
     <div>
       <h4>Explore</h4>
       <ul>
+        <li><a href="#fork">Fork the repo — own your AdWatch</a></li>
         <li><a href="viewer/">Live viewer</a></li>
         <li><a href="docs/METHOD.md">The method</a></li>
         <li><a href="docs/SCHEMA.md">Capture schema</a></li>
@@ -609,7 +648,7 @@ Week of 2026-10-28 · generated by GitHub Actions · Monday 09:00 Nairobi
     els.forEach(function(n){ n.classList.add("rv-in"); });
   }
 
-  var TH = { WINNER_DAYS: 90, HOOK_VERSIONS: 3 };
+  var TH = { PERSISTENCE_DAYS: 90, VARIANTS_FLAG: 3 };
   var el = function(id){ return document.getElementById(id); };
   var note = el("pulse-note"), noteText = el("pulse-note-text");
   function showNote(text, isErr){
@@ -617,35 +656,63 @@ Week of 2026-10-28 · generated by GitHub Actions · Monday 09:00 Nairobi
     note.style.color = isErr ? "#C24B33" : "#B97F22";
     note.hidden = false;
   }
-  try {
-    var res = await fetch("data/captures.jsonl");
+  function set(id, v){ var n = el(id); if (n) n.textContent = v; }
+  function age(r){
+    var d = r.ad_start || r.first_seen_by_us;
+    return d ? Math.max(0, Math.floor((Date.now() - new Date(d).getTime()) / 864e5)) : null;
+  }
+  async function loadJSONL(url){
+    var res = await fetch(url);
     if (!res.ok) throw new Error("HTTP " + res.status);
     var txt = (await res.text()).trim();
-    if (!txt) throw new Error("empty");
-    var allRows = txt.split("\n").map(function(l){ return JSON.parse(l); });
-    // Demo rows never masquerade as coverage: count real captures when they exist.
-    var real = allRows.filter(function(r){ return !r.example; });
-    var rows = real.length ? real : allRows;
-    function age(r){
-      var d = r.ad_start || r.first_seen_by_us;
-      return d ? Math.max(0, Math.floor((Date.now() - new Date(d).getTime()) / 864e5)) : null;
+    return txt ? txt.split("\n").map(function(l){ return JSON.parse(l); }) : [];
+  }
+  try {
+    var real = [];
+    try { real = await loadJSONL("data/captures.jsonl"); } catch (e) { /* file missing */ }
+    // Demo rows are fetched only to confirm they exist — they are NEVER counted here.
+    var demoCount = 0;
+    try { demoCount = (await loadJSONL("data/demo.jsonl")).length; } catch (e) { /* ok */ }
+
+    if (!real.length) {
+      ["p-captures","p-advertisers","p-longrunners","p-experimenters","p-meta","p-google","p-tiktok"].forEach(function(id){ set(id, "0"); });
+      set("p-categories", "—");
+      set("p-lastcapture", "none yet");
+      if (demoCount) {
+        showNote("coverage is honestly zero — no real captures yet. The " + demoCount + " fictional demo rows (data/demo.jsonl) are excluded from every number above. Browse a public library, run fuatilia add, and this dashboard fills with truth.", false);
+      } else {
+        showNote("no captures loaded — open the viewer or serve the repo root to try the demo.", true);
+      }
+    } else {
+      var advertisers = new Set(real.map(function(r){ return r.advertiser; }));
+      var categories = new Set();
+      real.forEach(function(r){ (r.tags || []).forEach(function(t){ categories.add(t); }); });
+      var captured = real.map(function(r){ return r.captured_at || r.first_seen_by_us; }).filter(Boolean).sort();
+      var platforms = { meta: 0, google: 0, tiktok: 0 };
+      real.forEach(function(r){ if (platforms[r.platform] !== undefined) platforms[r.platform]++; });
+
+      set("p-captures", real.length);
+      set("p-advertisers", advertisers.size);
+      set("p-categories", categories.size || "—");
+      set("p-lastcapture", captured.length ? captured[captured.length - 1] : "none yet");
+      set("p-longrunners", real.filter(function(r){ var t = age(r); return t !== null && t >= TH.PERSISTENCE_DAYS; }).length);
+      set("p-experimenters", real.filter(function(r){ return (Number(r.active_versions) || 0) >= TH.VARIANTS_FLAG; }).length);
+      set("p-meta", platforms.meta);
+      set("p-google", platforms.google);
+      set("p-tiktok", platforms.tiktok);
+      showNote("coverage = what was actually captured, never a census of the market. Demo rows (" + demoCount + ") excluded.", false);
     }
-    el("p-captures").textContent = rows.length;
-    el("p-advertisers").textContent = new Set(rows.map(function(r){ return r.advertiser; })).size;
-    el("p-winners").textContent = rows.filter(function(r){
-      var t = age(r); return t !== null && t >= TH.WINNER_DAYS;
-    }).length;
-    el("p-hooks").textContent = rows.filter(function(r){
-      return (Number(r.active_versions) || 0) >= TH.HOOK_VERSIONS;
-    }).length;
-    el("p-platforms").textContent = new Set(rows.map(function(r){ return r.platform; })).size;
-    if (!real.length && allRows.length){
-      showNote("demo data — fictional rows shipped with the repo. Run fuatilia add and these become real.", false);
-    } else if (allRows.length > real.length){
-      showNote(real.length + " real capture" + (real.length === 1 ? "" : "s") + " — " + (allRows.length - real.length) + " demo rows excluded from these counts.", false);
+
+    // Heartbeat: public proof of the last successful pipeline run.
+    try {
+      var hb = await (await fetch("ops/heartbeat.json")).json();
+      var days = Math.floor((Date.now() - new Date(hb.last_successful_run).getTime()) / 864e5);
+      set("p-heartbeat", "last successful run " + (days <= 0 ? "today" : days + "d ago") + " (" + (hb.commit || "").slice(0,7) + ")");
+    } catch (e) {
+      set("p-heartbeat", "no run recorded yet — run the AdWatch workflow once");
     }
   } catch (err) {
-    showNote("could not load data/captures.jsonl here — open the viewer or serve the repo root.", true);
+    showNote("could not load the data files here — open the viewer or serve the repo root.", true);
   }
 })();
 </script>

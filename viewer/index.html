@@ -19,9 +19,6 @@
   .crumb { margin: 10px 0 4px; }
   .crumb a { color: var(--blue); text-decoration: none; font-size: 13px; }
   .crumb a:hover { text-decoration: underline; }
-  .banner { display: none; background: rgba(248,81,73,.09); border: 1px solid var(--red); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; font-size: 13.5px; line-height: 1.55; }
-  .banner.show { display: block; }
-  .banner b { color: var(--red); text-transform: uppercase; letter-spacing: .5px; font-size: 12px; margin-right: 8px; }
   .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
   .toolbar button, .toolbar input {
     background: var(--panel); border: 1px solid var(--line); color: var(--text);
@@ -29,7 +26,6 @@
   }
   .toolbar input { cursor: text; min-width: 220px; }
   .toolbar button.active { border-color: var(--green); color: var(--green); }
-  #count { color: var(--dim); font-size: 12.5px; align-self: center; }
   .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
   .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; min-width: 130px; }
   .stat b { display: block; font-size: 22px; }
@@ -43,7 +39,6 @@
   .badge.hook { color: var(--amber); border-color: var(--amber); }
   .badge.young { color: var(--blue); border-color: var(--blue); }
   .badge.demo { color: var(--red); border-color: var(--red); }
-  .badge.band { color: var(--blue); border-color: var(--line); }
   .meta { color: var(--dim); font-size: 13px; margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; }
   .meta a { color: var(--blue); text-decoration: none; }
   .offer { margin-top: 8px; font-size: 14px; }
@@ -55,99 +50,82 @@
 <div class="wrap">
   <p class="crumb"><a href="../">&larr; Fuatilia home</a></p>
   <h1><span>Fuatilia</span> — Kenya ad watch</h1>
-  <p class="sub">Public ad-library captures, classified by tenure, variant and scale signals. Signals are heuristics, not proof — a long-runner is persistence, not profit; variants are not always hooks.</p>
-
-  <div class="banner" id="demo-banner"><b>Demo dataset</b> Every row below is fictional (<code>example: true</code>), shipped with the repo to show the shape of a capture. They are never counted as coverage. Run <code>fuatilia add</code> and your real captures replace them.</div>
+  <p class="sub">Public ad-library captures, classified by tenure and version signals. Signals are heuristics, not proof.</p>
 
   <div class="toolbar" id="filters">
-    <input id="q" type="search" placeholder="Search advertiser, offer, tag, headline, platform…">
+    <input id="q" type="search" placeholder="Search advertiser, offer, tag, platform, notes…">
     <button data-f="all" class="active">All</button>
     <button data-f="meta">Meta</button>
     <button data-f="google">Google</button>
     <button data-f="tiktok">TikTok</button>
-    <button data-f="longrun">Long-run 90d+</button>
-    <button data-f="experiments">Experiments</button>
-    <span id="count"></span>
+    <button data-f="winners">Long-running 90d+</button>
+    <button data-f="hooks">Experimenting 3+ variants</button>
+    <button id="demoToggle" data-on="0" title="Demo rows are fictional and never counted in coverage stats">Show demo rows</button>
   </div>
 
   <div class="stats" id="stats"></div>
+  <div id="count" style="font:500 12px/1.4 var(--mono);letter-spacing:.4px;color:#7d8a80;margin:-6px 0 14px"></div>
   <div id="list"><div class="empty">Loading captures…</div></div>
 
   <div class="foot">
-    Built from public transparency surfaces (Meta Ad Library · Google Ads Transparency Center · TikTok Creative Center) by human capture — every card shows its source and capture date.
+    Built from public transparency surfaces (Meta Ad Library · Google Ads Transparency Center · TikTok Creative Center) by human capture.
     Demo rows are fictional. Method: <code>docs/METHOD.md</code> · Schema: <code>docs/SCHEMA.md</code>.
     Also live on GitHub Pages: <a href="../">the Fuatilia landing page</a>.
   </div>
 </div>
 
 <script>
-const TH = { WINNER_DAYS: 90, HOOK_VERSIONS: 3 };
-const SOURCE_LABEL = {
-  manual_capture: "manual capture",
-  meta_api: "Meta API",
-  google_atc: "Google ATC",
-  tiktok_cc: "TikTok CC",
-};
-let records = [], filter = "all", query = "";
-let realOnly = false;
+const TH = { PERSISTENCE_DAYS: 90, VARIANTS_FLAG: 3 };
+let records = [], demoRecords = [], includeDemo = false, filter = "all", query = "";
 
 const params = new URLSearchParams(location.search);
-if (params.get("q")) {
-  document.getElementById("q").value = params.get("q");
-  query = params.get("q").trim().toLowerCase();
-}
 const win = (r) => (r.ad_start || r.first_seen_by_us)
   ? Math.max(0, Math.floor((Date.now() - new Date(r.ad_start || r.first_seen_by_us).getTime()) / 864e5)) : null;
 
-function bandBadge(r) {
-  const n = Number(r.active_ad_count);
-  if (!Number.isFinite(n) || n < 1) return "";
-  const band = n >= 30 ? "team-scale" : n >= 3 ? "scaling" : "solo/testing";
-  return `<span class="badge band" title="from the advertiser's total active ads (active_ad_count) — never from variant counts">${band} · ${n} ads</span>`;
-}
-
 function badges(r) {
   const t = win(r), v = Number(r.active_versions) || 0, b = [];
-  if (t !== null && t >= TH.WINNER_DAYS) b.push(`<span class="badge win">long-running · ${t}d</span>`);
+  if (t !== null && t >= TH.PERSISTENCE_DAYS) b.push(`<span class="badge win">long-running · ${t}d</span>`);
   else if (t !== null) b.push(`<span class="badge young">young · ${t}d</span>`);
-  if (v >= TH.HOOK_VERSIONS) b.push(`<span class="badge hook">experimenting · ${v} variants</span>`);
-  const bb = bandBadge(r);
-  if (bb) b.push(bb);
-  if (r.example) b.push(`<span class="badge demo">demo row</span>`);
+  if (v >= TH.VARIANTS_FLAG) b.push(`<span class="badge hook">experimenting · ${v} variants</span>`);
+  if (r.active_ad_count !== undefined && r.active_ad_count !== null && Number(r.active_ad_count) > 0)
+    b.push(`<span class="badge">${r.active_ad_count} active ads reported</span>`);
+  if (r.example) b.push(`<span class="badge demo">DEMO — fictional</span>`);
   return b.join("");
 }
 
-function haystack(r) {
-  return [
-    r.advertiser, r.offer, (r.tags || []).join(" "), r.landing_headline, r.platform,
-    r.country, r.creative_type, r.notes, r.id, r.source,
-    r.landing_url, r.library_url,
-  ].filter(Boolean).join(" ").toLowerCase();
-}
+const HAYFIELDS = (r) => [
+  r.advertiser, r.offer, (r.tags || []).join(" "), r.landing_headline,
+  r.platform, r.country, r.creative_type, r.notes, r.id, r.source,
+  r.landing_url, r.library_url,
+].filter(Boolean).join(" ").toLowerCase();
 
 function render() {
   const list = document.getElementById("list");
-  const tokens = query ? query.split(/\s+/).filter(Boolean) : [];
-  const rows = records.filter(r => {
-    if (filter === "longrun") { const t = win(r); if (t === null || t < TH.WINNER_DAYS) return false; }
-    else if (filter === "experiments") { if ((Number(r.active_versions) || 0) < TH.HOOK_VERSIONS) return false; }
+  const countEl = document.getElementById("count");
+  const tokens = query ? query.split(/\s+/u).filter(Boolean) : [];
+  const pool = includeDemo ? records.concat(demoRecords) : records;
+  let rows = pool.filter(r => {
+    if (filter === "winners") { const t = win(r); if (t === null || t < TH.PERSISTENCE_DAYS) return false; }
+    else if (filter === "hooks") { if ((Number(r.active_versions) || 0) < TH.VARIANTS_FLAG) return false; }
     else if (filter !== "all" && r.platform !== filter) return false;
-    const hay = haystack(r);
-    if (tokens.length && !tokens.every(t => hay.includes(t))) return false;
+    if (tokens.length) {
+      const hay = HAYFIELDS(r);
+      /* every word must match somewhere — platform, notes and ids included */
+      if (!tokens.every(t => hay.includes(t))) return false;
+    }
     return true;
   }).sort((a, b) => (win(b) ?? -1) - (win(a) ?? -1));
 
-  document.getElementById("count").textContent =
-    tokens.length ? `${rows.length} match${rows.length === 1 ? "" : "es"}` : "";
-
-  const statRows = realOnly ? records.filter(r => !r.example) : records;
-  const demoExcluded = records.length - statRows.length;
   document.getElementById("stats").innerHTML = [
-    ["Advertisers", new Set(statRows.map(r => r.advertiser)).size],
-    ["Captures", statRows.length],
-    ["Long-run 90d+", statRows.filter(r => { const t = win(r); return t !== null && t >= TH.WINNER_DAYS; }).length],
-    ["Experiments", statRows.filter(r => (Number(r.active_versions) || 0) >= TH.HOOK_VERSIONS).length],
-  ].map(([k, v]) => `<div class="stat"><b>${v}</b><small>${k}${demoExcluded > 0 && k === "Captures" ? ` · ${demoExcluded} demo excluded` : ""}</small></div>`).join("");
+    ["Advertisers", new Set(records.map(r => r.advertiser)).size],
+    ["Captures", records.length],
+    ["Long-running 90d+", records.filter(r => { const t = win(r); return t !== null && t >= TH.PERSISTENCE_DAYS; }).length],
+    ["Experimenting 3+ variants", records.filter(r => (Number(r.active_versions) || 0) >= TH.VARIANTS_FLAG).length],
+  ].map(([k, v]) => `<div class="stat"><b>${v}</b><small>${k}</small></div>`).join("");
+
+  countEl.textContent = tokens.length || filter !== "all" || includeDemo
+    ? `showing ${rows.length} of ${pool.length} captures${tokens.length ? ` · “${query}”` : ""}${filter !== "all" ? ` · filter: ${filter}` : ""}${includeDemo ? " · demo rows included (fictional)" : ""}`
+    : "";
 
   list.innerHTML = rows.length ? rows.map(r => `
     <div class="card">
@@ -159,14 +137,13 @@ function render() {
       <div class="meta">
         <span>${esc(r.platform)} · ${esc(r.country || "KE")}</span>
         ${r.ad_start ? `<span>started ${esc(r.ad_start)}</span>` : ""}
+        ${r.captured_at || r.first_seen_by_us ? `<span>captured ${esc(r.captured_at || r.first_seen_by_us)} · ${esc(r.source || "manual_capture")}</span>` : ""}
         ${r.creative_type ? `<span>${esc(r.creative_type)}</span>` : ""}
         ${(r.tags || []).length ? `<span>#${r.tags.map(esc).join(" #")}</span>` : ""}
-        ${r.captured_at ? `<span>captured ${esc(r.captured_at)}</span>` : ""}
-        ${r.source ? `<span>via ${esc(SOURCE_LABEL[r.source] || r.source)}${r.capture_method === "auto" ? " · auto" : ""}</span>` : ""}
         ${r.landing_url ? `<a href="${esc(r.landing_url)}" target="_blank" rel="noopener">landing page ↗</a>` : ""}
         ${r.library_url ? `<a href="${esc(r.library_url)}" target="_blank" rel="noopener">ad library ↗</a>` : ""}
       </div>
-    </div>`).join("") : `<div class="empty">No captures match. Browse the public ad library, then run <code>fuatilia add</code>.</div>`;
+    </div>`).join("") : `<div class="empty">No captures match${tokens.length ? ` <b>“${esc(query)}”</b>` : ""}. Words are matched against advertiser, offer, tags, platform, country, notes and links. Browse the public ad library, then run <code>fuatilia add</code>.</div>`;
 }
 
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
@@ -178,29 +155,43 @@ document.getElementById("filters").addEventListener("click", e => {
     render();
   }
 });
-let qTimer = null;
 document.getElementById("q").addEventListener("input", e => {
   query = e.target.value.trim().toLowerCase();
-  clearTimeout(qTimer);
-  qTimer = setTimeout(() => {
-    const url = new URL(location);
-    if (query) url.searchParams.set("q", query); else url.searchParams.delete("q");
-    history.replaceState(null, "", url);
-    render();
-  }, 150);
+  const u = new URL(location);
+  if (query) u.searchParams.set("q", query); else u.searchParams.delete("q");
+  history.replaceState(null, "", u);
+  render();
 });
+
+document.getElementById("demoToggle").addEventListener("click", e => {
+  includeDemo = !includeDemo;
+  e.target.dataset.on = includeDemo ? "1" : "0";
+  e.target.textContent = includeDemo ? "Demo rows shown — fictional" : "Show demo rows";
+  const u = new URL(location);
+  if (includeDemo) u.searchParams.set("demo", "1"); else u.searchParams.delete("demo");
+  history.replaceState(null, "", u);
+  render();
+});
+
+if (params.get("q")) {
+  query = (params.get("q") || "").trim().toLowerCase();
+  document.getElementById("q").value = query;
+}
+if (params.get("demo") === "1") {
+  includeDemo = true;
+  const dt = document.getElementById("demoToggle");
+  dt.dataset.on = "1"; dt.textContent = "Demo rows shown — fictional";
+}
 
 fetch("../data/captures.jsonl")
   .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
   .then(t => {
     records = t.trim() ? t.trim().split("\n").map(l => JSON.parse(l)) : [];
-    // Demo rows never masquerade as coverage: when real captures exist, the
-    // headline stats count real rows only (demo rows stay visible, badged).
-    const real = records.filter(r => !r.example);
-    if (real.length > 0) realOnly = true;
-    if (records.length > 0 && real.length === 0) {
-      document.getElementById("demo-banner").classList.add("show");
-    }
+    /* demo rows are a separate fetch — the production store stays clean */
+    return fetch("../data/demo.jsonl").then(r => (r.ok ? r.text() : "")).catch(() => "");
+  })
+  .then(dt => {
+    demoRecords = dt && dt.trim() ? dt.trim().split("\n").map(l => JSON.parse(l)) : [];
     render();
   })
   .catch(() => {

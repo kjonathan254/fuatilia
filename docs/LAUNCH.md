@@ -11,50 +11,54 @@ viewer — a real image beats a clean feed.
 
 **1/8 — the hook**
 
-Kenya's biggest advertisers publish their entire playbook in public. Every ad, its
-start date, its version count. Free to read, hiding in plain sight. I built a tool
-that reads it for you every Monday.
+Kenyan advertisers are running their playbooks through public ad libraries right now —
+start dates, variant counts, landing pages. Free to read, hiding in plain sight. I
+built a tool that turns that into a Monday brief.
 
 **2/8 — the source**
 
-The sources are Meta's Ad Library and Google's Ads Transparency Center. The publicly
-observable ads in Kenya, no login, no fee. Reading it is the hard part: hundreds of ad
-cards with no memory. The trick is counting days, variants and active-ad totals.
+The sources are Meta's Ad Library and Google's Ads Transparency Center — publicly
+available, no login, no fee. Not every ad in Kenya is there, and not every field shows
+on every card. Reading what IS there is the hard part: hundreds of ad cards, no
+memory. The trick is counting days, variants and active ads.
 
 **3/8 — the signals**
 
 Two numbers do the reading:
 
-1. An ad alive after 90 days gets a long-runner flag. Someone keeps renewing the
-budget. Persistence, not proof of profit.
+1. An ad alive after 90 days is a long-running creative — a persistence signal. Profit,
+brand reach, retargeting or autopilot: you investigate, then decide.
 
-2. Three or more variants of one ad means creative experimentation. Could be hooks,
-could be placements. Watch which variants survive.
+2. Three or more variants of one ad means creative experimentation. Sometimes hooks,
+sometimes just formats. Count concepts, not just variants.
 
 **4/8 — the product**
 
 I called it Fuatilia. Swahili for keep watch. Free, open source, MIT. Every Monday
-09:00 Nairobi it builds a brief: long-runners, experiments, new entrants, landing
-pages worth a teardown. Delivered straight to your Telegram or WhatsApp.
+09:00 Nairobi it builds a brief from what was captured: long-running creatives,
+experimenters, new entrants, landing pages worth a teardown. Telegram/WhatsApp delivery
+if you configure it.
 
 **5/8 — who it's for**
 
-Built for the advertisers the global tools skip. BigSpy, PiPiAds, Foreplay, AdClarity:
-none lists Kenya as a covered market as of writing. Enterprise intelligence costs
-more than most SME budgets here. If you sell fibre, solar, loans or skincare in Kenya,
-this is for you.
+Built for the advertisers global tools overlook: local categories, local budgets,
+local prices. Enterprise intelligence costs more than most SME budgets here. Fuatilia
+costs nothing and shows its method. If you sell fibre, solar, loans or skincare in
+Kenya, this is for you.
 
 **6/8 — the honesty**
 
-Full honesty, in the docs and on every page: ad spend is private, so exact budgets
-are impossible. Fuatilia reads time, variants and the advertiser's own active-ad
-count instead. It stamps signal, not proof on everything. You verify, then move.
+Full honesty, in the docs and on every page: ad spend is private, so exact budgets are
+impossible. Coverage is partial — you get what was actually captured, never a census.
+Scale bands read active ad counts, never variant counts. Signal, not proof. You
+verify, then move.
 
 **7/8 — how to try it**
 
 Try it in one minute: open the site, tap the live viewer, see what the radar sees.
 Want the Monday brief on your phone? Create a Telegram bot, paste two keys into repo
-secrets. Fifteen minutes, once, then it arrives forever.
+secrets. Fifteen minutes, once — scheduled delivery every Monday your repo stays
+active.
 
 **8/8 — the ask**
 
@@ -84,7 +88,7 @@ Issues and ideas welcome: https://github.com/kjonathan254/fuatilia/issues
 
 ## Follow-up posts (the week after)
 
-- **Teardown Tuesday** — pick one long-runner from the viewer, break down its
+- **Teardown Tuesday** — pick one long-running creative from the viewer, break down its
   landing page structure (promise → proof → offer → urgency → CTA). One per week.
 - **Signal of the week** — a screenshot of the most interesting capture, one line on
   why it matters.
