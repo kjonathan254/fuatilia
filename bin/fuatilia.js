@@ -27,7 +27,7 @@ import { renderDigest } from "../lib/digest.js";
 import { deliver } from "../lib/deliver.js";
 import { collect } from "../lib/collector.js";
 
-const VERSION = "0.3.0";
+const VERSION = "0.4.0";
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
 const CAPTURES = path.join(DATA_DIR, "captures.jsonl");
