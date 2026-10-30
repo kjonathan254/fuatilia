@@ -3,6 +3,18 @@
 One JSON object per line in `data/captures.jsonl` (JSON Lines: each line is a complete,
 independent record — safe to append, merge and diff with git).
 
+**Two data files, never mixed:**
+
+| File | Contents |
+|---|---|
+| `data/captures.jsonl` | **Production captures only** — real observations of real ads |
+| `data/demo.jsonl` | The fictional demo rows shipped with the repo (`example: true`) |
+
+`fuatilia add` writes to `captures.jsonl`; `fuatilia add --example` writes to `demo.jsonl`.
+The digest falls back to demo rows only when production is empty — and then prints a
+fictional-data warning banner. Coverage stats, the site's Coverage Monitor and weekly
+snapshots **never** read demo rows.
+
 ## Fields
 
 | Field | Type | Required | Notes |
@@ -15,28 +27,36 @@ independent record — safe to append, merge and diff with git).
 | `page_id` | string \| null | optional | Meta page ID when known (from the library URL) |
 | `ad_start` | ISO date | recommended | Start date printed on the ad card — feeds the tenure signal |
 | `first_seen_by_us` | ISO date | auto | First Fuatilia capture of this ad |
-| `active_versions` | number | recommended | Active variants of this ad — feeds the hook-testing signal |
+| `active_versions` | number | recommended | **Variants of this one ad concept** (different cuts of the same creative) — NOT the advertiser's catalogue size |
+| `active_ad_count` | number | strongly recommended | **Total active ads you can see for this advertiser+platform at capture time.** This is the only input to scale bands. Version counts are never substituted for it |
+| `concept_id` | string | optional | Groups variants of one creative idea (e.g. `concept-free-router`). Turns "7 versions" into "3 concepts, 7 executions" |
 | `creative_type` | string | optional | `video` \| `image` \| `carousel` \| `search` \| `other` |
 | `offer` | string | optional | The headline offer, in the advertiser's own words (short quote only) |
 | `landing_url` | string | optional | Where the ad's CTA goes |
 | `landing_headline` | string | optional | The H1 on the landing page (structure reference, not for copying) |
-| `library_url` | string | optional | Direct link back to the ad/advertiser in the public library |
-| `source` | string | optional | `manual_capture` (default) \| `meta_api` \| `google_atc` \| `tiktok_cc` |
+| `library_url` | string | optional | Direct link back to the ad/advertiser in the public library — every observation stays auditable |
+| `source` | string | optional | `manual_capture` (default) \| `meta_api` \| `google_atc` \| `tiktok_cc` — records whether the row was human-captured or automatically collected |
 | `tags` | string[] | optional | Free tags: `isp`, `promo`, `electronics`, `diaspora`… |
-| `example` | boolean | optional | `true` on demo rows shipped with the repo — excluded from real digests |
+| `example` | boolean | optional | `true` on demo rows — kept only in `data/demo.jsonl`, excluded from real digests, snapshots and coverage stats |
 | `notes` | string | optional | Anything future-you will thank you for |
 
 ## Example (real shape, fictional advertiser)
 
 ```json
-{"id":"demo-isp-ltd_meta_2026-10-26_a1","captured_at":"2026-10-26","advertiser":"Demo ISP Ltd","platform":"meta","country":"KE","page_id":null,"ad_start":"2026-07-02","first_seen_by_us":"2026-10-26","active_versions":4,"creative_type":"video","offer":"Free router + installation this month","landing_url":"https://example.co.ke/deal","landing_headline":"Home fibre from KSh 2,999/mo","library_url":"https://www.facebook.com/ads/library/?id=000000000000000","source":"manual_capture","tags":["isp","promo"],"example":true,"notes":"Fictional demo row — replace with your captures"}
+{"id":"demo-isp-ltd_meta_2026-10-26_a1","captured_at":"2026-10-26","advertiser":"Demo ISP Ltd","platform":"meta","country":"KE","page_id":null,"ad_start":"2026-07-02","first_seen_by_us":"2026-10-26","active_versions":4,"active_ad_count":12,"concept_id":"concept-free-router","creative_type":"video","offer":"Free router + installation this month","landing_url":"https://example.co.ke/deal","landing_headline":"Home fibre from KSh 2,999/mo","library_url":"https://www.facebook.com/ads/library/?id=000000000000000","source":"manual_capture","tags":["isp","promo"],"example":true,"notes":"Fictional demo row — replace with your captures"}
 ```
 
 ## Rules of the road
 
-1. One ad card = one line. If the advertiser has 30 active ads, capture the 5 that matter
-   (newest, longest-lived, most versions) and note the total in `notes`.
-2. `active_versions` counts **variants of the same ad concept**, not the advertiser's
-   whole catalogue — that distinction is what makes the hook-testing signal meaningful.
-3. Quote offers sparingly and for reference only — you are taking notes, not republishing.
-4. `example: true` rows are ignored by `fuatilia digest` once you start capturing real ads.
+1. One ad card = one line. If the advertiser shows 30 active ads, capture the cards that
+   matter (newest, longest-lived, most variants) **and record the total in
+   `active_ad_count`** — that number, not your card count, drives the scale band.
+2. `active_versions` counts **variants of the same ad concept** — aspect-ratio cuts,
+   language versions and placement variants included. Different opening hooks = different
+   concepts: give each concept its own `concept_id`.
+3. `active_ad_count` is what you can *see* in the library, counted the same way each week.
+   It indicates activity, never budgets — spend is not public.
+4. A 90+ day ad is a **persistence signal**: profitable, brand-building, retargeting,
+   grant-funded or forgotten on autopilot. Fuatilia flags persistence; you supply the verdict.
+5. Quote offers sparingly and for reference only — you are taking notes, not republishing.
+6. `example: true` rows belong in `data/demo.jsonl` only.

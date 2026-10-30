@@ -58,8 +58,9 @@
     <button data-f="meta">Meta</button>
     <button data-f="google">Google</button>
     <button data-f="tiktok">TikTok</button>
-    <button data-f="winners">Winners 90d+</button>
-    <button data-f="hooks">Hook testing</button>
+    <button data-f="winners">Long-running 90d+</button>
+    <button data-f="hooks">Experimenting 3+ variants</button>
+    <button id="demoToggle" data-on="0" title="Demo rows are fictional and never counted in coverage stats">Show demo rows</button>
   </div>
 
   <div class="stats" id="stats"></div>
@@ -74,8 +75,8 @@
 </div>
 
 <script>
-const TH = { WINNER_DAYS: 90, HOOK_VERSIONS: 3 };
-let records = [], filter = "all", query = "";
+const TH = { PERSISTENCE_DAYS: 90, VARIANTS_FLAG: 3 };
+let records = [], demoRecords = [], includeDemo = false, filter = "all", query = "";
 
 const params = new URLSearchParams(location.search);
 const win = (r) => (r.ad_start || r.first_seen_by_us)
@@ -83,10 +84,12 @@ const win = (r) => (r.ad_start || r.first_seen_by_us)
 
 function badges(r) {
   const t = win(r), v = Number(r.active_versions) || 0, b = [];
-  if (t !== null && t >= TH.WINNER_DAYS) b.push(`<span class="badge win">winner candidate · ${t}d</span>`);
+  if (t !== null && t >= TH.PERSISTENCE_DAYS) b.push(`<span class="badge win">long-running · ${t}d</span>`);
   else if (t !== null) b.push(`<span class="badge young">young · ${t}d</span>`);
-  if (v >= TH.HOOK_VERSIONS) b.push(`<span class="badge hook">hook testing · ${v} versions</span>`);
-  if (r.example) b.push(`<span class="badge demo">demo row</span>`);
+  if (v >= TH.VARIANTS_FLAG) b.push(`<span class="badge hook">experimenting · ${v} variants</span>`);
+  if (r.active_ad_count !== undefined && r.active_ad_count !== null && Number(r.active_ad_count) > 0)
+    b.push(`<span class="badge">${r.active_ad_count} active ads reported</span>`);
+  if (r.example) b.push(`<span class="badge demo">DEMO — fictional</span>`);
   return b.join("");
 }
 
@@ -100,9 +103,10 @@ function render() {
   const list = document.getElementById("list");
   const countEl = document.getElementById("count");
   const tokens = query ? query.split(/\s+/u).filter(Boolean) : [];
-  let rows = records.filter(r => {
-    if (filter === "winners") { const t = win(r); if (t === null || t < TH.WINNER_DAYS) return false; }
-    else if (filter === "hooks") { if ((Number(r.active_versions) || 0) < TH.HOOK_VERSIONS) return false; }
+  const pool = includeDemo ? records.concat(demoRecords) : records;
+  let rows = pool.filter(r => {
+    if (filter === "winners") { const t = win(r); if (t === null || t < TH.PERSISTENCE_DAYS) return false; }
+    else if (filter === "hooks") { if ((Number(r.active_versions) || 0) < TH.VARIANTS_FLAG) return false; }
     else if (filter !== "all" && r.platform !== filter) return false;
     if (tokens.length) {
       const hay = HAYFIELDS(r);
@@ -115,12 +119,12 @@ function render() {
   document.getElementById("stats").innerHTML = [
     ["Advertisers", new Set(records.map(r => r.advertiser)).size],
     ["Captures", records.length],
-    ["Winners 90d+", records.filter(r => { const t = win(r); return t !== null && t >= TH.WINNER_DAYS; }).length],
-    ["Hook tests", records.filter(r => (Number(r.active_versions) || 0) >= TH.HOOK_VERSIONS).length],
+    ["Long-running 90d+", records.filter(r => { const t = win(r); return t !== null && t >= TH.PERSISTENCE_DAYS; }).length],
+    ["Experimenting 3+ variants", records.filter(r => (Number(r.active_versions) || 0) >= TH.VARIANTS_FLAG).length],
   ].map(([k, v]) => `<div class="stat"><b>${v}</b><small>${k}</small></div>`).join("");
 
-  countEl.textContent = tokens.length || filter !== "all"
-    ? `showing ${rows.length} of ${records.length} captures${tokens.length ? ` · “${query}”` : ""}${filter !== "all" ? ` · filter: ${filter}` : ""}`
+  countEl.textContent = tokens.length || filter !== "all" || includeDemo
+    ? `showing ${rows.length} of ${pool.length} captures${tokens.length ? ` · “${query}”` : ""}${filter !== "all" ? ` · filter: ${filter}` : ""}${includeDemo ? " · demo rows included (fictional)" : ""}`
     : "";
 
   list.innerHTML = rows.length ? rows.map(r => `
@@ -133,6 +137,7 @@ function render() {
       <div class="meta">
         <span>${esc(r.platform)} · ${esc(r.country || "KE")}</span>
         ${r.ad_start ? `<span>started ${esc(r.ad_start)}</span>` : ""}
+        ${r.captured_at || r.first_seen_by_us ? `<span>captured ${esc(r.captured_at || r.first_seen_by_us)} · ${esc(r.source || "manual_capture")}</span>` : ""}
         ${r.creative_type ? `<span>${esc(r.creative_type)}</span>` : ""}
         ${(r.tags || []).length ? `<span>#${r.tags.map(esc).join(" #")}</span>` : ""}
         ${r.landing_url ? `<a href="${esc(r.landing_url)}" target="_blank" rel="noopener">landing page ↗</a>` : ""}
@@ -158,18 +163,35 @@ document.getElementById("q").addEventListener("input", e => {
   render();
 });
 
+document.getElementById("demoToggle").addEventListener("click", e => {
+  includeDemo = !includeDemo;
+  e.target.dataset.on = includeDemo ? "1" : "0";
+  e.target.textContent = includeDemo ? "Demo rows shown — fictional" : "Show demo rows";
+  const u = new URL(location);
+  if (includeDemo) u.searchParams.set("demo", "1"); else u.searchParams.delete("demo");
+  history.replaceState(null, "", u);
+  render();
+});
+
 if (params.get("q")) {
   query = (params.get("q") || "").trim().toLowerCase();
   document.getElementById("q").value = query;
 }
-
 if (params.get("demo") === "1") {
-  /* allow preview without a server: fetch relative anyway */
+  includeDemo = true;
+  const dt = document.getElementById("demoToggle");
+  dt.dataset.on = "1"; dt.textContent = "Demo rows shown — fictional";
 }
+
 fetch("../data/captures.jsonl")
   .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
   .then(t => {
     records = t.trim() ? t.trim().split("\n").map(l => JSON.parse(l)) : [];
+    /* demo rows are a separate fetch — the production store stays clean */
+    return fetch("../data/demo.jsonl").then(r => (r.ok ? r.text() : "")).catch(() => "");
+  })
+  .then(dt => {
+    demoRecords = dt && dt.trim() ? dt.trim().split("\n").map(l => JSON.parse(l)) : [];
     render();
   })
   .catch(() => {
