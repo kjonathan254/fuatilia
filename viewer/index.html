@@ -53,7 +53,7 @@
   <p class="sub">Public ad-library captures, classified by tenure and version signals. Signals are heuristics, not proof.</p>
 
   <div class="toolbar" id="filters">
-    <input id="q" type="search" placeholder="Search advertiser, offer, tag…">
+    <input id="q" type="search" placeholder="Search advertiser, offer, tag, platform, notes…">
     <button data-f="all" class="active">All</button>
     <button data-f="meta">Meta</button>
     <button data-f="google">Google</button>
@@ -63,6 +63,7 @@
   </div>
 
   <div class="stats" id="stats"></div>
+  <div id="count" style="font:500 12px/1.4 var(--mono);letter-spacing:.4px;color:#7d8a80;margin:-6px 0 14px"></div>
   <div id="list"><div class="empty">Loading captures…</div></div>
 
   <div class="foot">
@@ -89,15 +90,24 @@ function badges(r) {
   return b.join("");
 }
 
+const HAYFIELDS = (r) => [
+  r.advertiser, r.offer, (r.tags || []).join(" "), r.landing_headline,
+  r.platform, r.country, r.creative_type, r.notes, r.id, r.source,
+  r.landing_url, r.library_url,
+].filter(Boolean).join(" ").toLowerCase();
+
 function render() {
   const list = document.getElementById("list");
+  const countEl = document.getElementById("count");
+  const tokens = query ? query.split(/\s+/u).filter(Boolean) : [];
   let rows = records.filter(r => {
     if (filter === "winners") { const t = win(r); if (t === null || t < TH.WINNER_DAYS) return false; }
     else if (filter === "hooks") { if ((Number(r.active_versions) || 0) < TH.HOOK_VERSIONS) return false; }
     else if (filter !== "all" && r.platform !== filter) return false;
-    if (query) {
-      const hay = `${r.advertiser} ${r.offer || ""} ${(r.tags || []).join(" ")} ${r.landing_headline || ""}`.toLowerCase();
-      if (!hay.includes(query)) return false;
+    if (tokens.length) {
+      const hay = HAYFIELDS(r);
+      /* every word must match somewhere — platform, notes and ids included */
+      if (!tokens.every(t => hay.includes(t))) return false;
     }
     return true;
   }).sort((a, b) => (win(b) ?? -1) - (win(a) ?? -1));
@@ -108,6 +118,10 @@ function render() {
     ["Winners 90d+", records.filter(r => { const t = win(r); return t !== null && t >= TH.WINNER_DAYS; }).length],
     ["Hook tests", records.filter(r => (Number(r.active_versions) || 0) >= TH.HOOK_VERSIONS).length],
   ].map(([k, v]) => `<div class="stat"><b>${v}</b><small>${k}</small></div>`).join("");
+
+  countEl.textContent = tokens.length || filter !== "all"
+    ? `showing ${rows.length} of ${records.length} captures${tokens.length ? ` · “${query}”` : ""}${filter !== "all" ? ` · filter: ${filter}` : ""}`
+    : "";
 
   list.innerHTML = rows.length ? rows.map(r => `
     <div class="card">
@@ -124,7 +138,7 @@ function render() {
         ${r.landing_url ? `<a href="${esc(r.landing_url)}" target="_blank" rel="noopener">landing page ↗</a>` : ""}
         ${r.library_url ? `<a href="${esc(r.library_url)}" target="_blank" rel="noopener">ad library ↗</a>` : ""}
       </div>
-    </div>`).join("") : `<div class="empty">No captures match. Browse the public ad library, then run <code>fuatilia add</code>.</div>`;
+    </div>`).join("") : `<div class="empty">No captures match${tokens.length ? ` <b>“${esc(query)}”</b>` : ""}. Words are matched against advertiser, offer, tags, platform, country, notes and links. Browse the public ad library, then run <code>fuatilia add</code>.</div>`;
 }
 
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
@@ -136,7 +150,18 @@ document.getElementById("filters").addEventListener("click", e => {
     render();
   }
 });
-document.getElementById("q").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); render(); });
+document.getElementById("q").addEventListener("input", e => {
+  query = e.target.value.trim().toLowerCase();
+  const u = new URL(location);
+  if (query) u.searchParams.set("q", query); else u.searchParams.delete("q");
+  history.replaceState(null, "", u);
+  render();
+});
+
+if (params.get("q")) {
+  query = (params.get("q") || "").trim().toLowerCase();
+  document.getElementById("q").value = query;
+}
 
 if (params.get("demo") === "1") {
   /* allow preview without a server: fetch relative anyway */
