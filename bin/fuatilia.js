@@ -31,8 +31,10 @@ import { renderDigest } from "../lib/digest.js";
 import { deliver } from "../lib/deliver.js";
 import { collect } from "../lib/collector.js";
 import { pushCaptures } from "../lib/supabase-sync.js";
+import { writeReport } from "../lib/analyst.js";
+import { deliverReports } from "../lib/deliver.js";
 
-const VERSION = "0.4.0";
+const VERSION = "0.5.0";
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
 const CAPTURES = path.join(DATA_DIR, "captures.jsonl");
@@ -66,6 +68,15 @@ Fuatilia v${VERSION} — know what Kenya is advertising (the publicly observable
   fuatilia push [--source S] [--brief UUID]
                                  push captures to Supabase (automation platform);
                                  --brief links the evidence to a portal brief
+  fuatilia report [--out DIR] [--brief UUID]
+                                 write the weekly intelligence report: deterministic
+                                 signals + AI interpretation on top (skips AI without
+                                 FUATILIA_AI_API_KEY); --brief persists it to the
+                                 platform reports table
+  fuatilia deliver-reports        send the weekly report to every active WhatsApp
+                                 brief as an approved template (per-customer,
+                                 logged in deliveries); skips without platform +
+                                 WhatsApp secrets — docs/DELIVERY.md §5
   fuatilia snapshot                  write snapshots/<week>.json (weekly history)
 
 Signals are heuristics, not proof. Long-running != profitable; variants != new hooks.
@@ -504,6 +515,41 @@ async function cmdPush(args) {
   }
 }
 
+async function cmdReport(args) {
+  try {
+    const r = await writeReport(ROOT, process.env, { outDir: args.out, briefId: args.brief });
+    r.notes.forEach((n) => console.log(`note: ${n}`));
+    console.log(`report written: ${path.relative(ROOT, r.file)}`);
+    console.log(
+      `interpretation: ${r.interpretation}${r.model ? ` (model: ${r.model})` : ""} — AI writes on top of deterministic signals, never instead of them`,
+    );
+    if (r.persisted) console.log(`persisted: reports row ${r.persisted}`);
+  } catch (e) {
+    die(e.message || String(e));
+  }
+}
+
+async function cmdDeliverReports() {
+  try {
+    const r = await deliverReports(ROOT, process.env, {});
+    r.skipped.forEach((m) => console.log(`skip: ${m}`));
+    r.notes.forEach((n) => console.log(`note: ${n}`));
+    r.sent.forEach((s) =>
+      console.log(`sent: "${s.brief}" → ${s.to}${s.provider_message_id ? ` (id ${s.provider_message_id})` : ""}`),
+    );
+    r.failed.forEach((f) => console.error(`failed: "${f.brief}" → ${f.to || "?"} — ${f.error}`));
+    if (r.failed.length) process.exit(1);
+  } catch (e) {
+    if (/HTTP 40[14]/.test(e.message) && /does not exist|schema cache|Could not find/i.test(e.message)) {
+      die(
+        "platform schema not ready — run supabase/migrations/0001_fuatilia_init.sql in the SQL Editor first\n" +
+        `detail: ${e.message}`,
+      );
+    }
+    die(e.message || String(e));
+  }
+}
+
 // ---------- main ----------
 
 const [cmd, ...rest] = process.argv.slice(2);
@@ -536,6 +582,12 @@ switch (cmd) {
     break;
   case "push":
     cmdPush(args);
+    break;
+  case "report":
+    cmdReport(args);
+    break;
+  case "deliver-reports":
+    cmdDeliverReports();
     break;
   case "version":
   case "--version":

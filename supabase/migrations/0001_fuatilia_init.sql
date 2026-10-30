@@ -115,7 +115,7 @@ create table if not exists public.collection_runs (
   id              uuid primary key default gen_random_uuid(),
   started_at      timestamptz not null default now(),
   finished_at     timestamptz,
-  source          text not null,                   -- manual_capture | meta_api | google_atc | tiktok_cc
+  source          text not null,                   -- manual_capture | meta_api | google_atc | tiktok_cc | scheduled_workflow
   status          text not null default 'running'
                   check (status in ('running','ok','failed')),
   records_fetched int,

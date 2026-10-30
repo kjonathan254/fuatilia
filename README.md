@@ -27,17 +27,18 @@ not a census of the market, and we never claim it is.
 
 | Piece | File | What it does |
 |---|---|---|
-| CLI | `bin/fuatilia.js` | `init` · `add` · `check` · `score` · `digest` · `snapshot` · `deliver` · `collect` — zero-dependency Node ≥ 18 |
+| CLI | `bin/fuatilia.js` | `init` · `add` · `check` · `score` · `digest` · `snapshot` · `deliver` · `collect` · `push` · `report` · `deliver-reports` — zero-dependency Node ≥ 18 |
 | Signals engine | `lib/signals.js` | Tenure, variant counts, **active-ad-count scale bands** → long-running creatives & creative experimentation |
 | Digest renderer | `lib/digest.js` | The Monday Markdown sheet: pulse, long-running creatives, experimenters, new entrants, teardown list — demo mode is labelled loudly |
 | Snapshots | `snapshots/` | Weekly per-advertiser aggregates (`snapshot-<week>.json`) with deltas vs the previous week — the history layer |
-| Delivery | `lib/deliver.js` | Sends the digest to **Telegram**, **WhatsApp (Cloud API)** or any webhook — env-driven, skips when unconfigured |
+| Delivery | `lib/deliver.js` | Sends the digest to **Telegram**, **WhatsApp (Cloud API)** or any webhook; `deliver-reports` sends per-customer **WhatsApp template** messages and logs them in `deliveries` — env-driven, skips when unconfigured |
+| Report writer | `lib/analyst.js` | Weekly intelligence report: deterministic facts → guardrailed **AI interpretation** (OpenAI-compatible, optional) with a deterministic fallback — AI writes on top of the numbers, never instead of them |
 | API collector | `lib/collector.js` | Pulls the Meta Ad Library **API tier** (EU + issue ads) into `captures.jsonl`, de-duplicated |
 | Supabase sync | `lib/supabase-sync.js` | `push` uploads real captures to the automation platform (observations + heartbeat) — env-driven, skips when unconfigured; `--brief <uuid>` attaches evidence to a portal brief |
 | Watchlist | `watchlist.json` | Kenyan brands & category search seeds to track weekly |
 | Capture store | `data/captures.jsonl` | One JSON object per seen ad card — **real captures only** (schema: `docs/SCHEMA.md`) |
 | Demo store | `data/demo.jsonl` | The fictional demo rows (`example: true`) — never mixed into real digests, snapshots or coverage stats |
-| Monday Action | `.github/workflows/adwatch.yml` | Generates the digest every **Monday 09:00 Nairobi** as a workflow artifact |
+| Monday Action | `.github/workflows/adwatch.yml` | Every **Monday 09:00 Nairobi**: collect → push (platform) → digest → snapshot → deliver → report (AI layer) → deliver-reports (per-customer templates) → heartbeat + archive |
 | CI | `.github/workflows/ci.yml` | Syntax + schema + smoke tests on every push |
 | Viewer | `viewer/index.html` | Static browser for non-technical users (GitHub Pages ready) |
 

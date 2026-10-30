@@ -104,19 +104,24 @@ every Monday is not a product advantage — reliability is the product.
 | Stage | Scope | Status |
 |---|---|---|
 | 1 · Customer onboarding | Register, configure competitors/industries/frequency | **Live** — portal + Auth + trigger + RLS |
-| 2 · Automated collection | Connect authorised sources, schedule, record provenance | **Built** — `fuatilia add`/`collect` + `fuatilia push` with heartbeat (`collection_runs`) |
-| 3 · Intelligence engine | Classify, compare, detect change | **Built (deterministic)** — persistence/experimentation/scale signals; AI interpretation next |
-| 4 · Personalised reports | Evidence + links + dates + limitations | **Schema live** — report writer is the next build |
-| 5 · Automatic delivery | Channel of choice, pause/edit anytime | **Per-operator today** (Telegram/WhatsApp/webhook); per-customer next |
+| 2 · Automated collection | Connect authorised sources, schedule, record provenance | **Live** — `fuatilia add`/`collect` + `fuatilia push --source scheduled_workflow` in the Monday workflow (observations + `collection_runs` heartbeat); flips on with `SUPABASE_URL` + service-role secrets |
+| 3 · Intelligence engine | Classify, compare, detect change | **Built** — deterministic signals + AI interpretation layered on top (`fuatilia report`, guardrailed, deterministic fallback); AI endpoint optional |
+| 4 · Personalised reports | Evidence + links + dates + limitations | **Report row live** (`reports` + `fuatilia report --brief`); per-brief competitor-filtered content is the next build |
+| 5 · Automatic delivery | Channel of choice, pause/edit anytime | **Built** — owner channels (Telegram/WhatsApp text/webhook) + per-customer WhatsApp **template** delivery (`fuatilia deliver-reports`, logged in `deliveries`); template approval is a pilot step |
 | 6 · Billing & subscriptions | Plan limits, renewals | **Metering live** — `subscriptions.free_sessions_*` implements the 5-free-sessions model; payment processing later |
 
 ## 7 · Deliberately not built yet (and why)
 
 - **n8n orchestrator** — GitHub Actions already coordinates the Monday loop; n8n earns
   its place when per-customer schedules and retries multiply.
-- **AI report writer** — until real observations flow for a paying pilot, an AI writer
-  would generate confident prose from thin data. First: one sector, 5–10 customers,
-  a limited advertiser set (the audit's validation experiment).
-- **WhatsApp Business Platform per customer** — template approval and phone-number
-  infrastructure come with the pilot, not before.
+- **Per-brief report content** — the AI writer runs on the week's shared deterministic
+  facts; filtering the evidence through each brief's named competitors comes when the
+  first paying pilot brings real per-customer capture volume. An AI writer personalising
+  thin data would generate confident prose from noise.
 - **Payment processing** — the free-session meter gates usage; billing follows proof.
+
+The AI interpretation layer and the WhatsApp per-customer template delivery are now
+BUILT (Stages 3 and 5 above) — but both stay honestly gated: the AI layer is optional
+by config and falls back to deterministic prose; the WhatsApp path needs the owner to
+register the template in Meta Business Manager (docs/DELIVERY.md §7) before the first
+real send.

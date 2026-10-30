@@ -1,8 +1,9 @@
-# Delivery & Collection Setup (v0.2)
+# Delivery & Collection Setup (v0.5)
 
-The Monday pipeline is: **collect → digest → deliver**. The digest always runs. The
-other two stages switch themselves on as soon as you add their secrets — a fresh fork
-works with zero configuration, and you light up channels one by one.
+The Monday pipeline is: **collect → push → digest → snapshot → deliver → report →
+deliver-reports**. The digest, snapshot and report always run. Every other stage
+switches itself on as soon as you add its secrets — a fresh fork works with zero
+configuration, and you light up stages one by one.
 
 Add secrets at: **repo → Settings → Secrets and variables → Actions → New repository secret.**
 
@@ -82,6 +83,11 @@ every Monday 09:00 Nairobi, no one has to remember anything.
    - `FUATILIA_WHATSAPP_PHONE_ID` (the sender phone number ID)
    - `FUATILIA_WHATSAPP_TO` (recipient number, country code, no `+`)
 
+**Scope of this text mode:** free-form text messages are only deliverable inside a
+24-hour customer-service window or in test mode. A scheduled business-initiated
+weekly brief must go as an **approved template** — that is `fuatilia deliver-reports`
+in §7 below.
+
 Pragmatic alternative: skip Meta Business entirely — deliver to Telegram, and forward
 from Telegram to WhatsApp manually, or bridge via a webhook (below).
 
@@ -110,13 +116,96 @@ The collector de-duplicates on stable ad IDs and appends to `data/captures.jsonl
 Kenyan commercial ads), it logs the reason and moves on — the Monday run never turns red
 over it.
 
+## 5. Platform connection — scheduled collection (`fuatilia push`, `fuatilia report`)
+
+This is Stage 2 of the automation architecture: the Monday workflow stops being a
+local digest and starts feeding the platform (observations, heartbeat, reports).
+
+| Secret | Meaning |
+|---|---|
+| `SUPABASE_URL` | `https://<project>.supabase.co` — Project Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | the service-role key (**bypasses RLS** — pipeline only, never client-side) |
+| `FUATILIA_BRIEF_ID` | optional — links pushed evidence to that portal brief; without it rows are stored but stay pipeline-only |
+| `FUATILIA_REPORT_BRIEF_ID` | optional — brief the weekly report row is filed under (`reports.brief_id` is required) |
+
+What the workflow does once these are set:
+
+1. `fuatilia push --source scheduled_workflow` — every real capture lands in
+   `observations` (deduped by evidence key) and the run is recorded in
+   `collection_runs`, so the portal's "last run" card shows pipeline health. Set
+   `FUATILIA_BRIEF_ID` so the evidence is visible to the brief's customer.
+2. `fuatilia report --brief <id>` — the weekly report row lands in `reports` with
+   `summary` counts and the `content` sections; per-customer delivery (§7) records
+   each send against it in `deliveries`.
+
+## 6. AI interpretation layer (`fuatilia report`)
+
+Stage 3: the deterministic engine computes every number; an LLM writes the words on
+top of them, never instead of them. The model sees ONLY the computed facts JSON and a
+hard guardrail prompt; its output is shape-validated and any failure falls back to the
+built-in deterministic interpreter — an AI outage never turns the Monday run red.
+
+| Secret | Meaning |
+|---|---|
+| `FUATILIA_AI_API_KEY` | any OpenAI-compatible provider — set it and the AI layer switches on |
+| `FUATILIA_AI_BASE_URL` | default `https://api.openai.com/v1`; point at any compatible endpoint |
+| `FUATILIA_AI_MODEL` | default `gpt-4o-mini` |
+
+Without the key (or when the endpoint fails) the report is still written —
+`digests/report-<week>.md` + `.json` — with the deterministic interpretation and a
+note saying so. The files are committed to the repo and uploaded as artifacts.
+
+## 7. WhatsApp Business template — per-customer delivery (`fuatilia deliver-reports`)
+
+Stage 5: the workflow sends each active WhatsApp brief its weekly notification as an
+**approved template** message and records every send in the `deliveries` table.
+Template messages are the only compliant way to business-initiate a weekly brief.
+
+**Register the template once** (Meta Business Manager → WhatsApp → Message templates
+→ Create template):
+
+- Name: `fuatilia_weekly_intel` · Category: **Marketing** · Language: **English (en)**
+- Body (exactly five positional parameters):
+
+```text
+Hi {{1}}, your weekly advertising intelligence brief "{{2}}" is ready for the week of {{3}}.
+
+{{4}}
+
+Open your report: {{5}}
+
+Reply STOP to opt out.
+```
+
+| Param | Filled with |
+|---|---|
+| `{{1}}` | customer name (from their portal account) |
+| `{{2}}` | brief name (e.g. "Banks watch") |
+| `{{3}}` | week-of date |
+| `{{4}}` | weekly pulse line: advertisers observed · records captured |
+| `{{5}}` | portal/report link (`FUATILIA_PORTAL_URL`, defaults to the Pages site) |
+
+Approval usually takes minutes to 48h. Personalised report CONTENT per brief is the
+next build (Stage 4) — today every customer gets the same honest weekly pulse,
+personalised with their name, brief and link.
+
+Secrets: `FUATILIA_WHATSAPP_TOKEN`, `FUATILIA_WHATSAPP_PHONE_ID` (same app as §2),
+optional `FUATILIA_WHATSAPP_TEMPLATE` / `FUATILIA_WHATSAPP_TEMPLATE_LANG` (override
+the defaults above) and `FUATILIA_PORTAL_URL`. Requires §5 (the platform knows who
+to message and where to log). Customers who reply STOP must be opted out on the
+platform before the next send — template sends to opted-out numbers are rejected by
+Meta and would show up as `failed` in the run log and the deliveries table.
+
 ---
 
 ## Behaviour guarantees
 
 | Situation | Result |
 |---|---|
-| No secrets at all | collect skips, digest runs, deliver skips — **run stays green** |
+| No secrets at all | collect, push, deliver, report-AI, deliver-reports skip — digest + snapshot + deterministic report still run, **run stays green** |
 | One channel misconfigured | that channel reports `failed`, others still send, **step exits 1** so you notice |
 | Meta API down or tier empty | collector logs honest notes, digest still renders |
+| AI endpoint down or off-spec | report falls back to the deterministic interpretation, notes the reason, run stays green |
+| Supabase unreachable | push/report persist notes the failure; digest + files still ship; `collection_runs` heartbeat shows the failed run in the portal |
 | `--digest path/to/file.md` | deliver sends that exact file instead of the newest |
+| Template not yet approved | deliver-reports fails loudly for that send (Meta rejects unknown templates) — approve first, §7 |
