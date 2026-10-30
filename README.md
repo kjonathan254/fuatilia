@@ -33,6 +33,7 @@ not a census of the market, and we never claim it is.
 | Snapshots | `snapshots/` | Weekly per-advertiser aggregates (`snapshot-<week>.json`) with deltas vs the previous week — the history layer |
 | Delivery | `lib/deliver.js` | Sends the digest to **Telegram**, **WhatsApp (Cloud API)** or any webhook — env-driven, skips when unconfigured |
 | API collector | `lib/collector.js` | Pulls the Meta Ad Library **API tier** (EU + issue ads) into `captures.jsonl`, de-duplicated |
+| Supabase sync | `lib/supabase-sync.js` | `push` uploads real captures to the automation platform (observations + heartbeat) — env-driven, skips when unconfigured |
 | Watchlist | `watchlist.json` | Kenyan brands & category search seeds to track weekly |
 | Capture store | `data/captures.jsonl` | One JSON object per seen ad card — **real captures only** (schema: `docs/SCHEMA.md`) |
 | Demo store | `data/demo.jsonl` | The fictional demo rows (`example: true`) — never mixed into real digests, snapshots or coverage stats |
@@ -116,6 +117,8 @@ weekly reading habit. **Sell analysis, never raw platform data.**
 - [`docs/METHOD.md`](docs/METHOD.md) — the four-part method + legality boundaries
 - [`docs/SCHEMA.md`](docs/SCHEMA.md) — the capture record schema
 - [`docs/DELIVERY.md`](docs/DELIVERY.md) — Telegram/WhatsApp/webhook setup + Meta API collector
+- [`docs/AUTOMATION-ARCHITECTURE.md`](docs/AUTOMATION-ARCHITECTURE.md) — the automation-first platform: six components, Supabase schema, security model, build stages
+- [`supabase/migrations/0001_fuatilia_init.sql`](supabase/migrations/0001_fuatilia_init.sql) — the platform database schema (run once in the Supabase SQL Editor)
 - [`docs/LAUNCH.md`](docs/LAUNCH.md) — the X launch thread + posting kit
 
 ## The Monday pipeline
