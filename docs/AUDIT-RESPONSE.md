@@ -43,11 +43,13 @@ This file maps every audit finding to an action: **fixed in this release (v0.3.0
 - Sector filters, advertiser comparison, landing-page teardowns at scale → **v0.4/v1.0**
 - Moving scheduling off GitHub Actions for any paid tier → deferred until there is a paid tier (audit agrees: "You do not need to build that backend today")
 
-## Known cosmetic debt
+## Known cosmetic debt — cleared
 
-The 60-second launch video still uses the old "90+ days = winner" phrasing in two stamp
-graphics. The audio says the same. Re-rendering is cheap (the Remotion project is in the
-repo history) but was deliberately deferred one day so the correctness fixes ship first.
+The 60-second launch video previously used the old "90+ days = winner" phrasing in two
+stamp graphics. **Re-rendered on 2026-10-30 (silent master, no voiceover — owner's
+call)**: stamps now read `LONG-RUNNER · 90+ DAYS`, `EXPERIMENTING · SIGNAL` and
+`NEW ENTRANT`, and the terminal scene types the v0.4 flags (`--ads`, `--concept`).
+Delivered as `fuatilia-launch-60s.mp4`; the TTS voiceover track was dropped entirely.
 
 ## The question the audit asked that only the owner can answer
 
