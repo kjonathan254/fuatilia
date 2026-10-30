@@ -116,6 +116,17 @@
   .way .mins{font:500 11px/1 var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--faint)}
   .way a{font-weight:600;font-size:14.5px;text-decoration:none;border-bottom:1.5px solid var(--green);padding-bottom:1px}
   .way a:hover{color:var(--ink);border-color:var(--ink)}
+  .forkgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+  @media(max-width:1000px){.forkgrid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.forkgrid{grid-template-columns:1fr}}
+  .fstep{background:var(--paper2);border:1.5px solid var(--ink);box-shadow:var(--sh);padding:26px 22px 22px;position:relative}
+  .fstep .fnum{position:absolute;top:-13px;left:18px;background:var(--ink);color:var(--paper);font:600 10px/1 var(--mono);letter-spacing:1.4px;text-transform:uppercase;padding:6px 10px;border-radius:4px}
+  .fstep:nth-child(1) .fnum{background:var(--green)} .fstep:nth-child(3) .fnum{background:var(--amber)}
+  .fstep h3{font:600 20px/1.25 var(--serif);margin:8px 0 8px}
+  .fstep p{font-size:14px;color:var(--dim);line-height:1.62}
+  .fstep a{font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--green);padding-bottom:1px}
+  .fstep a:hover{color:var(--ink);border-color:var(--ink)}
+  .fstep code{font:500 11.5px/1.4 var(--mono);background:var(--paper);border:1px solid rgba(24,36,32,.18);padding:1px 5px;border-radius:3px;word-break:break-word}
 
   /* A–Z */
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:36px}
@@ -232,6 +243,7 @@
     <a class="brand" href="./"><span class="brand-dot"></span><span class="brand-name">Fuatilia</span></a>
     <div class="nav-links">
       <a class="hide-m" href="#start">Start here</a>
+      <a class="hide-m" href="#fork">Fork it</a>
       <a class="hide-m" href="#how">How it works</a>
       <a class="hide-m" href="#signals">Signals</a>
       <a class="hide-m" href="#pulse">Pulse</a>
@@ -317,7 +329,7 @@
           <span class="tag">Way 2 · The subscriber</span>
           <h3>Get the brief on your phone</h3>
           <p>Fork the repo, create a Telegram bot with @BotFather, paste two keys into repo secrets. GitHub does the rest — the digest lands every Monday 09:00 Nairobi.</p>
-          <a href="docs/DELIVERY.md">The 15-minute guide</a> <span class="mins">· no coding</span>
+          <a href="#fork">The fork flow, step by step</a> <span class="mins">· no coding</span>
         </div>
         <div class="way" data-rv>
           <span class="tag">Way 3 · The operator</span>
@@ -329,9 +341,56 @@
     </div>
   </section>
 
+  <section class="sec" id="fork">
+    <div class="wrap">
+      <div class="eyebrow" data-rv><span class="n">01</span> The fork flow — own your own AdWatch</div>
+      <h2 data-rv>Fork it. Paste two keys. Done.</h2>
+      <p class="lede" data-rv>You do not rent Fuatilia — you own it. Four steps, nothing to install, no servers to babysit: GitHub's own machines run the radar inside <em>your</em> copy of the repo and deliver the Monday digest to <em>your</em> phone. Free, forever.</p>
+      <div class="forkgrid">
+        <div class="fstep" data-rv>
+          <span class="fnum">Step 1 · 10 seconds</span>
+          <h3>Fork the repo</h3>
+          <p>Open <a href="https://github.com/kjonathan254/fuatilia/fork" target="_blank" rel="noopener">github.com/kjonathan254/fuatilia</a> and press <b>Fork</b>. You now own a complete copy — code, demo data and the weekly workflow included.</p>
+        </div>
+        <div class="fstep" data-rv>
+          <span class="fnum">Step 2 · 1 click</span>
+          <h3>Switch on Actions</h3>
+          <p>In your fork, open the <b>Actions</b> tab and press the green enable button. That is the whole step — the Monday radar workflow ships inside the repo, ready to go.</p>
+        </div>
+        <div class="fstep" data-rv>
+          <span class="fnum">Step 3 · 15 minutes</span>
+          <h3>Paste two secrets</h3>
+          <p>Create a Telegram bot with @BotFather, then add <code>FUATILIA_TELEGRAM_BOT_TOKEN</code> and <code>FUATILIA_TELEGRAM_CHAT_ID</code> under Settings → Secrets and variables → Actions. <a href="docs/DELIVERY.md">Our tap-by-tap guide</a> walks you through every screen.</p>
+        </div>
+        <div class="fstep" data-rv>
+          <span class="fnum">Step 4 · 2 minutes</span>
+          <h3>Run it once</h3>
+          <p>Actions → <b>AdWatch</b> → <b>Run workflow</b>. Your first digest lands on your phone before your tea cools. Then every Monday 09:00 Nairobi, automatically, forever.</p>
+        </div>
+      </div>
+      <div class="term" data-rv style="margin-top:36px">
+        <div class="term-bar">
+          <span class="term-dot" style="background:#E88B6F"></span>
+          <span class="term-dot" style="background:#E8B45C"></span>
+          <span class="term-dot" style="background:#5FD79B"></span>
+          <span class="term-title">prefer the terminal? — the operator lane</span>
+        </div>
+        <div class="term-body"><span class="c-cmd">$ git clone https://github.com/kjonathan254/fuatilia.git &amp;&amp; cd fuatilia &amp;&amp; npm install</span>
+<span class="c-cmd">$ node bin/fuatilia.js add --advertiser "Zuku" --platform meta --country KE \</span>
+<span class="c-cmd">    --start 2026-09-01 --versions 4 --offer "Free installation this month"</span>
+<span class="c-com"># your machine, your data, one JSONL file you can actually read</span><span class="cursor"></span></div>
+      </div>
+      <div class="cta-row" data-rv>
+        <a class="btn alt" href="https://github.com/kjonathan254/fuatilia/fork" target="_blank" rel="noopener">Fork Fuatilia now</a>
+        <a class="btn" href="docs/DELIVERY.md">The 15-minute setup guide</a>
+        <a class="btn ghost" href="https://github.com/kjonathan254/fuatilia/blob/main/.github/workflows/adwatch.yml" target="_blank" rel="noopener">See the Monday workflow</a>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="how">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">01</span> How it works</div>
+      <div class="eyebrow" data-rv><span class="n">02</span> How it works</div>
       <h2 data-rv>From A to Z, no jargon.</h2>
       <p class="lede" data-rv>Eight letters. If you can follow a recipe, you can follow this system.</p>
       <div class="steps">
@@ -381,7 +440,7 @@
 
   <section class="sec" id="signals">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">02</span> The signals</div>
+      <div class="eyebrow" data-rv><span class="n">03</span> The signals</div>
       <h2 data-rv>Three numbers do the reading.</h2>
       <p class="lede" data-rv>You do not need analytics jargon. The radar only ever counts days and versions.</p>
       <div class="sig-grid">
@@ -410,7 +469,7 @@
 
   <section class="sec" id="pipeline">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">03</span> The Monday pipeline</div>
+      <div class="eyebrow" data-rv><span class="n">04</span> The Monday pipeline</div>
       <h2 data-rv>Collect, digest, deliver.</h2>
       <div class="pipe">
         <div class="pipe-box" data-rv>
@@ -437,7 +496,7 @@
 
   <section class="sec" id="pulse">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">04</span> Live pulse</div>
+      <div class="eyebrow" data-rv><span class="n">05</span> Live pulse</div>
       <h2 data-rv>What the radar sees right now.</h2>
       <p class="lede" data-rv>Numbers below are computed in your browser from <code>data/captures.jsonl</code> — the same file the CLI writes. No server, no tracking.</p>
       <div class="pulse-grid" data-rv>
@@ -453,7 +512,7 @@
 
   <section class="sec" id="digest">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">05</span> The Monday digest</div>
+      <div class="eyebrow" data-rv><span class="n">06</span> The Monday digest</div>
       <h2 data-rv>This lands every Monday morning.</h2>
       <p class="lede" data-rv>Generated by GitHub Actions, filed as an artifact, delivered to your phone if you want. Here is a real one, demo rows included:</p>
       <div class="term" data-rv>
@@ -494,7 +553,7 @@ Week of 2026-10-28 · generated by GitHub Actions · Monday 09:00 Nairobi
 
   <section class="sec" id="why">
     <div class="wrap">
-      <div class="eyebrow" data-rv><span class="n">06</span> Why Kenyans should care</div>
+      <div class="eyebrow" data-rv><span class="n">07</span> Why Kenyans should care</div>
       <h2 data-rv>The intel was already public. Now it is usable.</h2>
       <div class="why-grid">
         <div class="why" data-rv>
@@ -543,6 +602,7 @@ Week of 2026-10-28 · generated by GitHub Actions · Monday 09:00 Nairobi
     <div>
       <h4>Explore</h4>
       <ul>
+        <li><a href="#fork">Fork the repo — own your AdWatch</a></li>
         <li><a href="viewer/">Live viewer</a></li>
         <li><a href="docs/METHOD.md">The method</a></li>
         <li><a href="docs/SCHEMA.md">Capture schema</a></li>
