@@ -142,9 +142,9 @@ visibly labelled), named competitors and delivery log.
 
 - Security model: the page ships only the Supabase **anon public** key; every
   row is scoped by Row Level Security to the signed-in customer — cross-client
-  reads return empty by policy. Never paste a service_role key here.
-- One-time enable: set the `SUPABASE_ANON_KEY` constant in `portal/index.html`
-  (Dashboard → Project Settings → API keys → anon public).
+  reads return empty by policy. Never paste a service_role key here. (Anon key
+  configured 2026-10-31; the unconfigured fallback is a neutral "temporarily
+  unavailable" card — no stack or setup details are shown publicly.)
 - Onboarding a client end-to-end (account → brief → evidence → Monday
   report → delivery): [`docs/CLIENT-ONBOARDING.md`](docs/CLIENT-ONBOARDING.md).
 
