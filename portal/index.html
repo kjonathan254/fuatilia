@@ -186,7 +186,7 @@ function hideAuthBanner() { $("authBanner").hidden = true; }
 
 /* ---------- boot ---------- */
 (function boot() {
-  if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === "PASTE_ANON_KEY_HERE") {
+  if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.length < 100) {
     $("setupView").hidden = false; return;
   }
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
