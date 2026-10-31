@@ -41,6 +41,7 @@ not a census of the market, and we never claim it is.
 | Monday Action | `.github/workflows/adwatch.yml` | Every **Monday 09:00 Nairobi**: collect → push (platform) → digest → snapshot → deliver → report (AI layer) → deliver-reports (per-customer templates) → heartbeat + archive |
 | CI | `.github/workflows/ci.yml` | Syntax + schema + smoke tests on every push |
 | Viewer | `viewer/index.html` | Static browser for non-technical users (GitHub Pages ready) |
+| Agent skill | `skills/fuatilia/SKILL.md` | The entire operating procedure — setup, Telegram bot, WhatsApp templates, client onboarding, weekly capture loop — as an installable skill for AI agents |
 
 ## Quickstart
 
@@ -121,7 +122,10 @@ weekly reading habit. **Sell analysis, never raw platform data.**
 - [`docs/AUTOMATION-ARCHITECTURE.md`](docs/AUTOMATION-ARCHITECTURE.md) — the automation-first platform: six components, Supabase schema, security model, build stages
 - [`supabase/migrations/0001_fuatilia_init.sql`](supabase/migrations/0001_fuatilia_init.sql) — the platform database schema (safe to re-run in the Supabase SQL Editor; policies are dropped and recreated, evidence is customer-scoped)
 - [`docs/CLIENT-ONBOARDING.md`](docs/CLIENT-ONBOARDING.md) — the practical, non-demo workflow for onboarding a paying client (example: DC254)
+- [`docs/FIRST-REAL-CYCLE.md`](docs/FIRST-REAL-CYCLE.md) — the first fully real cycle, start to finish: 7 captures → pipeline → Telegram confirmation (2026-10-31)
+- [`skills/fuatilia/SKILL.md`](skills/fuatilia/SKILL.md) — the same procedure as an installable agent skill
 - [`docs/LAUNCH.md`](docs/LAUNCH.md) — the X launch thread + posting kit
+- Install guide for the skill: <https://kjonathan254.github.io/fuatilia/skill.html>
 
 ## The Monday pipeline
 
@@ -147,6 +151,30 @@ visibly labelled), named competitors and delivery log.
   unavailable" card — no stack or setup details are shown publicly.)
 - Onboarding a client end-to-end (account → brief → evidence → Monday
   report → delivery): [`docs/CLIENT-ONBOARDING.md`](docs/CLIENT-ONBOARDING.md).
+
+## Use it as an agent skill
+
+The whole operating procedure — Supabase backend, Telegram bot creation, WhatsApp
+template delivery, client onboarding and the weekly evidence loop — ships as an
+**installable agent skill**. Point your AI agent at it and it can run the entire
+cycle the way it was run for the first real client report.
+
+**Install (Claude Code or any agent that reads `SKILL.md`):**
+
+```bash
+# from a clone of this repo
+cp -r skills/fuatilia ~/.claude/skills/        # Claude Code
+# or just point your agent at the file:
+#   https://raw.githubusercontent.com/kjonathan254/fuatilia/main/skills/fuatilia/SKILL.md
+```
+
+- Skill file: [`skills/fuatilia/SKILL.md`](skills/fuatilia/SKILL.md) — trigger it by
+  asking for "a weekly Kenya ad-intelligence cycle", "track competitor ads in
+  Kenya", "set up Fuatilia", "deliver my report to Telegram/WhatsApp".
+- Illustrated install guide: <https://kjonathan254.github.io/fuatilia/skill.html>
+- Where it came from: [`docs/FIRST-REAL-CYCLE.md`](docs/FIRST-REAL-CYCLE.md) — the
+  stored breakdown of the first fully real cycle (7 real captures → Monday
+  pipeline → report confirmed on Telegram).
 
 ## Roadmap
 
