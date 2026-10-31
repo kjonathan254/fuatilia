@@ -60,8 +60,8 @@ two repository secrets. For DC254:
    - `FUATILIA_BRIEF_ID` = the brief UUID
    - `FUATILIA_REPORT_BRIEF_ID` = the same UUID
 
-   (These are already set to the DataCentre254 Brief
-   `011086a5-7ca7-4bc2-8f53-e3de7c34280e`. Re-point them per active client.)
+   (Kept out of this public doc on purpose: the live brief UUID lives only in
+   the repo secrets. Re-point them per active client.)
 
 The other required secrets — `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
 `FUATILIA_TELEGRAM_BOT_TOKEN`, `FUATILIA_TELEGRAM_CHAT_ID` — are already
@@ -139,9 +139,9 @@ node bin/fuatilia.js score   # tenure + signals + scale per capture
 **Manual (same-day delivery, e.g. you promised evidence by Friday):**
 
 ```bash
-export SUPABASE_URL="https://tmxunegddjjlomssnrkh.supabase.co"
+export SUPABASE_URL="https://<your-project-ref>.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="<service role key>"
-node bin/fuatilia.js push --brief 011086a5-7ca7-4bc2-8f53-e3de7c34280e --source manual
+node bin/fuatilia.js push --brief <brief-uuid> --source manual
 ```
 
 Integrity guard: `push` **refuses to run when `captures.jsonl` has zero real

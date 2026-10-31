@@ -124,7 +124,6 @@ weekly reading habit. **Sell analysis, never raw platform data.**
 - [`docs/CLIENT-ONBOARDING.md`](docs/CLIENT-ONBOARDING.md) — the practical, non-demo workflow for onboarding a paying client (example: DC254)
 - [`docs/FIRST-REAL-CYCLE.md`](docs/FIRST-REAL-CYCLE.md) — the first fully real cycle, start to finish: 7 captures → pipeline → Telegram confirmation (2026-10-31)
 - [`skills/fuatilia/SKILL.md`](skills/fuatilia/SKILL.md) — the same procedure as an installable agent skill
-- [`docs/LAUNCH.md`](docs/LAUNCH.md) — the X launch thread + posting kit
 - Install guide for the skill: <https://kjonathan254.github.io/fuatilia/skill.html>
 
 ## The Monday pipeline
