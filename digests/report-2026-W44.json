@@ -1,26 +1,20 @@
 {
   "week": "2026-W44",
-  "generated_at": "2026-10-31T11:58:58.250Z",
+  "generated_at": "2026-10-31T13:18:13.816Z",
   "interpretation": "deterministic",
   "model": null,
   "engine_note": "deterministic signals from lib/signals.js; the interpretation layer writes on top of those numbers, never instead of them",
-  "headline": "Week 2026-W44: 5 advertisers on the public record",
+  "headline": "Week 2026-W44: 4 advertisers on the public record",
   "executive": [
-    "5 advertisers observed across 6 captured records (meta: 4, google: 1, tiktok: 1).",
-    "3 advertisers kept creative live 90+ days (Demo Skincare KE 213d; Demo Gadgets KE 166d; Demo ISP Ltd 121d) — persistence, not performance proof.",
-    "3 advertisers ran 3+ variants of one ad (Demo Gadgets KE: 7; Demo ISP Ltd: 4; Demo Loans KE: 3) — active creative experimentation.",
-    "6 captures new to us within 7 days."
+    "4 advertisers observed across 7 captured records (meta: 7).",
+    "1 advertiser kept creative live 90+ days (Safaricom PLC 95d) — persistence, not performance proof.",
+    "7 captures new to us within 7 days."
   ],
   "strategic": [
-    "Demo Skincare KE (meta): 213 days live, 2 active ads observed (card-reported). Teardown candidate — check what the landing page is doing that the ad promises.",
-    "Demo Gadgets KE (meta): 166 days live, 34 active ads observed (card-reported). Teardown candidate — check what the landing page is doing that the ad promises.",
-    "Demo ISP Ltd (meta): 121 days live, 12 active ads observed (card-reported). Teardown candidate — check what the landing page is doing that the ad promises.",
-    "Demo Gadgets KE (meta): 7 variants of one ad. Track concepts, not counts — group the variants by idea before reading a hook strategy.",
-    "Demo ISP Ltd (meta): 4 variants of one ad. Track concepts, not counts — group the variants by idea before reading a hook strategy.",
-    "Demo Loans KE (tiktok): 3 variants of one ad. Track concepts, not counts — group the variants by idea before reading a hook strategy.",
-    "Demo ISP Ltd (meta) is new to our capture — offer on the card: \"Free router + installation this month\". Re-check next Monday; young ads say nothing yet.",
-    "Demo Gadgets KE (meta) is new to our capture — offer on the card: \"Smartwatch at KSh 1,999 — today only\". Re-check next Monday; young ads say nothing yet.",
-    "Demo Solar KE (google) is new to our capture — offer on the card: \"Solar kit on 30-day deposit\". Re-check next Monday; young ads say nothing yet."
+    "Safaricom PLC (meta): 95 days live, 4 active ads observed (captured-card basis). Teardown candidate — check what the landing page is doing that the ad promises.",
+    "Safaricom PLC (meta) is new to our capture — offer on the card: \"New number ranges are here - get yours from any Safaricom Shop or Dealer outlet near you. #SafaricomPopoteUlipo\". Re-check next Monday; young ads say nothing yet.",
+    "Safaricom PLC (meta) is new to our capture — offer on the card: \"M-PESA Business Till: free payments up to 500 bob, up from 200. Lipa na M-PESA on MyOne App. #PataMoreNaSafaricom\". Re-check next Monday; young ads say nothing yet.",
+    "Safaricom PLC (meta) is new to our capture — offer on the card: \"M-Shwari and KCB M-PESA now under Financial Services on My OneApp - use the search option to get there faster\". Re-check next Monday; young ads say nothing yet."
   ],
   "methodology": [
     "All numbers come from deterministic classification of captured observations (lib/signals.js): tenure from library start dates, variant counts from ad cards, active-ad counts from the card's advertiser-level figure with our captured-card count as the labelled fallback.",
@@ -33,188 +27,124 @@
     "Kenyan commercial ads are not in Meta's Ad Library API; coverage is limited to what was actually captured from the public libraries this week.",
     "Delivery is scheduled, not guaranteed — collection depends on capture discipline and platform availability."
   ],
-  "demo_mode": true,
+  "demo_mode": false,
   "facts": {
     "week": "2026-W44",
-    "generated_at": "2026-10-31T11:58:58.250Z",
-    "demo_mode": true,
+    "generated_at": "2026-10-31T13:18:13.816Z",
+    "demo_mode": false,
     "thresholds": {
       "long_running_days": 90,
       "variants_flag": 3,
       "new_window_days": 7
     },
     "pulse": {
-      "advertisers_observed": 5,
-      "records_captured": 6,
+      "advertisers_observed": 4,
+      "records_captured": 7,
       "by_platform": {
-        "meta": 4,
-        "google": 1,
-        "tiktok": 1
+        "meta": 7
       },
       "watchlist_size": 8
     },
     "advertisers": [
       {
-        "advertiser": "Demo Skincare KE",
+        "advertiser": "Safaricom PLC",
         "platform": "meta",
-        "active_ads": 2,
-        "scale_basis": "reported_active_ads",
-        "variants": 2,
-        "longest_live_days": 213,
-        "running_since": "2026-04-01",
-        "band": "light",
+        "active_ads": 4,
+        "scale_basis": "captured_cards",
+        "variants": 0,
+        "longest_live_days": 95,
+        "running_since": "2026-07-28",
+        "band": "consistent",
         "signals": [
           "LONG_RUNNING"
         ]
       },
       {
-        "advertiser": "Demo Gadgets KE",
+        "advertiser": "Spiro Kenya - EV",
         "platform": "meta",
-        "active_ads": 34,
-        "scale_basis": "reported_active_ads",
-        "variants": 7,
-        "longest_live_days": 166,
-        "running_since": "2026-05-18",
-        "band": "wide-footprint",
-        "signals": [
-          "LONG_RUNNING",
-          "CREATIVE_EXPERIMENTATION"
-        ]
-      },
-      {
-        "advertiser": "Demo ISP Ltd",
-        "platform": "meta",
-        "active_ads": 12,
-        "scale_basis": "reported_active_ads",
-        "variants": 4,
-        "longest_live_days": 121,
-        "running_since": "2026-07-02",
-        "band": "consistent",
-        "signals": [
-          "LONG_RUNNING",
-          "CREATIVE_EXPERIMENTATION"
-        ]
-      },
-      {
-        "advertiser": "Demo Loans KE",
-        "platform": "tiktok",
-        "active_ads": 5,
-        "scale_basis": "reported_active_ads",
-        "variants": 3,
-        "longest_live_days": 77,
-        "running_since": "2026-08-15",
-        "band": "consistent",
-        "signals": [
-          "CREATIVE_EXPERIMENTATION"
-        ]
-      },
-      {
-        "advertiser": "Demo Solar KE",
-        "platform": "meta",
-        "active_ads": 3,
-        "scale_basis": "reported_active_ads",
-        "variants": 2,
-        "longest_live_days": 41,
-        "running_since": "2026-09-20",
-        "band": "consistent",
+        "active_ads": 1,
+        "scale_basis": "captured_cards",
+        "variants": 0,
+        "longest_live_days": 25,
+        "running_since": "2026-10-06",
+        "band": "light",
         "signals": []
       },
       {
-        "advertiser": "Demo Solar KE",
-        "platform": "google",
-        "active_ads": 3,
-        "scale_basis": "reported_active_ads",
-        "variants": 1,
-        "longest_live_days": 21,
-        "running_since": "2026-10-10",
-        "band": "consistent",
+        "advertiser": "Starlink",
+        "platform": "meta",
+        "active_ads": 1,
+        "scale_basis": "captured_cards",
+        "variants": 0,
+        "longest_live_days": 8,
+        "running_since": "2026-10-23",
+        "band": "light",
+        "signals": []
+      },
+      {
+        "advertiser": "JAMII FAIBA",
+        "platform": "meta",
+        "active_ads": 1,
+        "scale_basis": "captured_cards",
+        "variants": 0,
+        "longest_live_days": 2,
+        "running_since": "2026-10-29",
+        "band": "light",
         "signals": []
       }
     ],
     "new_this_week": [
       {
-        "advertiser": "Demo ISP Ltd",
+        "advertiser": "Safaricom PLC",
         "platform": "meta",
-        "ad_start": "2026-07-02",
-        "variants": 4,
-        "offer": "Free router + installation this month"
+        "ad_start": "2026-09-13",
+        "variants": null,
+        "offer": "New number ranges are here - get yours from any Safaricom Shop or Dealer outlet near you. #SafaricomPopoteUlipo"
       },
       {
-        "advertiser": "Demo Gadgets KE",
+        "advertiser": "Safaricom PLC",
         "platform": "meta",
-        "ad_start": "2026-05-18",
-        "variants": 7,
-        "offer": "Smartwatch at KSh 1,999 — today only"
+        "ad_start": "2026-09-13",
+        "variants": null,
+        "offer": "M-PESA Business Till: free payments up to 500 bob, up from 200. Lipa na M-PESA on MyOne App. #PataMoreNaSafaricom"
       },
       {
-        "advertiser": "Demo Solar KE",
-        "platform": "google",
-        "ad_start": "2026-10-10",
-        "variants": 1,
-        "offer": "Solar kit on 30-day deposit"
-      },
-      {
-        "advertiser": "Demo Loans KE",
-        "platform": "tiktok",
-        "ad_start": "2026-08-15",
-        "variants": 3,
-        "offer": "KSh 500 to 50,000 in minutes"
-      },
-      {
-        "advertiser": "Demo Solar KE",
+        "advertiser": "Safaricom PLC",
         "platform": "meta",
-        "ad_start": "2026-09-20",
-        "variants": 2,
-        "offer": "Pay 30% deposit, we install"
+        "ad_start": "2026-07-28",
+        "variants": null,
+        "offer": "M-Shwari and KCB M-PESA now under Financial Services on My OneApp - use the search option to get there faster"
       },
       {
-        "advertiser": "Demo Skincare KE",
+        "advertiser": "Safaricom PLC",
         "platform": "meta",
-        "ad_start": "2026-04-01",
-        "variants": 2,
-        "offer": "LED mask results in 4 weeks"
+        "ad_start": "2026-10-08",
+        "variants": null,
+        "offer": "1.5GB for KES 99 - stream on YouTube today. #PataMoreNaYouTube"
+      },
+      {
+        "advertiser": "JAMII FAIBA",
+        "platform": "meta",
+        "ad_start": "2026-10-29",
+        "variants": null,
+        "offer": "Faiba Home by JTL: 35 Mbps KSh 3,000/mo (Starter), 60 Mbps KSh 4,000/mo (Accelerate), 90 Mbps KSh 5,000/mo (Best Value);"
+      },
+      {
+        "advertiser": "Starlink",
+        "platform": "meta",
+        "ad_start": "2026-10-23",
+        "variants": null,
+        "offer": "High-speed internet to places where it was previously too expensive, too unreliable, or completely out of reach. Stream,"
+      },
+      {
+        "advertiser": "Spiro Kenya - EV",
+        "platform": "meta",
+        "ad_start": "2026-10-06",
+        "variants": null,
+        "offer": "Spiro Electric Bike via M-KOPA: deposit KES 15,000, then KES 365 per day for 24 months. Requires Kenyan National ID, KRA"
       }
     ],
-    "teardown_candidates": [
-      {
-        "advertiser": "Demo ISP Ltd",
-        "platform": "meta",
-        "landing_url": "https://example.co.ke/deal",
-        "landing_headline": "Home fibre from KSh 2,999/mo",
-        "signals": [
-          "LONG_RUNNING",
-          "CREATIVE_EXPERIMENTATION"
-        ]
-      },
-      {
-        "advertiser": "Demo Gadgets KE",
-        "platform": "meta",
-        "landing_url": "https://example.co.ke/watch",
-        "landing_headline": "Kenya's #1 budget smartwatch",
-        "signals": [
-          "LONG_RUNNING",
-          "CREATIVE_EXPERIMENTATION"
-        ]
-      },
-      {
-        "advertiser": "Demo Solar KE",
-        "platform": "google",
-        "landing_url": "https://example.co.ke/solar",
-        "landing_headline": "Power your home without KPLC",
-        "signals": [
-          "YOUNG"
-        ]
-      },
-      {
-        "advertiser": "Demo Skincare KE",
-        "platform": "meta",
-        "landing_url": "https://example.co.ke/mask",
-        "landing_headline": "Salon results at home",
-        "signals": [
-          "LONG_RUNNING"
-        ]
-      }
-    ]
+    "teardown_candidates": []
   },
-  "supabase_id": "51a9300d-d76c-498f-835f-d8420570d3aa"
+  "supabase_id": "b7844ce8-7e3d-49a8-8709-889c1fdf74e9"
 }
