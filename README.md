@@ -120,6 +120,7 @@ weekly reading habit. **Sell analysis, never raw platform data.**
 - [`docs/DELIVERY.md`](docs/DELIVERY.md) — Telegram/WhatsApp/webhook setup + Meta API collector
 - [`docs/AUTOMATION-ARCHITECTURE.md`](docs/AUTOMATION-ARCHITECTURE.md) — the automation-first platform: six components, Supabase schema, security model, build stages
 - [`supabase/migrations/0001_fuatilia_init.sql`](supabase/migrations/0001_fuatilia_init.sql) — the platform database schema (safe to re-run in the Supabase SQL Editor; policies are dropped and recreated, evidence is customer-scoped)
+- [`docs/CLIENT-ONBOARDING.md`](docs/CLIENT-ONBOARDING.md) — the practical, non-demo workflow for onboarding a paying client (example: DC254)
 - [`docs/LAUNCH.md`](docs/LAUNCH.md) — the X launch thread + posting kit
 
 ## The Monday pipeline
@@ -131,6 +132,21 @@ collect (Meta API tier — optional) → digest (always) → deliver (Telegram/W
 
 Every optional stage self-skips when its secrets are missing, so a fresh fork runs green
 out of the box and lights up as you configure. Setup guide: `docs/DELIVERY.md`.
+
+## Client portal
+
+**https://kjonathan254.github.io/fuatilia/portal/** — static client app on
+GitHub Pages, no extra infrastructure. Clients sign in with email + password,
+manage their briefs, and read their own evidence, weekly reports (demo rows
+visibly labelled), named competitors and delivery log.
+
+- Security model: the page ships only the Supabase **anon public** key; every
+  row is scoped by Row Level Security to the signed-in customer — cross-client
+  reads return empty by policy. Never paste a service_role key here.
+- One-time enable: set the `SUPABASE_ANON_KEY` constant in `portal/index.html`
+  (Dashboard → Project Settings → API keys → anon public).
+- Onboarding a client end-to-end (account → brief → evidence → Monday
+  report → delivery): [`docs/CLIENT-ONBOARDING.md`](docs/CLIENT-ONBOARDING.md).
 
 ## Roadmap
 
