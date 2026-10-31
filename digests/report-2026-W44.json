@@ -1,6 +1,6 @@
 {
   "week": "2026-W44",
-  "generated_at": "2026-10-31T11:40:40.018Z",
+  "generated_at": "2026-10-31T11:49:41.305Z",
   "interpretation": "deterministic",
   "model": null,
   "engine_note": "deterministic signals from lib/signals.js; the interpretation layer writes on top of those numbers, never instead of them",
@@ -36,7 +36,7 @@
   "demo_mode": true,
   "facts": {
     "week": "2026-W44",
-    "generated_at": "2026-10-31T11:40:40.018Z",
+    "generated_at": "2026-10-31T11:49:41.305Z",
     "demo_mode": true,
     "thresholds": {
       "long_running_days": 90,
