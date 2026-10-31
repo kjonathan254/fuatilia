@@ -1,11 +1,52 @@
 {
   "week": "2026-W44",
-  "generated_at": "2026-10-31T11:58:57.398Z",
+  "generated_at": "2026-10-31T13:18:13.226Z",
   "note": "weekly aggregate of captured observations only — demo rows excluded; activity signals, not spend",
   "totals": {
-    "advertisers": 0,
-    "records": 0,
-    "platforms": {}
+    "advertisers": 4,
+    "records": 7,
+    "platforms": {
+      "meta": 7
+    }
   },
-  "advertisers": []
+  "advertisers": [
+    {
+      "advertiser": "Safaricom PLC",
+      "platform": "meta",
+      "active_ads": 4,
+      "scale_basis": "captured_cards",
+      "variants": 0,
+      "max_tenure_days": 95,
+      "signals": [
+        "LONG_RUNNING"
+      ]
+    },
+    {
+      "advertiser": "Spiro Kenya - EV",
+      "platform": "meta",
+      "active_ads": 1,
+      "scale_basis": "captured_cards",
+      "variants": 0,
+      "max_tenure_days": 25,
+      "signals": []
+    },
+    {
+      "advertiser": "Starlink",
+      "platform": "meta",
+      "active_ads": 1,
+      "scale_basis": "captured_cards",
+      "variants": 0,
+      "max_tenure_days": 8,
+      "signals": []
+    },
+    {
+      "advertiser": "JAMII FAIBA",
+      "platform": "meta",
+      "active_ads": 1,
+      "scale_basis": "captured_cards",
+      "variants": 0,
+      "max_tenure_days": 2,
+      "signals": []
+    }
+  ]
 }
