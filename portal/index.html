@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F1E5">
+<title>Fuatilia Portal — your advertising intelligence</title>
+<style>
+  :root{
+    --paper:#F6F1E5; --paper2:#FFFDF6; --paper3:#EFE8D6;
+    --ink:#182420; --ink2:#2C3A33;
+    --dim:#5E6B62; --faint:#8A948C;
+    --green:#0E7C4A; --green-b:#12A05F; --green-soft:#E3EFE4;
+    --clay:#C24B33; --clay-soft:#F4E3DC;
+    --amber:#B97F22; --amber-soft:#F3E9D2;
+    --line:#D9CFB8; --line2:#B9AC8B;
+    --sans:"Space Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    --sh:6px 6px 0 rgba(24,36,32,.12);
+    --sh-sm:4px 4px 0 rgba(24,36,32,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:var(--green)}
+  .mast{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--paper2)}
+  .brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)}
+  .brand-dot{width:11px;height:11px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+  .brand-name{font-family:var(--serif);font-weight:700;font-size:19px}
+  .mast-right{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--dim)}
+  .mast-right .email{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  main{max-width:980px;margin:0 auto;padding:22px 16px 60px}
+  .card{background:var(--paper2);border:1px solid var(--line);border-radius:10px;box-shadow:var(--sh-sm);padding:18px;margin-bottom:16px}
+  h1{font-family:var(--serif);font-size:26px;line-height:1.25;margin-bottom:6px}
+  h2{font-family:var(--serif);font-size:19px;margin-bottom:10px}
+  h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:8px}
+  .sub{color:var(--dim);font-size:14px;margin-bottom:14px}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin:10px 0 4px}
+  input[type=text],input[type=email],input[type=password],select{
+    width:100%;padding:9px 11px;border:1px solid var(--line2);border-radius:7px;background:var(--paper);
+    font:15px var(--sans);color:var(--ink)}
+  input:focus,select:focus{outline:2px solid var(--green-b);outline-offset:1px}
+  .btn{display:inline-block;border:1px solid var(--ink);background:var(--green);color:#fff;font:600 14.5px var(--sans);
+    padding:9px 16px;border-radius:7px;cursor:pointer;box-shadow:var(--sh-sm)}
+  .btn:active{transform:translate(2px,2px);box-shadow:none}
+  .btn[disabled]{opacity:.55;cursor:wait}
+  .btn2{display:inline-block;border:1px solid var(--line2);background:var(--paper2);color:var(--ink2);
+    font:500 13.5px var(--sans);padding:8px 14px;border-radius:7px;cursor:pointer}
+  .btn2:hover{border-color:var(--green);color:var(--green)}
+  .btn-danger{border-color:var(--clay);color:var(--clay);background:var(--paper2)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+  .row>*{flex:1;min-width:130px}
+  .badge{display:inline-block;font:600 11px var(--mono);letter-spacing:.04em;padding:3px 8px;border-radius:20px;border:1px solid var(--line2);background:var(--paper3);color:var(--ink2)}
+  .badge.ok{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+  .badge.warn{background:var(--amber-soft);border-color:var(--amber);color:var(--amber)}
+  .badge.bad{background:var(--clay-soft);border-color:var(--clay);color:var(--clay)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+  .stat{background:var(--paper3);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+  .stat b{display:block;font-size:22px;font-family:var(--serif)}
+  .stat span{font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);
+    border-bottom:1.5px solid var(--line2);padding:7px 8px}
+  td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
+  tr:hover td{background:var(--paper3)}
+  .scroll{overflow-x:auto}
+  .briefs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .brief-card{background:var(--paper2);border:1px solid var(--line);border-radius:10px;box-shadow:var(--sh-sm);
+    padding:15px;cursor:pointer}
+  .brief-card:hover{border-color:var(--green)}
+  .brief-card h4{font-family:var(--serif);font-size:17px;margin-bottom:5px}
+  .brief-card p{font-size:12.5px;color:var(--dim)}
+  .banner{border-radius:8px;padding:10px 13px;font-size:13.5px;margin-bottom:12px}
+  .banner.demo{background:var(--amber-soft);border:1px solid var(--amber);color:#7a5417}
+  .banner.err{background:var(--clay-soft);border:1px solid var(--clay);color:var(--clay)}
+  .banner.info{background:var(--green-soft);border:1px solid var(--green);color:var(--green)}
+  details{margin:8px 0}
+  summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--ink2)}
+  ul.bullets{margin:8px 0 8px 18px;font-size:14.5px}
+  ul.bullets li{margin-bottom:5px}
+  .muted{color:var(--dim);font-size:13px}
+  .mono{font-family:var(--mono);font-size:12.5px}
+  .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);
+    padding:10px 18px;border-radius:8px;font-size:14px;display:none;z-index:50;max-width:90vw}
+  .back{display:inline-block;margin-bottom:12px;font-size:13.5px;color:var(--dim);text-decoration:none}
+  .back:hover{color:var(--green)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+  footer{max-width:980px;margin:0 auto;padding:18px 16px 40px;color:var(--faint);font-size:12.5px}
+  @media(max-width:640px){ h1{font-size:22px} .mast-right .email{display:none} }
+</style>
+</head>
+<body>
+
+<nav class="mast">
+  <a class="brand" href="../"><span class="brand-dot"></span><span class="brand-name">Fuatilia</span></a>
+  <div class="mast-right">
+    <span class="email" id="whoEmail"></span>
+    <button class="btn2" id="btnLogout" hidden>Sign out</button>
+  </div>
+</nav>
+
+<main>
+  <!-- setup card: shown when the anon key is not configured yet -->
+  <section id="setupView" class="card" hidden>
+    <h1>Portal setup needed</h1>
+    <p class="sub">The Supabase <b>anon public key</b> is not configured in this page yet.</p>
+    <p>It is the <i>public</i> key (safe for browsers — row-level security scopes all data). Copy it from
+       <span class="mono">Supabase Dashboard &rarr; Project Settings &rarr; API &rarr; anon public</span> and paste it into
+       <span class="mono">portal/index.html</span> at <span class="mono">SUPABASE_ANON_KEY</span>, then redeploy.</p>
+  </section>
+
+  <!-- auth -->
+  <section id="authView" hidden>
+    <div class="card" style="max-width:430px;margin:8vh auto 0">
+      <h1 id="authTitle">Sign in</h1>
+      <p class="sub">Your weekly advertising intelligence for Kenya.</p>
+      <div id="authBanner" class="banner err" hidden></div>
+      <div id="signinFields">
+        <label>Email</label>
+        <input type="email" id="inEmail" autocomplete="email" placeholder="you@company.co.ke">
+        <label>Password</label>
+        <input type="password" id="inPass" autocomplete="current-password" placeholder="••••••••">
+        <div style="margin-top:14px" class="row">
+          <button class="btn" id="btnSignIn">Sign in</button>
+          <button class="btn2" id="toSignup">Create account</button>
+          <button class="btn2" id="toReset">Forgot password</button>
+        </div>
+      </div>
+      <div id="signupFields" hidden>
+        <label>Email</label>
+        <input type="email" id="upEmail" autocomplete="email" placeholder="you@company.co.ke">
+        <label>Password <span class="muted">(8+ characters)</span></label>
+        <input type="password" id="upPass" autocomplete="new-password" placeholder="••••••••">
+        <label>Company / your name</label>
+        <input type="text" id="upName" placeholder="Acme Ltd">
+        <p class="muted" style="margin-top:8px">A new account starts on the free Radar plan — 5 intelligence sessions included.</p>
+        <div style="margin-top:14px" class="row">
+          <button class="btn" id="btnSignUp">Create account</button>
+          <button class="btn2" id="backSignin">Back to sign in</button>
+        </div>
+      </div>
+      <div id="resetFields" hidden>
+        <label>Email</label>
+        <input type="email" id="reEmail" placeholder="you@company.co.ke">
+        <div style="margin-top:14px" class="row">
+          <button class="btn" id="btnReset">Send reset link</button>
+          <button class="btn2" id="backSignin2">Back to sign in</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- app -->
+  <section id="appView" hidden>
+    <div id="profileCard" class="card"></div>
+    <div id="briefsSect" class="card"></div>
+    <div id="newBriefSect" class="card" hidden></div>
+    <div id="briefView" hidden></div>
+  </section>
+</main>
+
+<footer>Fuatilia — public ad-library intelligence for Kenya. Evidence is captured from publicly available transparency pages only.</footer>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* =========================================================================
+   CONFIG — the anon key is PUBLIC by design (RLS scopes every row to the
+   signed-in customer). Never put the service_role key in this file.
+   ========================================================================= */
+const SUPABASE_URL = "https://tmxunegddjjlomssnrkh.supabase.co";
+const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_HERE";
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtDate = (d) => (d ? String(d).slice(0, 10) : "—");
+let sb = null;
+let BRIEFS = [];
+
+function toast(msg, ms = 3200) {
+  const t = $("toast"); t.textContent = msg; t.style.display = "block";
+  clearTimeout(t._h); t._h = setTimeout(() => { t.style.display = "none"; }, ms);
+}
+function banner(which, msg) { const b = $("authBanner"); b.textContent = msg; b.hidden = false; b.className = "banner " + which; }
+function hideAuthBanner() { $("authBanner").hidden = true; }
+
+/* ---------- boot ---------- */
+(function boot() {
+  if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === "PASTE_ANON_KEY_HERE") {
+    $("setupView").hidden = false; return;
+  }
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  wireAuth();
+  sb.auth.getSession().then(({ data }) => {
+    if (data && data.session && data.session.user) enter(data.session.user);
+    else $("authView").hidden = false;
+  });
+  sb.auth.onAuthStateChange((e, session) => {
+    if (e === "SIGNED_OUT") { show("authView"); $("btnLogout").hidden = true; }
+  });
+})();
+
+function show(id) {
+  $("setupView").hidden = id !== "setupView";
+  $("authView").hidden = id !== "authView";
+  $("appView").hidden = id !== "appView";
+}
+
+/* ---------- auth ---------- */
+function wireAuth() {
+  $("btnSignIn").onclick = async () => {
+    hideAuthBanner(); lock($("btnSignIn"), true);
+    const { error } = await sb.auth.signInWithPassword({ email: $("inEmail").value.trim(), password: $("inPass").value });
+    lock($("btnSignIn"), false);
+    if (error) banner("err", error.message);
+  };
+  $("btnSignUp").onclick = async () => {
+    hideAuthBanner(); lock($("btnSignUp"), true);
+    const email = $("upEmail").value.trim();
+    const pass = $("upPass").value;
+    if (pass.length < 8) { lock($("btnSignUp"), false); banner("err", "Password must be at least 8 characters."); return; }
+    const { data, error } = await sb.auth.signUp({
+      email: email, password: pass,
+      options: { data: { name: $("upName").value.trim() } },
+    });
+    lock($("btnSignUp"), false);
+    if (error) { banner("err", error.message); return; }
+    if (data && data.user && !data.session) banner("info", "Account created — check your email inbox for the confirmation link, then sign in.");
+    else if (data && data.session) enter(data.user);
+  };
+  $("btnReset").onclick = async () => {
+    hideAuthBanner(); lock($("btnReset"), true);
+    const { error } = await sb.auth.resetPasswordForEmail($("reEmail").value.trim());
+    lock($("btnReset"), false);
+    if (error) { banner("err", error.message); return; }
+    banner("info", "Reset link sent — check your email.");
+  };
+  $("toSignup").onclick = () => { $("signinFields").hidden = true; $("signupFields").hidden = false; $("resetFields").hidden = true; $("authTitle").textContent = "Create your account"; hideAuthBanner(); };
+  $("toReset").onclick = () => { $("signinFields").hidden = true; $("signupFields").hidden = true; $("resetFields").hidden = false; $("authTitle").textContent = "Reset password"; hideAuthBanner(); };
+  const back = () => { $("signinFields").hidden = false; $("signupFields").hidden = true; $("resetFields").hidden = true; $("authTitle").textContent = "Sign in"; hideAuthBanner(); };
+  $("backSignin").onclick = back; $("backSignin2").onclick = back;
+  $("btnLogout").onclick = () => sb.auth.signOut();
+}
+function lock(b, on) { b.disabled = on; }
+async function enter(user) {
+  $("whoEmail").textContent = user.email || "";
+  $("btnLogout").hidden = false;
+  show("appView");
+  await renderHome();
+}
+
+/* ---------- home: profile + subscription + briefs ---------- */
+async function renderHome() {
+  $("briefView").hidden = true;
+  const pc = $("profileCard");
+  pc.innerHTML = "<h2>Loading your account…</h2>";
+  const results = await Promise.all([
+    sb.from("customers").select("*").limit(1).maybeSingle(),
+    sb.from("subscriptions").select("*").limit(1).maybeSingle(),
+    sb.from("briefs").select("*").order("created_at", { ascending: true }),
+  ]);
+  const cust = results[0].data, e1 = results[0].error;
+  const sub = results[1].data;
+  const briefs = results[2].data, e3 = results[2].error;
+  if (e1 || e3) {
+    pc.innerHTML = '<div class="banner err">Could not load account: ' + esc((e1 && e1.message) || (e3 && e3.message)) + "</div>";
+    return;
+  }
+  BRIEFS = briefs || [];
+  const statusBadge = (s) => {
+    if (s === "active" || s === "trialing") return '<span class="badge ok">' + esc(s) + "</span>";
+    if (s === "past_due") return '<span class="badge bad">' + esc(s) + "</span>";
+    return '<span class="badge">' + esc(s || "—") + "</span>";
+  };
+  pc.innerHTML = `
+    <div class="row">
+      <div style="flex:2">
+        <h1>${esc(cust ? cust.name : "Welcome")}</h1>
+        <p class="sub">${esc((cust && cust.company) || "")}${cust && cust.company && cust && cust.phone ? " · " : ""}${esc((cust && cust.phone) || "")}</p>
+      </div>
+      <div style="flex:1">
+        <h3>Plan</h3>
+        <p>${esc((sub && sub.plan) || "—")} ${statusBadge(sub && sub.status)}
+           <span class="muted">${sub ? sub.free_sessions_used + "/" + sub.free_sessions_limit + " sessions used" : ""}</span></p>
+      </div>
+    </div>
+    <details><summary>Update profile</summary>
+      <div class="row">
+        <div><label>Name</label><input type="text" id="pName" value="${esc(cust && cust.name)}"></div>
+        <div><label>Company</label><input type="text" id="pCompany" value="${esc((cust && cust.company) || "")}"></div>
+        <div><label>Phone (WhatsApp)</label><input type="text" id="pPhone" value="${esc((cust && cust.phone) || "")}"></div>
+      </div>
+      <div style="margin-top:10px"><button class="btn2" id="btnSaveProfile">Save profile</button></div>
+    </details>`;
+  $("btnSaveProfile").onclick = async () => {
+    lock($("btnSaveProfile"), true);
+    const { error } = await sb.from("customers").update({
+      name: $("pName").value.trim(), company: $("pCompany").value.trim(), phone: $("pPhone").value.trim(),
+    }).eq("id", cust.id);
+    lock($("btnSaveProfile"), false);
+    if (error) { toast("Save failed: " + error.message, 5000); return; }
+    toast("Profile saved"); renderHome();
+  };
+
+  const bs = $("briefsSect");
+  bs.innerHTML = `
+    <div class="row" style="align-items:center">
+      <div style="flex:1"><h2 style="margin:0">Your briefs</h2><p class="sub" style="margin:0">One brief = one monitoring configuration.</p></div>
+      <button class="btn2" id="btnNewBrief">+ New brief</button>
+    </div>
+    ${BRIEFS.length ? "" : '<p class="muted" style="margin-top:10px">No briefs yet — create your first one below.</p>'}
+    <div class="briefs" style="margin-top:12px">
+      ${BRIEFS.map((b) => `
+        <div class="brief-card" data-id="${b.id}">
+          <h4>${esc(b.name)}</h4>
+          <p>${esc(b.geography)} · ${esc((b.platforms || []).join(", "))}</p>
+          <p>${esc(b.frequency)} · via ${esc(b.delivery_channel)} ${statusBadge(b.status)}</p>
+        </div>`).join("")}
+    </div>`;
+  Array.prototype.forEach.call(bs.querySelectorAll(".brief-card"), (el) => { el.onclick = () => openBrief(el.dataset.id); });
+  $("btnNewBrief").onclick = () => {
+    const nb = $("newBriefSect");
+    nb.hidden = !nb.hidden;
+    if (!nb.hidden) renderNewBriefForm();
+  };
+}
+
+/* ---------- new brief ---------- */
+function renderNewBriefForm() {
+  const nb = $("newBriefSect");
+  nb.innerHTML = `
+    <h2>New brief</h2>
+    <div class="row">
+      <div style="flex:2"><label>Brief name</label><input type="text" id="nbName" placeholder="e.g. Data-centre movers KE"></div>
+      <div><label>Industry <span class="muted">(optional)</span></label><input type="text" id="nbIndustry" placeholder="data centres"></div>
+      <div><label>Geography</label><input type="text" id="nbGeo" value="KE"></div>
+    </div>
+    <div class="row">
+      <div><label>Platforms</label>
+        <div style="display:flex;gap:12px;padding:8px 2px;font-size:14px">
+          <label style="margin:0;font-weight:400"><input type="checkbox" id="nbMeta" checked> Meta</label>
+          <label style="margin:0;font-weight:400"><input type="checkbox" id="nbGoogle" checked> Google</label>
+          <label style="margin:0;font-weight:400"><input type="checkbox" id="nbTiktok"> TikTok</label>
+        </div>
+      </div>
+      <div><label>Frequency</label>
+        <select id="nbFreq"><option value="weekly" selected>Weekly</option><option value="daily">Daily</option><option value="monthly">Monthly</option></select>
+      </div>
+      <div><label>Delivery</label>
+        <select id="nbChan"><option value="telegram" selected>Telegram</option><option value="whatsapp">WhatsApp</option><option value="email">Email</option></select>
+      </div>
+      <div><label>Deliver to <span class="muted">(phone / email / chat id)</span></label><input type="text" id="nbDest" placeholder="+2547… / user@… / 123456"></div>
+    </div>
+    <div style="margin-top:12px"><button class="btn" id="btnCreateBrief">Create brief</button></div>`;
+  $("btnCreateBrief").onclick = async () => {
+    lock($("btnCreateBrief"), true);
+    const ids = { meta: "nbMeta", google: "nbGoogle", tiktok: "nbTiktok" };
+    const platforms = ["meta", "google", "tiktok"].filter((p) => $(ids[p]).checked);
+    const dest = $("nbDest").value.trim();
+    const insert = await sb.from("briefs").insert({
+      name: $("nbName").value.trim() || "My intelligence brief",
+      industry: $("nbIndustry").value.trim() || null,
+      geography: ($("nbGeo").value.trim() || "KE").toUpperCase(),
+      platforms: platforms.length ? platforms : ["meta", "google"],
+      frequency: $("nbFreq").value,
+      delivery_channel: $("nbChan").value,
+      delivery_destination: dest || null,
+    }).select();
+    lock($("btnCreateBrief"), false);
+    if (insert.error) { toast("Create failed: " + insert.error.message, 5000); return; }
+    toast("Brief created"); $("newBriefSect").hidden = true; openBrief(insert.data[0].id);
+  };
+}
+
+/* ---------- brief detail ---------- */
+async function openBrief(id) {
+  const b = BRIEFS.find((x) => x.id === id);
+  if (!b) return;
+  const v = $("briefView");
+  v.hidden = false;
+  v.innerHTML = '<div class="card"><h2>Loading…</h2></div>';
+  v.scrollIntoView({ behavior: "smooth" });
+
+  const parts = await Promise.all([
+    sb.from("observations").select("*").eq("brief_id", id).order("captured_at", { ascending: false }).limit(100),
+    sb.from("reports").select("*").eq("brief_id", id).order("period_end", { ascending: false }),
+    sb.from("brief_competitors").select("*").eq("brief_id", id).order("created_at"),
+    sb.from("deliveries").select("id, channel, destination, status, sent_at, error, reports!inner(brief_id)").eq("reports.brief_id", id).order("sent_at", { ascending: false }).limit(15),
+  ]);
+  const observations = parts[0].data || [];
+  const reports = parts[1].data || [];
+  const competitors = parts[2].data || [];
+  const deliveries = parts[3].data || [];
+  const advertisers = new Set(observations.map((o) => o.advertiser));
+  const lastCap = observations.length ? observations[0].captured_at : null;
+
+  v.innerHTML = `
+    <a class="back" href="#" id="backHome2">&larr; All briefs</a>
+    <div class="card">
+      <div class="row" style="align-items:center">
+        <div style="flex:2"><h1>${esc(b.name)}</h1>
+          <p class="sub">${esc(b.geography)} · ${esc((b.platforms || []).join(", "))} · ${esc(b.frequency)} · delivered via ${esc(b.delivery_channel)}${b.delivery_destination ? " to " + esc(b.delivery_destination) : ""}</p></div>
+        <div>${b.status === "active" ? '<span class="badge ok">active</span>' : '<span class="badge">paused</span>'}</div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>${observations.length}${observations.length === 100 ? "+" : ""}</b><span>evidence rows</span></div>
+        <div class="stat"><b>${advertisers.size}</b><span>advertisers</span></div>
+        <div class="stat"><b>${reports.length}</b><span>weekly reports</span></div>
+        <div class="stat"><b>${fmtDate(lastCap)}</b><span>last capture</span></div>
+      </div>
+      <p class="muted">New evidence is captured with the <span class="mono">fuatilia</span> CLI and pushed to this brief automatically every week (or on demand with <span class="mono">fuatilia push</span>).</p>
+    </div>
+
+    <div class="card">
+      <h2>Weekly reports</h2>
+      ${reports.length ? reports.map(renderReport).join("") : '<p class="muted">No reports yet — the first one lands after the next Monday run.</p>'}
+    </div>
+
+    <div class="card">
+      <h2>Competitors watched</h2>
+      ${competitors.length ? `<div class="scroll"><table><tr><th>Name</th><th>Page ID</th><th>Notes</th><th></th></tr>
+        ${competitors.map((c) => `<tr><td><b>${esc(c.name)}</b></td><td class="mono">${esc(c.page_id || "—")}</td><td>${esc(c.notes || "")}</td>
+          <td><button class="btn2 btn-danger" data-del="${c.id}">Remove</button></td></tr>`).join("")}</table></div>`
+        : '<p class="muted">None named yet — add the advertisers this brief should keep an eye on.</p>'}
+      <details ${competitors.length ? "" : "open"}><summary>+ Name a competitor</summary>
+        <div class="row">
+          <div><label>Advertiser name</label><input type="text" id="cpName" placeholder="e.g. Africa Data Centres"></div>
+          <div><label>Library page ID <span class="muted">(optional)</span></label><input type="text" id="cpPage" placeholder="123456…"></div>
+          <div><label>Notes</label><input type="text" id="cpNotes" placeholder="why watched"></div>
+        </div>
+        <div style="margin-top:10px"><button class="btn2" id="btnAddComp">Add to brief</button></div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h2>Evidence — latest observations</h2>
+      ${observations.length ? `<div class="scroll"><table>
+        <tr><th>Captured</th><th>Advertiser</th><th>Platform</th><th>Active ads</th><th>Offer</th></tr>
+        ${observations.map((o) => `<tr>
+          <td>${fmtDate(o.captured_at)}</td>
+          <td><b>${esc(o.advertiser)}</b>${o.creative_type ? ' <span class="muted">· ' + esc(o.creative_type) + "</span>" : ""}</td>
+          <td><span class="badge">${esc(o.platform)}</span></td>
+          <td>${o.active_ad_count === null || o.active_ad_count === undefined ? "—" : o.active_ad_count}</td>
+          <td>${esc(o.offer || "—")}</td></tr>`).join("")}</table></div>`
+        : '<p class="muted">No evidence yet — capture your first real ad card with <span class="mono">fuatilia add</span>, then push.</p>'}
+    </div>
+
+    <div class="card">
+      <h2>Delivery log</h2>
+      ${deliveries.length ? `<div class="scroll"><table><tr><th>When</th><th>Channel</th><th>To</th><th>Status</th></tr>
+        ${deliveries.map((d) => `<tr><td>${d.sent_at ? fmtDate(d.sent_at) : "—"}</td><td><span class="badge">${esc(d.channel)}</span></td>
+          <td class="mono">${esc(d.destination)}</td><td>${d.status === "sent" ? '<span class="badge ok">sent</span>' : d.status === "failed" ? '<span class="badge bad" title="' + esc(d.error || "") + '">failed</span>' : '<span class="badge warn">' + esc(d.status) + "</span>"}</td></tr>`).join("")}</table></div>`
+        : '<p class="muted">No per-report sends recorded yet.</p>'}
+    </div>`;
+
+  $("backHome2").onclick = (e) => { e.preventDefault(); v.hidden = true; window.scrollTo(0, 0); };
+  $("btnAddComp").onclick = async () => {
+    const name = $("cpName").value.trim();
+    if (!name) { toast("Give the competitor a name"); return; }
+    lock($("btnAddComp"), true);
+    const ins = await sb.from("brief_competitors").insert({
+      brief_id: id, name: name, page_id: $("cpPage").value.trim() || null, notes: $("cpNotes").value.trim() || null,
+    });
+    lock($("btnAddComp"), false);
+    if (ins.error) { toast("Add failed: " + ins.error.message, 5000); return; }
+    toast("Competitor added"); openBrief(id);
+  };
+  Array.prototype.forEach.call(v.querySelectorAll("[data-del]"), (btn) => {
+    btn.onclick = async () => {
+      lock(btn, true);
+      const del = await sb.from("brief_competitors").delete().eq("id", btn.dataset.del);
+      lock(btn, false);
+      if (del.error) { toast("Remove failed: " + del.error.message, 5000); return; }
+      openBrief(id);
+    };
+  });
+}
+
+function renderReport(r) {
+  const c = r.content || {};
+  const s = r.summary || {};
+  const chips = ["observations", "advertisers", "new_observations", "offer_changes"]
+    .filter((k) => s[k] !== undefined)
+    .map((k) => '<span class="badge">' + esc(k.replace(/_/g, " ")) + ": " + esc(s[k]) + "</span>").join(" ");
+  const isDemo = c.demo_mode || r.demo_mode;
+  const demoBlock = isDemo
+    ? '<div class="banner demo">' + esc(c.banner || "Demo mode — fictional demo rows. Format demonstration only; not market intelligence.") + "</div>" : "";
+  const bullets = (arr) => (Array.isArray(arr) && arr.length ? '<ul class="bullets">' + arr.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>" : "");
+  return `<details class="sect" style="margin-top:14px">
+    <summary>${esc(r.headline || "Weekly report")} <span class="muted">· ${fmtDate(r.period_start)} &rarr; ${fmtDate(r.period_end)}</span></summary>
+    ${demoBlock}
+    <div class="chips">${chips}</div>
+    ${bullets(c.executive)}
+    ${bullets(c.strategic)}
+    <details><summary>Methodology &amp; limitations</summary>
+      <p class="muted" style="margin-top:6px">${esc(c.methodology || "")}</p>
+      <p class="muted">${esc(c.limitations || "")}</p>
+    </details>
+  </details>`;
+}
+</script>
+</body>
+</html>
