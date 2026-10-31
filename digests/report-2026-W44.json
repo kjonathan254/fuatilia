@@ -1,6 +1,6 @@
 {
   "week": "2026-W44",
-  "generated_at": "2026-10-31T11:49:41.305Z",
+  "generated_at": "2026-10-31T11:58:58.250Z",
   "interpretation": "deterministic",
   "model": null,
   "engine_note": "deterministic signals from lib/signals.js; the interpretation layer writes on top of those numbers, never instead of them",
@@ -36,7 +36,7 @@
   "demo_mode": true,
   "facts": {
     "week": "2026-W44",
-    "generated_at": "2026-10-31T11:49:41.305Z",
+    "generated_at": "2026-10-31T11:58:58.250Z",
     "demo_mode": true,
     "thresholds": {
       "long_running_days": 90,
@@ -215,5 +215,6 @@
         ]
       }
     ]
-  }
+  },
+  "supabase_id": "51a9300d-d76c-498f-835f-d8420570d3aa"
 }

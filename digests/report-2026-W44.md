@@ -1,6 +1,6 @@
 # Fuatilia weekly report — Week 2026-W44: 5 advertisers on the public record
 
-Week 2026-W44 · generated 2026-10-31T11:49:41.305Z · interpretation: deterministic
+Week 2026-W44 · generated 2026-10-31T11:58:58.250Z · interpretation: deterministic
 
 > **Demo mode** — built from the fictional demo rows (`data/demo.jsonl`, `example: true`). This report demonstrates format only; it is not market intelligence.
 
