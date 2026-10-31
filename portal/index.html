@@ -100,13 +100,13 @@
 </nav>
 
 <main>
-  <!-- setup card: shown when the anon key is not configured yet -->
+  <!-- fallback: shown only if the portal is not configured yet — deliberately
+       neutral: no stack names, no dashboard paths, no file/constant names -->
   <section id="setupView" class="card" hidden>
-    <h1>Portal setup needed</h1>
-    <p class="sub">The Supabase <b>anon public key</b> is not configured in this page yet.</p>
-    <p>It is the <i>public</i> key (safe for browsers — row-level security scopes all data). Copy it from
-       <span class="mono">Supabase Dashboard &rarr; Project Settings &rarr; API &rarr; anon public</span> and paste it into
-       <span class="mono">portal/index.html</span> at <span class="mono">SUPABASE_ANON_KEY</span>, then redeploy.</p>
+    <h1>Fuatilia Portal</h1>
+    <p class="sub">This portal is temporarily unavailable while we perform scheduled maintenance.</p>
+    <p>Please check back again soon — your briefs, evidence and weekly reports are safe.
+       Questions? Contact your account manager.</p>
   </section>
 
   <!-- auth -->
@@ -169,7 +169,7 @@
    signed-in customer). Never put the service_role key in this file.
    ========================================================================= */
 const SUPABASE_URL = "https://tmxunegddjjlomssnrkh.supabase.co";
-const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_HERE";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRteHVuZWdkZGpqbG9tc3NucmtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNTE2OTYsImV4cCI6MjEwODkyNzY5Nn0.UcLTH92ilfJ3yKV5ZjG6zf0-GcqPewciat89ryCR5mI";
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
