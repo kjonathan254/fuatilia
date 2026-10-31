@@ -211,9 +211,10 @@ function show(id) {
 function wireAuth() {
   $("btnSignIn").onclick = async () => {
     hideAuthBanner(); lock($("btnSignIn"), true);
-    const { error } = await sb.auth.signInWithPassword({ email: $("inEmail").value.trim(), password: $("inPass").value });
+    const { data, error } = await sb.auth.signInWithPassword({ email: $("inEmail").value.trim(), password: $("inPass").value });
     lock($("btnSignIn"), false);
     if (error) banner("err", error.message);
+    else if (data && data.user) enter(data.user); // auth state listener only handles SIGNED_OUT — switch views explicitly
   };
   $("btnSignUp").onclick = async () => {
     hideAuthBanner(); lock($("btnSignUp"), true);
