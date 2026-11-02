@@ -1,0 +1,82 @@
+{
+  "week": "2026-W45",
+  "generated_at": "2026-11-02T14:42:51.390Z",
+  "note": "weekly aggregate of captured observations only — demo rows excluded; activity signals, not spend",
+  "totals": {
+    "advertisers": 4,
+    "records": 7,
+    "platforms": {
+      "meta": 7
+    }
+  },
+  "advertisers": [
+    {
+      "advertiser": "Safaricom PLC",
+      "platform": "meta",
+      "active_ads": 4,
+      "scale_basis": "captured_cards",
+      "variants": 0,
+      "max_tenure_days": 97,
+      "signals": [
+        "LONG_RUNNING"
+      ]
+    },
+    {
+      "advertiser": "Spiro Kenya - EV",
+      "platform": "meta",
+      "active_ads": 1,
+      "scale_basis": "captured_cards",
+      "variants": 0,
+      "max_tenure_days": 27,
+      "signals": []
+    },
+    {
+      "advertiser": "Starlink",
+      "platform": "meta",
+      "active_ads": 1,
+      "scale_basis": "captured_cards",
+      "variants": 0,
+      "max_tenure_days": 10,
+      "signals": []
+    },
+    {
+      "advertiser": "JAMII FAIBA",
+      "platform": "meta",
+      "active_ads": 1,
+      "scale_basis": "captured_cards",
+      "variants": 0,
+      "max_tenure_days": 4,
+      "signals": []
+    }
+  ],
+  "delta_vs_previous_week": [
+    {
+      "advertiser": "Safaricom PLC",
+      "platform": "meta",
+      "active_ads_before": 4,
+      "active_ads_now": 4,
+      "change": 0
+    },
+    {
+      "advertiser": "Spiro Kenya - EV",
+      "platform": "meta",
+      "active_ads_before": 1,
+      "active_ads_now": 1,
+      "change": 0
+    },
+    {
+      "advertiser": "Starlink",
+      "platform": "meta",
+      "active_ads_before": 1,
+      "active_ads_now": 1,
+      "change": 0
+    },
+    {
+      "advertiser": "JAMII FAIBA",
+      "platform": "meta",
+      "active_ads_before": 1,
+      "active_ads_now": 1,
+      "change": 0
+    }
+  ]
+}

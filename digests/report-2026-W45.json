@@ -1,0 +1,150 @@
+{
+  "week": "2026-W45",
+  "generated_at": "2026-11-02T14:42:52.156Z",
+  "interpretation": "deterministic",
+  "model": null,
+  "engine_note": "deterministic signals from lib/signals.js; the interpretation layer writes on top of those numbers, never instead of them",
+  "headline": "Week 2026-W45: 4 advertisers on the public record",
+  "executive": [
+    "4 advertisers observed across 7 captured records (meta: 7).",
+    "1 advertiser kept creative live 90+ days (Safaricom PLC 97d) — persistence, not performance proof.",
+    "7 captures new to us within 7 days."
+  ],
+  "strategic": [
+    "Safaricom PLC (meta): 97 days live, 4 active ads observed (captured-card basis). Teardown candidate — check what the landing page is doing that the ad promises.",
+    "Safaricom PLC (meta) is new to our capture — offer on the card: \"New number ranges are here - get yours from any Safaricom Shop or Dealer outlet near you. #SafaricomPopoteUlipo\". Re-check next Monday; young ads say nothing yet.",
+    "Safaricom PLC (meta) is new to our capture — offer on the card: \"M-PESA Business Till: free payments up to 500 bob, up from 200. Lipa na M-PESA on MyOne App. #PataMoreNaSafaricom\". Re-check next Monday; young ads say nothing yet.",
+    "Safaricom PLC (meta) is new to our capture — offer on the card: \"M-Shwari and KCB M-PESA now under Financial Services on My OneApp - use the search option to get there faster\". Re-check next Monday; young ads say nothing yet."
+  ],
+  "methodology": [
+    "All numbers come from deterministic classification of captured observations (lib/signals.js): tenure from library start dates, variant counts from ad cards, active-ad counts from the card's advertiser-level figure with our captured-card count as the labelled fallback.",
+    "Scale bands read active ad counts, never variant counts — variants are creatives, not ads.",
+    "Interpretation is layered on top of those numbers; the AI layer, when enabled, receives only the computed facts and may not introduce advertisers, numbers or quotes."
+  ],
+  "limitations": [
+    "Signals are not proof: long-running ads can be losers on autopilot; variant counts can be formats, languages or placements rather than new hooks.",
+    "Spend is not public outside political ads — nothing here estimates budgets.",
+    "Kenyan commercial ads are not in Meta's Ad Library API; coverage is limited to what was actually captured from the public libraries this week.",
+    "Delivery is scheduled, not guaranteed — collection depends on capture discipline and platform availability."
+  ],
+  "demo_mode": false,
+  "facts": {
+    "week": "2026-W45",
+    "generated_at": "2026-11-02T14:42:52.156Z",
+    "demo_mode": false,
+    "thresholds": {
+      "long_running_days": 90,
+      "variants_flag": 3,
+      "new_window_days": 7
+    },
+    "pulse": {
+      "advertisers_observed": 4,
+      "records_captured": 7,
+      "by_platform": {
+        "meta": 7
+      },
+      "watchlist_size": 8
+    },
+    "advertisers": [
+      {
+        "advertiser": "Safaricom PLC",
+        "platform": "meta",
+        "active_ads": 4,
+        "scale_basis": "captured_cards",
+        "variants": 0,
+        "longest_live_days": 97,
+        "running_since": "2026-07-28",
+        "band": "consistent",
+        "signals": [
+          "LONG_RUNNING"
+        ]
+      },
+      {
+        "advertiser": "Spiro Kenya - EV",
+        "platform": "meta",
+        "active_ads": 1,
+        "scale_basis": "captured_cards",
+        "variants": 0,
+        "longest_live_days": 27,
+        "running_since": "2026-10-06",
+        "band": "light",
+        "signals": []
+      },
+      {
+        "advertiser": "Starlink",
+        "platform": "meta",
+        "active_ads": 1,
+        "scale_basis": "captured_cards",
+        "variants": 0,
+        "longest_live_days": 10,
+        "running_since": "2026-10-23",
+        "band": "light",
+        "signals": []
+      },
+      {
+        "advertiser": "JAMII FAIBA",
+        "platform": "meta",
+        "active_ads": 1,
+        "scale_basis": "captured_cards",
+        "variants": 0,
+        "longest_live_days": 4,
+        "running_since": "2026-10-29",
+        "band": "light",
+        "signals": []
+      }
+    ],
+    "new_this_week": [
+      {
+        "advertiser": "Safaricom PLC",
+        "platform": "meta",
+        "ad_start": "2026-09-13",
+        "variants": null,
+        "offer": "New number ranges are here - get yours from any Safaricom Shop or Dealer outlet near you. #SafaricomPopoteUlipo"
+      },
+      {
+        "advertiser": "Safaricom PLC",
+        "platform": "meta",
+        "ad_start": "2026-09-13",
+        "variants": null,
+        "offer": "M-PESA Business Till: free payments up to 500 bob, up from 200. Lipa na M-PESA on MyOne App. #PataMoreNaSafaricom"
+      },
+      {
+        "advertiser": "Safaricom PLC",
+        "platform": "meta",
+        "ad_start": "2026-07-28",
+        "variants": null,
+        "offer": "M-Shwari and KCB M-PESA now under Financial Services on My OneApp - use the search option to get there faster"
+      },
+      {
+        "advertiser": "Safaricom PLC",
+        "platform": "meta",
+        "ad_start": "2026-10-08",
+        "variants": null,
+        "offer": "1.5GB for KES 99 - stream on YouTube today. #PataMoreNaYouTube"
+      },
+      {
+        "advertiser": "JAMII FAIBA",
+        "platform": "meta",
+        "ad_start": "2026-10-29",
+        "variants": null,
+        "offer": "Faiba Home by JTL: 35 Mbps KSh 3,000/mo (Starter), 60 Mbps KSh 4,000/mo (Accelerate), 90 Mbps KSh 5,000/mo (Best Value);"
+      },
+      {
+        "advertiser": "Starlink",
+        "platform": "meta",
+        "ad_start": "2026-10-23",
+        "variants": null,
+        "offer": "High-speed internet to places where it was previously too expensive, too unreliable, or completely out of reach. Stream,"
+      },
+      {
+        "advertiser": "Spiro Kenya - EV",
+        "platform": "meta",
+        "ad_start": "2026-10-06",
+        "variants": null,
+        "offer": "Spiro Electric Bike via M-KOPA: deposit KES 15,000, then KES 365 per day for 24 months. Requires Kenyan National ID, KRA"
+      }
+    ],
+    "teardown_candidates": []
+  },
+  "supabase_id": "14d5b4e4-c3d5-47f8-9269-79a1a4349104"
+}
