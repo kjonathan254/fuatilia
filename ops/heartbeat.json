@@ -1,6 +1,6 @@
 {
-  "last_successful_run": "2026-11-02T14:42:53Z",
+  "last_successful_run": "2026-11-09T15:06:59Z",
   "workflow": "adwatch",
-  "commit": "314b8c6",
+  "commit": "bdc9892",
   "note": "written by the AdWatch workflow on every success; delivery is scheduled, subject to GitHub Actions availability and configured channel secrets"
 }
